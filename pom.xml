@@ -6,17 +6,33 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+	<!-- 加载maven私服 -->
+	<repositories>
+        <repository>
+		    <id>nexus</id>
+            <name>Team Nexus Repository</name>
+            <url>http://47.95.10.198:8081/nexus/content/groups/public</url>
+        </repository>
+	</repositories>
+	<pluginRepositories>
+	    <pluginRepository>
+            <id>nexus</id>
+            <name>Team Nexus Repository</name>
+			<url>http://47.95.10.198:8081/nexus/content/groups/public</url>
+        </pluginRepository>
+	</pluginRepositories>
+
 	<profiles>
 		<profile>
-			<id>jdk-1.7</id>
+			<id>jdk-1.8</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
-				<jdk>1.7</jdk>
+				<jdk>1.8</jdk>
 			</activation>
 			<properties>
-				<maven.compiler.source>1.7</maven.compiler.source>
-				<maven.compiler.target>1.7</maven.compiler.target>
-				<maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
+				<maven.compiler.source>1.8</maven.compiler.source>
+				<maven.compiler.target>1.8</maven.compiler.target>
+				<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
 			</properties>
 		</profile>
 	</profiles>
@@ -302,6 +318,13 @@
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
 			<version>4.1.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.20</version>
 		</dependency>
 
 	</dependencies>

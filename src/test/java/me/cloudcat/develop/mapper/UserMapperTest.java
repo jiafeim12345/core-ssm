@@ -28,7 +28,7 @@ public class UserMapperTest {
 		System.out.println(user.size());
 	}
 
-/*	@Test
+/*	@SQLGenerator
 	public void testInsertUser() {
 		User user = new User(); 
 		user.setUsername("test");
@@ -38,7 +38,7 @@ public class UserMapperTest {
 		mapper.insertUser(user);
 	}
 
-	@Test
+	@SQLGenerator
 	public void testDeleteUser() {
 		SqlSession session = sqlSessionFactory.openSession();
 		UserMapper mapper = session.getMapper(UserMapper.class);
