@@ -3,13 +3,13 @@
  * 
  * http://www.joven.com.cn
  */
-package me.cloudcat.develop.entity.configuration;
+package me.cloudcat.develop.entity;
 
 /**
  * 
  * @author ZZWang
  *
- *         2017年7月8日 下午9:51:07
+ * 2017年7月8日 下午9:51:07
  */
 public class User {
 

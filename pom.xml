@@ -1,22 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>me.cloudcat.develop</groupId>
-	<artifactId>MyCore</artifactId>
+	<groupId>cloudcat</groupId>
+	<artifactId>core-ssm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<!-- 加载maven私服 -->
 	<repositories>
         <repository>
-		    <id>nexus</id>
+		    <id>aliyun</id>
             <name>Team Nexus Repository</name>
             <url>http://47.95.10.198:8081/nexus/content/groups/public</url>
         </repository>
 	</repositories>
 	<pluginRepositories>
 	    <pluginRepository>
-            <id>nexus</id>
+            <id>aliyun</id>
             <name>Team Nexus Repository</name>
 			<url>http://47.95.10.198:8081/nexus/content/groups/public</url>
         </pluginRepository>
@@ -24,7 +24,7 @@
 
 	<profiles>
 		<profile>
-			<id>jdk-1.8</id>
+			<id>dev</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 				<jdk>1.8</jdk>
@@ -37,15 +37,21 @@
 		</profile>
 	</profiles>
 
-	<!-- 手动加载src/main/java目录下的配置文件，默认情况下idea会自动忽略这些文件 -->
+
 	<build>
 		<resources>
+			<!-- 加载src/main/java目录下的xml和properties文件，默认情况下idea会自动忽略这些文件 -->
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
 					<include>**/*.xml</include>
 					<include>**/*.properties</include>
 				</includes>
+			</resource>
+			<!-- 使resources目录下的文件使用pom中的键值 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
 			</resource>
 		</resources>
 	</build>
@@ -269,6 +275,14 @@
 			<artifactId>activiti-spring</artifactId>
 			<version>5.20.0</version>
 		</dependency>
+
+		<!-- mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.44</version>
+		</dependency>
+
 		<!-- oracle -->
 		<!-- <dependency> <groupId>oracle</groupId> <artifactId>ojdbc6</artifactId> <version>6</version> </dependency> -->
 
@@ -278,6 +292,7 @@
 			<artifactId>shiro-core</artifactId>
 			<version>1.2.2</version>
 		</dependency>
+
 		<!-- postgres -->
 		<dependency>
 			<groupId>org.postgresql</groupId>

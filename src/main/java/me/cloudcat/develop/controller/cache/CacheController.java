@@ -1,4 +1,4 @@
-package me.cloudcat.develop.controller.configuration;
+package me.cloudcat.develop.controller.cache;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import me.cloudcat.develop.entity.configuration.User;
+import me.cloudcat.develop.entity.User;
 import me.cloudcat.develop.dao.UserMapper;
 
 /**

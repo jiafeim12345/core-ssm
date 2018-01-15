@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import me.cloudcat.develop.entity.configuration.User;
+import me.cloudcat.develop.entity.User;
 
 public interface UserMapper {
 	

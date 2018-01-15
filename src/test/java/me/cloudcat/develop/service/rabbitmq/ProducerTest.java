@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext.xml", "classpath:spring-rabbitmq.xml"})
+@ContextConfiguration(locations = {"classpath:spring-context.xml", "classpath:spring-rabbitmq.xml"})
 public class ProducerTest {
 
     @Autowired

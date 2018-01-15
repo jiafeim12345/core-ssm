@@ -1,9 +1,9 @@
-package me.cloudcat.develop.entity.configuration;
+package me.cloudcat.develop.entity;
 
 /**
  * @author ZZWang
  *
- *         2017年7月9日 下午1:16:53
+ * 2017年7月9日 下午1:16:53
  */
 public class Person {
 	

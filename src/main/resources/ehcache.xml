@@ -14,8 +14,8 @@
                 eternal="false"  
                 maxElementsInMemory="100"  
                 timeToIdleSeconds="10"  
-                timeToLiveSeconds="30"  
-                overflowToDisk="false">  
-  </cache>  
-  
-</ehcache>  
+                timeToLiveSeconds="30"
+                overflowToDisk="false">
+  </cache>
+
+</ehcache>

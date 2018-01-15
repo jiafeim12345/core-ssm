@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @Time 2017年8月1日  下午3:17:24
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath*:applicationContext.xml")
+@ContextConfiguration(locations="classpath*:spring-context.xml")
 public class AOPServiceTest {
 
 	@Autowired

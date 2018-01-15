@@ -1,7 +1,7 @@
 package me.cloudcat.develop.mapper;
 
 import me.cloudcat.develop.dao.UserMapper;
-import me.cloudcat.develop.entity.configuration.User;
+import me.cloudcat.develop.entity.User;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath*:applicationContext.xml")
+@ContextConfiguration(locations="classpath*:spring-context.xml")
 public class UserMapperTest {
 
 	@Autowired

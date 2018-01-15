@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:data="http://www.springframework.org/schema/data/repository"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
 		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository.xsd">
 
 
 	<!-- 加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
-	<context:property-placeholder location="classpath:applicationContext.properties" />
+	<context:property-placeholder location="classpath:jdbc.properties" />
 
 	<!-- spring基本配置 -->
 	<context:component-scan base-package="me.cloudcat.develop" />
@@ -21,11 +20,28 @@
 	<!-- 数据源配置 -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${mybatis.driverClass}" />
-		<property name="url" value="${mybatis.url}" />
-		<property name="username" value="${mybatis.username}" />
-		<property name="password" value="${mybatis.password}" />
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
 	</bean>
+
+    <!-- 多数据库处理 -->
+    <bean id="vendorProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="Oracle">oracle</prop>
+                <prop key="MySQL">mysql</prop>
+                <prop key="SQL Server">sqlserver</prop>
+                <prop key="DB2">db2</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+        <property name="properties" ref="vendorProperties" />
+    </bean>
+
 	<!-- sqlSessionFactory -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 数据库连接池 -->
@@ -33,8 +49,11 @@
 		<!-- 指定mapper.xml的位置 -->
 		<property name="mapperLocations" value="classpath:me/cloudcat/develop/dao/impl/*.xml" />
 		<!-- 加载mybatis的全局配置文件 -->
-		<property name="configLocation" value="classpath:sqlMapConfig.xml" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="databaseIdProvider" ref="databaseIdProvider" />
+        <property name="typeAliasesPackage" value="me.cloudcat.develop.entity"/>
 	</bean>
+
 	<!-- mapper扫描器 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- 扫描包路径，如果需要扫描多个包，中间使用半角逗号隔开 -->
@@ -46,27 +65,8 @@
      <property name="ehCacheLocation" value="classpath:ehcache.xml" />  
    </bean> -->
 	
-	<!-- hibernate Entity Manager 配置,本系统使用jpa，下列代码未使用,hibernate3使用hibernate3.annotation.AnnotationSessionFactoryBean配置factory -->
-	<!-- <bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan">
-			<list>
-				可以加多个包
-				<value>me.cloudcat.entity</value>
-			</list>
-		</property>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
-				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-			</props>
-		</property>
-	</bean> -->
 
-
-	<!-- Jpa 事务配置 -->
+	<!-- 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
@@ -76,25 +76,6 @@
 	<bean id="persistenceExceptionTranslationPostProcessor"
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
-	<!-- tx:advice配置了事务的管理者是transactionManager，同时tx:method也规定了如果方法名匹配“add*”和“get*”方法时使用事务，propagation是设定事务的传播级别。 
-		除了“add*”和“get*”方法，其他的方法的事务是只读的（典型地，对于只执行查询的事务你会将该属性设为true，如果出现了更新、插入或是删除语句时只读事务就会失败） 
-		aop:config指定了一个aop:pointcut去引用上边的advice。 这样就通过AOP的拦截机制实现了事务，当然你还要用Spring的方式自己配置UserDAO和UserService。 -->
-
-	<!-- 使用注解，所以下面代码省略 -->
-	<!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
-		<tx:attributes>
-			<tx:method name="add*" propagation="REQUIRED" />
-			<tx:method name="get*" propagation="REQUIRED" />
-			<tx:method name="*" read-only="true" />
-		</tx:attributes>
-	</tx:advice>
-	<aop:config expose-proxy="true">
-		只对业务逻辑层实施事务
-		<aop:pointcut id="txPointcut"
-			expression="execution(* com.lei.demo.service..*.*(..))" />
-		Advisor定义，切入点和通知分别为txPointcut、txAdvice
-		<aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" />
-	</aop:config>  -->
     <aop:config>
         <aop:aspect id="id" order="1" ref="datePrint">
             <aop:pointcut expression="execution(* me.cloudcat.develop.service.AOPService.printOne(..))" id="allMethod"/>

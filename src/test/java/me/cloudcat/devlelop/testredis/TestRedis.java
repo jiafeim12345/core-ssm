@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import redis.clients.jedis.Jedis;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:applicationContext.xml")
+@ContextConfiguration(locations = "classpath*:spring-context.xml")
 public class TestRedis {
 
 	@Test

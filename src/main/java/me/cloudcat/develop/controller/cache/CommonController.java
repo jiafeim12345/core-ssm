@@ -1,7 +1,7 @@
-package me.cloudcat.develop.controller.configuration;
+package me.cloudcat.develop.controller.cache;
 
 import me.cloudcat.develop.dao.UserMapper;
-import me.cloudcat.develop.entity.configuration.User;
+import me.cloudcat.develop.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
