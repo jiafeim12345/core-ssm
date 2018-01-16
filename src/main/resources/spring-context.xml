@@ -12,7 +12,7 @@
 
 
 	<!-- 加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
-	<context:property-placeholder location="classpath:jdbc.properties" />
+	<context:property-placeholder location="classpath:jdbc.properties,classpath:rabbitmq.properties" />
 
 	<!-- spring基本配置 -->
 	<context:component-scan base-package="me.cloudcat.develop" />
