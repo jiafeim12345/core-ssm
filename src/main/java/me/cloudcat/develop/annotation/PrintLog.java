@@ -1,7 +1,5 @@
 package me.cloudcat.develop.annotation;
 
-import sun.reflect.annotation.AnnotationType;
-
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.LOCAL_VARIABLE})

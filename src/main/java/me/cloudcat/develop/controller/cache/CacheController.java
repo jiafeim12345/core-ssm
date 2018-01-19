@@ -38,7 +38,7 @@ public class CacheController {
 	 */
 	@RequestMapping(value = "/testOneLevel", method = RequestMethod.GET)
 	public String test1(HttpServletRequest request, Model model) {
-		//同一session进行查询操作测试
+		// 同一session进行查询操作测试
 		/*SqlSession session = factory.openSession();
 		List<Object> list = session.selectList("me.cloudcat.develop.dao.UserMapper.getUserTest");
 		System.out.println(list.size());
