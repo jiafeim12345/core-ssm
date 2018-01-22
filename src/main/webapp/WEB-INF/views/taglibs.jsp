@@ -10,4 +10,5 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <%@include file="../layout/commonCss.jsp" %>
+
 <%@include file="../layout/commonScript.jsp" %>

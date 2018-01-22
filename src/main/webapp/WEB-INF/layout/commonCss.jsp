@@ -2,4 +2,4 @@
 
 <link href="/static/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-<link rel="stylesheet" href="/static/css/zTreeStyle.css" />
+<link rel="stylesheet" href="/static/css/zTreeStyle/zTreeStyle.css" />

@@ -7,3 +7,8 @@
 
 <script type="text/javascript" src="/static/assets/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- websocket -->
+<script type="text/javascript" src="/static/js/socket/common.js"></script>
+<script type="text/javascript" src="/static/js/socket/sockjs-0.3.4.js"></script>
+<script type="text/javascript" src="/static/js/socket/stomp.js"></script>
