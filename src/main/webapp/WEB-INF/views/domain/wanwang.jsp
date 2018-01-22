@@ -38,11 +38,22 @@
 
         $(function($){
             socketConn();
+            var oldDomainMap = ${oldDomainMap};
+            $("#total").text(oldDomainMap['Total']);
+            $.each(oldDomainMap['Rows'],function(i,item){
+                $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
+                $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
+                $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
+                $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
+                $("#old_tr_"+i).append("<td>"+item.Registrar+"</td>");
+                $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
+            })
         })
     </script>
 </head>
 
 <body>
+<h3>域名总数：<span id="total"></span></h3>
 <table class="table table-hover">
     <caption  style="text-align:center"><h2><b>最新域名</b></h2></caption>
     <thead>
@@ -61,20 +72,18 @@
 
 </table>
 <br><br>
-<table class="table table-hover">
+<table class="table table-hover ">
     <caption style="text-align:center"><h2><b>最近50条域名</b></h2></caption>
     <thead>
-    <tr>
-        <th>域名</th>
-        <th>电话</th>
-        <th>注册商</th>
-        <th>注册时间</th>
-    </tr>
+        <tr>
+            <th>域名</th>
+            <th>电话</th>
+            <th>邮箱</th>
+            <th>注册商</th>
+            <th>注册时间</th>
+        </tr>
     </thead>
     <tbody id="old_tbody" style="font-size: 20px">
-        <tr>
-            <td colspan="4" align="center">暂无数据...</td>
-        </tr>
     </tbody>
 </table>
 </body>

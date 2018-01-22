@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -38,8 +40,9 @@ public class DomainController {
     @RequestMapping(value = "/admin/wanwang/home", method = RequestMethod.GET)
     public String wanwangHome(Model model, HttpServletRequest request, @RequestParam(value = "username", defaultValue = "") String username) throws InterruptedException {
         request.getSession().setAttribute(Constant.SESSION_USER, username);
+        String oldDomain = domainService.getWanWangDomain();
         isInterrupt = false;
-        Thread t = new Thread(new Runnable(){
+        /*Thread t = new Thread(new Runnable(){
             public void run(){
                 while (!isInterrupt) {
                     Random random = new Random();
@@ -61,8 +64,10 @@ public class DomainController {
                         e.printStackTrace();
                     }
                 }
-            }});
+            }});*/
 //        t.start();
+        Map oldDomainMap = JSONObject.toJavaObject(JSON.parseObject(oldDomain), Map.class);
+        model.addAttribute("oldDomainMap", oldDomainMap);
         return "/domain/wanwang";
     }
 
