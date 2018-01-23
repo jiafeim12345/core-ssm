@@ -74,6 +74,7 @@
                     $("#"+uuid).append("<td>"+item.Registrar+"</td>");
                     $("#"+uuid).append("<td>"+item.RegDate+"</td>");
                 })
+                alert("发现新域名！");
             };
         }
 
