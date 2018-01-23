@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.utils.CommonUtils;
 import me.cloudcat.develop.utils.HttpUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ import java.util.HashMap;
  */
 @Service
 public class DomainService {
+
+    private static Logger logger = Logger.getLogger(DomainService.class);
 
     // header封装
     HashMap<String, String> headers = new HashMap<>();
@@ -64,7 +67,7 @@ public class DomainService {
         headers.put("Cookie", Constant.domainCookie);
         String result = HttpUtils.sendPost("https://newly.faname.com/tools/newly/Newly03.ashx",
                 paramStr + "&PageIndex=1", headers);
-        System.out.println(result);
+        logger.info("万网域名  Total:" + JSONArray.parseObject(result).get("Total") + "  " + result);
         return result;
     }
 

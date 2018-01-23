@@ -1,7 +1,7 @@
 package me.cloudcat.develop.websocket.config;
 
+import com.alibaba.fastjson.JSON;
 import me.cloudcat.develop.Constant;
-import net.sf.json.util.JSONUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -28,7 +28,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			System.out.println(e.getMessage());
 		}
 		logger.info("websocket连接成功!");
-		System.out.println("websocket连接成功!");
 	}
 
 	// 抛出异常时处理
@@ -39,7 +38,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		}
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
 		logger.info("websocket出现异常！");
-		System.out.println("websocket出现异常！");
 	}
 
 	// 连接关闭后处理
@@ -47,7 +45,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
 		logger.info("websocket已关闭！");
-		System.out.println("websocket已关闭！");
 	}
 
 	@Override
@@ -66,10 +63,9 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		if (wsSession != null) {
 			if (wsSession.isOpen()) {
 				try {
-					wsSession.sendMessage(new TextMessage(JSONUtils.valueToString(messageMap)));
+					wsSession.sendMessage(new TextMessage(JSON.toJSONString((messageMap))));
 				} catch (IOException e) {
 					logger.info("发送信息失败！");
-					System.out.println("发送信息失败！");
 				}
 			}
 		}
@@ -89,7 +85,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 					wsSession.sendMessage(new TextMessage(jsonString));
 				} catch (IOException e) {
 					logger.info("发送信息失败！");
-					System.out.println("发送信息失败！");
 				}
 			}
 		}

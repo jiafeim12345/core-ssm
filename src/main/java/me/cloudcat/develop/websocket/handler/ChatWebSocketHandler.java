@@ -1,6 +1,8 @@
 package me.cloudcat.develop.websocket.handler;
 
+import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.controller.DomainController;
+import me.cloudcat.develop.utils.ThreadUtils;
 import me.cloudcat.develop.websocket.config.BaseWebSocketHandler;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketMessage;
@@ -22,6 +24,7 @@ public class ChatWebSocketHandler extends BaseWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		super.afterConnectionClosed(session, closeStatus);
 		// 中断线程
-		DomainController.isInterrupt = true;
+        ThreadUtils.setInterrupt(true);
+        System.out.println("线程已关闭");
 	}
 }

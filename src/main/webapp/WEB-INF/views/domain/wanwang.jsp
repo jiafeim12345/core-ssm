@@ -14,6 +14,20 @@
 
     <script type="text/javascript">
 
+        function uuidGenerator() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            var uuid = s.join("");
+            return uuid;
+        }
+
         // 建立socket连接
         function socketConn() {
             var websocket;
@@ -32,7 +46,34 @@
             websocket.onerror = function(evnt) {}
             websocket.onclose = function(evnt) {}
             websocket.onmessage = function(evnt) {
-                alert(evnt.data)
+                var dataJson = JSON.parse(evnt.data);
+                // 异常处理
+                if (dataJson['error'] != null && dataJson['error'] != undefined && dataJson['error'] != '') {
+                    $("body").html("<h3>" + dataJson['error'] + "</h3>");
+                    return;
+                }
+                // 更新总数
+                var total = dataJson['Total'];
+                if (total != null && total != undefined && total != '') {
+                    $("#total").text(total);
+                }
+                $("#prompt").remove();
+                // 清空样式
+                $("#new_tbody tr").each(function(){
+                    $(this).removeClass("danger");
+                })
+                $.each(dataJson['Rows'], function(i, item){
+                    if (item.Domain == undefined) {
+                        return;
+                    }
+                    var uuid = uuidGenerator();
+                    $("#new_tbody").prepend("<tr id="+uuid+" class='danger'></tr>");
+                    $("#"+uuid).append("<td>"+item.Domain+"</td>");
+                    $("#"+uuid).append("<td>"+item.tel+"</td>");
+                    $("#"+uuid).append("<td>"+item.EMail+"</td>");
+                    $("#"+uuid).append("<td>"+item.Registrar+"</td>");
+                    $("#"+uuid).append("<td>"+item.RegDate+"</td>");
+                })
             };
         }
 
@@ -53,34 +94,35 @@
 </head>
 
 <body>
-<h3>域名总数：<span id="total"></span></h3>
-<table class="table table-hover">
+<h4>域名总数：<span id="total"></span></h4>
+<table class="table table-hover table-condensed">
     <caption  style="text-align:center"><h2><b>最新域名</b></h2></caption>
     <thead>
         <tr>
-            <th>域名</th>
-            <th>电话</th>
-            <th>注册商</th>
-            <th>注册时间</th>
+            <th width="20%">域名</th>
+            <th width="20%">电话</th>
+            <th width="20%">邮箱</th>
+            <th width="20%">注册商</th>
+            <th width="20%">注册时间</th>
         </tr>
     </thead>
     <tbody id="new_tbody" style="font-size: 20px">
-        <tr>
-            <td colspan="4" align="center">暂无数据...</td>
+        <tr id = "prompt">
+            <td colspan="5" align="center">暂无数据...</td>
         </tr>
     </tbody>
 
 </table>
 <br><br>
-<table class="table table-hover ">
+<table class="table table-hover table-condensed">
     <caption style="text-align:center"><h2><b>最近50条域名</b></h2></caption>
     <thead>
         <tr>
-            <th>域名</th>
-            <th>电话</th>
-            <th>邮箱</th>
-            <th>注册商</th>
-            <th>注册时间</th>
+            <th width="20%">域名</th>
+            <th width="20%">电话</th>
+            <th width="20%">邮箱</th>
+            <th width="20%">注册商</th>
+            <th width="20%">注册时间</th>
         </tr>
     </thead>
     <tbody id="old_tbody" style="font-size: 20px">

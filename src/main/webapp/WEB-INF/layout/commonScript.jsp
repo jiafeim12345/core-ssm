@@ -12,3 +12,7 @@
 <script type="text/javascript" src="/static/js/socket/common.js"></script>
 <script type="text/javascript" src="/static/js/socket/sockjs-0.3.4.js"></script>
 <script type="text/javascript" src="/static/js/socket/stomp.js"></script>
+
+<script type="text/javascript" src="/static/js/json2.js"></script>
+
+<%--<script type="text/javascript" src="/static/js/commonUtils.js"></script>--%>
