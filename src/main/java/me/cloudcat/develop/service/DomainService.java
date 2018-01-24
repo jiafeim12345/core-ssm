@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @Author: zhenzhong.wang
@@ -26,7 +28,11 @@ public class DomainService {
 
     private static Logger logger = Logger.getLogger(DomainService.class);
 
+    // 域名总数（线程安全）
     private static Integer total = 0;
+
+    // 已查域名记录（线程安全）
+    private static Set<String> domainRecords = new HashSet<String>();
 
     @Autowired
     ChatWebSocketHandler socketHandler;
@@ -65,9 +71,9 @@ public class DomainService {
      * @return
      */
     public String getWanWangDomain() throws InterruptedException {
-        int pageSize = 50;
+        // 查询参数初始化
+        int pageSize = 200;
         int pageIndex = 1;
-        // 注册商设定为万网
         String registrar = "HICHINA ZHICHENG TECHNOLOGY LTD.";
 
         params.put("Registrar", registrar);
@@ -141,14 +147,17 @@ public class DomainService {
                             continue;
                         }
                         Integer domainTotal = DomainService.getTotal();
-                        if (domainTotal == currentTotal) {
+                        if (domainTotal.equals(currentTotal)) {
                             continue;
                         }
                         // 域名总数增加
                         if (currentTotal > domainTotal) {
                             // 更新记录总数
                             DomainService.setTotal(currentTotal);
-                            resultMap.put("Rows", rows.subList(0, currentTotal - domainTotal));
+                            // 获取更新的域名
+                            resultMap.put("Rows", getNewDomain(rows));
+                            // 更新域名记录
+                            DomainService.updateDomainRecords(rows);
                         }
                         resultMap.put("Total", currentTotal.toString());
                         socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
@@ -162,4 +171,41 @@ public class DomainService {
             }});
         t.start();
     }
+
+    /**
+     * 更新域名记录
+     * @param json
+     */
+    public static void updateDomainRecords(JSONArray json) {
+        synchronized (domainRecords) {
+            for(Object ob : json){
+                domainRecords.add(JSON.parseObject(ob.toString()).get("Domain").toString());
+            }
+        }
+    }
+
+    public static Set<String> getDomainRecords() {
+        return domainRecords;
+    }
+
+    /**
+     * 获取新域名(线程安全)
+     * 通过新域名集合和旧域名记录的对比，获取新更新的域名
+     * @param newDomainArray
+     * @return
+     */
+    public JSONArray getNewDomain(JSONArray newDomainArray) {
+        synchronized (domainRecords) {
+            JSONArray result = new JSONArray();
+            for(Object ob : newDomainArray) {
+                String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
+                // 如果域名在旧域名记录中不存在，则返回
+                if (!domainRecords.contains(domain)) {
+                    result.add(ob);
+                }
+            }
+            return result;
+        }
+    }
+
 }

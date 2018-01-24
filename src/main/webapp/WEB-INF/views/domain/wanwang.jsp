@@ -107,7 +107,7 @@
 <body>
 <h4><span id="error"><a href="${ctx}/admin/wanwang/config">${error}</a></span></h4>
 <h4>域名总数：<span id="total"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-    <span>刷新时间：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;<span id="maxTime">${maxTime}</span>&nbsp;秒</span></h4>
+    <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;<span id="maxTime">${maxTime}</span>&nbsp;秒</span></h4>
 <table class="table table-hover table-condensed">
     <caption  style="text-align:center"><h2><b>最新域名</b></h2></caption>
     <thead>

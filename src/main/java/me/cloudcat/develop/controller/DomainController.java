@@ -48,9 +48,17 @@ public class DomainController {
             model.addAttribute("error", "Cookie异常！点击进入Cookie设置！");
             return "/domain/wanwang";
         }
+
         Map oldDomainMap = JSONObject.toJavaObject(JSON.parseObject(oldDomain), Map.class);
         // 记录域名总数
-        DomainService.setTotal((int) oldDomainMap.get("Total"));
+        int total = (int) oldDomainMap.get("Total");
+        if (total == 0) {
+            model.addAttribute("error", "查询频繁，请稍后再试！");
+            return "/domain/wanwang";
+        }
+        DomainService.setTotal(total);
+        // 更新域名记录
+        DomainService.updateDomainRecords(JSONArray.parseArray(oldDomainMap.get("Rows").toString()));
 
         // 封装页面信息
         model.addAttribute("oldDomainMap", oldDomainMap);
