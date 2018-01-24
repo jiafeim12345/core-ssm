@@ -47,6 +47,16 @@
             websocket.onclose = function(evnt) {}
             websocket.onmessage = function(evnt) {
                 var dataJson = JSON.parse(evnt.data);
+                if (dataJson['option'] == 'updateMaxTime') {
+                    $("#maxTime").text(dataJson['value']);
+                    return;
+                }
+
+                if (dataJson['option'] == 'updateMinTime') {
+                    $("#minTime").text(dataJson['value']);
+                    return;
+                }
+
                 // 异常处理
                 if (dataJson['error'] != null && dataJson['error'] != undefined && dataJson['error'] != '') {
                     $("body").html("<h3>" + dataJson['error'] + "</h3>");
@@ -71,8 +81,8 @@
                     $("#"+uuid).append("<td>"+item.Domain+"</td>");
                     $("#"+uuid).append("<td>"+item.tel+"</td>");
                     $("#"+uuid).append("<td>"+item.EMail+"</td>");
-                    $("#"+uuid).append("<td>"+item.Registrar+"</td>");
                     $("#"+uuid).append("<td>"+item.RegDate+"</td>");
+                    $("#"+uuid).append("<td>"+new Date().toLocaleTimeString()+"</td>");
                 })
                 alert("发现新域名！");
             };
@@ -87,15 +97,17 @@
                 $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
                 $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
                 $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.Registrar+"</td>");
                 $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
+                $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
             })
         })
     </script>
 </head>
 
 <body>
-<h4>域名总数：<span id="total"></span></h4>
+<h4><span id="error"><a href="${ctx}/admin/wanwang/config">${error}</a></span></h4>
+<h4>域名总数：<span id="total"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <span>刷新时间：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;<span id="maxTime">${maxTime}</span>&nbsp;秒</span></h4>
 <table class="table table-hover table-condensed">
     <caption  style="text-align:center"><h2><b>最新域名</b></h2></caption>
     <thead>
@@ -103,8 +115,8 @@
             <th width="20%">域名</th>
             <th width="20%">电话</th>
             <th width="20%">邮箱</th>
-            <th width="20%">注册商</th>
             <th width="20%">注册时间</th>
+            <th width="20%">刷新时间</th>
         </tr>
     </thead>
     <tbody id="new_tbody" style="font-size: 20px">
@@ -122,8 +134,8 @@
             <th width="20%">域名</th>
             <th width="20%">电话</th>
             <th width="20%">邮箱</th>
-            <th width="20%">注册商</th>
             <th width="20%">注册时间</th>
+            <th width="20%">刷新时间</th>
         </tr>
     </thead>
     <tbody id="old_tbody" style="font-size: 20px">

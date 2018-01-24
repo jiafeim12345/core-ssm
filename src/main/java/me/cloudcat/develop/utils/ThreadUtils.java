@@ -1,7 +1,5 @@
 package me.cloudcat.develop.utils;
 
-import com.sun.jmx.snmp.tasks.ThreadService;
-
 import java.util.Random;
 
 /**
@@ -13,6 +11,9 @@ import java.util.Random;
 public class ThreadUtils {
 
     private static Boolean interrupt = true;
+
+    private static Integer minTime = 20;
+    private static Integer maxTime = 30;
 
     /**
      * [min,max]区间内睡眠随机时间
@@ -29,13 +30,33 @@ public class ThreadUtils {
         }
     }
 
-    public static void setInterrupt(boolean b) {
+    public static void setInterrupt(Boolean b) {
         synchronized(interrupt) {
             interrupt = b;
         }
     }
 
-    public static Object getInterrupt() {
+    public static Boolean getInterrupt() {
         return interrupt;
+    }
+
+    public static void setMinTime(Integer min) {
+        synchronized(minTime) {
+            minTime = min;
+        }
+    }
+
+    public static Integer getMinTime() {
+        return minTime;
+    }
+
+    public static void setMaxTime(Integer max) {
+        synchronized(maxTime) {
+            maxTime = max;
+        }
+    }
+
+    public static Integer getMaxTime() {
+        return maxTime;
     }
 }

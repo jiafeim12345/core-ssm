@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * http请求工具
  * @Author: zhenzhong.wang
  * @Time: 2018/1/19 14:34
  */
 public class HttpUtils {
+
+    private static String domainCookie = "";
 
     /**
      * 向指定URL发送GET方法的请求
@@ -118,7 +121,6 @@ public class HttpUtils {
             }
         } catch (Exception e) {
             System.out.println("发送 POST 请求出现异常！"+e);
-            e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
         finally{
@@ -137,4 +139,17 @@ public class HttpUtils {
         return result;
     }
 
+    /**
+     * 设置cookie（线程安全）
+     * @param cookie
+     */
+    public static void setDomainCookie(String cookie) {
+        synchronized (domainCookie) {
+            domainCookie = cookie;
+        }
+    }
+
+    public static String getDomainCookie() {
+        return domainCookie;
+    }
 }
