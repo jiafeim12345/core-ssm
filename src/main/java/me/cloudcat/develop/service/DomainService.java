@@ -82,7 +82,7 @@ public class DomainService {
         String paramStr = CommonUtils.formDataSerialize(params);
         headers.put("Cookie", getDomainCookie());
         String result = HttpUtils.sendPost("https://newly.faname.com/tools/newly/Newly03.ashx",
-                paramStr + "&PageIndex=1", headers);
+                paramStr, headers);
         if (StringUtils.isNotEmpty(result)){
             logger.info("万网域名：Total-" + JSONArray.parseObject(result).get("Total") + "  " + result
             + "\n刷新时间：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒");
@@ -165,7 +165,8 @@ public class DomainService {
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     HashMap<String, Object> errorMap = new HashMap<>();
-                    errorMap.put("error", "查询出现异常，请联系管理员！");
+                    errorMap.put("error", "查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
+                    logger.error("查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
                     socketHandler.sendMessageToUser(Constant.recieveUsername, errorMap);
                 }
             }});
