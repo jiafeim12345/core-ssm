@@ -111,6 +111,4 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	public WebSocketSession getWebSocketSession(String userName) {
 		return wsSessions.get(userName);
 	}
-	
-	
 }

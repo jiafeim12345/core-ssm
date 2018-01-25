@@ -67,5 +67,4 @@ public abstract class BaseEntity<T extends BaseEntity> implements Comparable<Obj
 		//根据id倒序排列
 		return o.getId().intValue() - this.getId().intValue();
 	}
-
 }
