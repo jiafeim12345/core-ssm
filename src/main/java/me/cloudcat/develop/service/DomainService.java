@@ -127,51 +127,50 @@ public class DomainService {
     public void startThread(){
         // 开启线程循环
         ThreadUtils.setInterrupt(false);
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    while (!(boolean) ThreadUtils.getInterrupt()) {
-                        // 睡眠4到6秒
-                        ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
-                        // 查询域名
-                        String domainStr = "";
-                        domainStr = getWanWangDomain();
-                        // 数据清洗
-                        JSONObject domainJson = JSON.parseObject(domainStr);
-                        HashMap<String, Object> resultMap = new HashMap<>();
-                        // 当前域名总数
-                        Integer currentTotal = (Integer) domainJson.get("Total");
+        Thread t = new Thread(() -> {
+            try {
+                while (!(boolean) ThreadUtils.getInterrupt()) {
+                    // 睡眠4到6秒
+                    ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
+                    // 查询域名
+                    String domainStr = "";
+                    domainStr = getWanWangDomain();
+                    // 数据清洗
+                    JSONObject domainJson = JSON.parseObject(domainStr);
+                    HashMap<String, Object> resultMap = new HashMap<>();
+                    // 当前域名总数
+                    Integer currentTotal = (Integer) domainJson.get("Total");
 
-                        JSONArray rows = (JSONArray) domainJson.get("Rows");
-                        // 查询过于频繁,等待六秒钟后查询
-                        if (currentTotal == 0) {
-                            Thread.sleep(6000);
-                            continue;
-                        }
-                        Integer domainTotal = DomainService.getTotal();
-                        if (domainTotal.equals(currentTotal)) {
-                            continue;
-                        }
-                        // 域名总数增加
-                        if (currentTotal > domainTotal) {
-                            // 更新记录总数
-                            DomainService.setTotal(currentTotal);
-                            // 获取更新的域名
-                            resultMap.put("Rows", getNewDomain(rows));
-                            // 更新域名记录
-                            DomainService.updateDomainRecords(rows);
-                        }
-                        resultMap.put("Total", currentTotal.toString());
-                        socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
+                    JSONArray rows = (JSONArray) domainJson.get("Rows");
+                    // 查询过于频繁,等待六秒钟后查询
+                    if (currentTotal == 0) {
+                        Thread.sleep(6000);
+                        continue;
                     }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    HashMap<String, Object> errorMap = new HashMap<>();
-                    errorMap.put("error", "查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
-                    logger.error("查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
-                    socketHandler.sendMessageToUser(Constant.recieveUsername, errorMap);
+                    Integer domainTotal = DomainService.getTotal();
+                    if (domainTotal.equals(currentTotal)) {
+                        continue;
+                    }
+                    // 域名总数增加
+                    if (currentTotal > domainTotal) {
+                        // 更新记录总数
+                        DomainService.setTotal(currentTotal);
+                        // 获取更新的域名
+                        resultMap.put("Rows", getNewDomain(rows));
+                        // 更新域名记录
+                        DomainService.updateDomainRecords(rows);
+                    }
+                    resultMap.put("Total", currentTotal.toString());
+                    socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
                 }
-            }});
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                HashMap<String, Object> errorMap = new HashMap<>();
+                errorMap.put("error", "查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
+                logger.error("查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
+                socketHandler.sendMessageToUser(Constant.recieveUsername, errorMap);
+            }
+        });
         t.start();
     }
 
