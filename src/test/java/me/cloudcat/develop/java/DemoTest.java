@@ -53,4 +53,13 @@ public class DemoTest {
         System.out.println(hmacSHA1);
         System.out.println(URLEncoder.encode(hmacSHA1, "utf-8"));
     }
+
+    @Test
+    public void testThree() {
+        try {
+            int a = 1/0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

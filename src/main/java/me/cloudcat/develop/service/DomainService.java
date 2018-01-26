@@ -51,9 +51,6 @@ public class DomainService {
         headers.put("X-Requested-With", "XMLHttpRequest");
         // 初始化params
         params.put("act", "newlydaily");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String now = formatter.format(LocalDate.now());
-        params.put("datestr", now);
         params.put("Tld", "");
         params.put("Registrar", "");
         params.put("Province", "shanghai");
@@ -79,13 +76,18 @@ public class DomainService {
         params.put("Registrar", registrar);
         params.put("PageSize", pageSize);
         params.put("PageIndex", pageIndex);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String now = formatter.format(LocalDate.now());
+        params.put("datestr", now);
         String paramStr = CommonUtils.formDataSerialize(params);
         headers.put("Cookie", getDomainCookie());
         String result = HttpUtils.sendPost("https://newly.faname.com/tools/newly/Newly03.ashx",
                 paramStr, headers);
         if (StringUtils.isNotEmpty(result)){
             logger.info("万网域名：Total-" + JSONArray.parseObject(result).get("Total") + "  " + result
-            + "\n刷新时间：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒");
+            + "\n\n刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒"
+            + "  域名时间：" + now
+            + "\n\nCookie：" + getDomainCookie());
         }
         return result;
     }
