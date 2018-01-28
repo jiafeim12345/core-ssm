@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.service.DomainService;
+import me.cloudcat.develop.utils.DNSUtils;
 import me.cloudcat.develop.utils.HttpUtils;
 import me.cloudcat.develop.utils.ThreadUtils;
 import me.cloudcat.develop.websocket.handler.ChatWebSocketHandler;
@@ -15,9 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -103,5 +107,19 @@ public class DomainController {
             socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
         }
         return "redirect:/admin/wanwang/config";
+    }
+
+    /**
+     * Whois查询
+     * @param domainName
+     * @return
+     * @throws UnsupportedEncodingException
+     * @throws SignatureException
+     */
+    @RequestMapping(value = "/admin/whois", method = RequestMethod.GET)
+    public String whois(@RequestParam("domainName") String domainName, Model model) throws UnsupportedEncodingException, SignatureException {
+        Map<String, Object> whoisInfo = DNSUtils.getWhois(domainName);
+        model.addAttribute("whoisInfo", whoisInfo);
+        return "/domain/whoisDialog";
     }
 }

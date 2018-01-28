@@ -5,6 +5,7 @@
   Time: 17:31
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ include file="../taglibs.jsp"%>
 <html>
@@ -83,6 +84,7 @@
                     $("#"+uuid).append("<td>"+item.EMail+"</td>");
                     $("#"+uuid).append("<td>"+item.RegDate+"</td>");
                     $("#"+uuid).append("<td>"+new Date().toLocaleTimeString()+"</td>");
+                    $("#"+uuid).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
                 })
                 alert("发现新域名！");
             };
@@ -99,8 +101,21 @@
                 $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
                 $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
                 $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
+                $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
             })
         })
+
+        function whois(domainName) {
+            layer.open({
+                type: 2,
+                title: 'Whois信息：' + domainName,
+                maxmin: true,
+                zIndex: 10,
+                shadeClose: true, //点击遮罩关闭层
+                area : ['600px' , '400px'],
+                content: '${ctx}/admin/whois?domainName=' +domainName
+            });
+        }
     </script>
 </head>
 
@@ -112,11 +127,12 @@
     <caption  style="text-align:center"><h2><b>最新域名</b></h2></caption>
     <thead>
         <tr>
-            <th width="20%">域名</th>
-            <th width="20%">电话</th>
-            <th width="20%">邮箱</th>
-            <th width="20%">注册时间</th>
-            <th width="20%">刷新时间</th>
+            <th width="16%">域名</th>
+            <th width="16%">电话</th>
+            <th width="16%">邮箱</th>
+            <th width="16%">注册时间</th>
+            <th width="16%">刷新时间</th>
+            <th width="16%">操作</th>
         </tr>
     </thead>
     <tbody id="new_tbody" style="font-size: 20px">
@@ -131,11 +147,12 @@
     <caption style="text-align:center"><h2><b>最近50条域名</b></h2></caption>
     <thead>
         <tr>
-            <th width="20%">域名</th>
-            <th width="20%">电话</th>
-            <th width="20%">邮箱</th>
-            <th width="20%">注册时间</th>
-            <th width="20%">刷新时间</th>
+            <th width="16%">域名</th>
+            <th width="16%">电话</th>
+            <th width="16%">邮箱</th>
+            <th width="16%">注册时间</th>
+            <th width="16%">刷新时间</th>
+            <th width="16%">操作</th>
         </tr>
     </thead>
     <tbody id="old_tbody" style="font-size: 20px">

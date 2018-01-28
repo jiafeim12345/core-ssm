@@ -16,3 +16,6 @@
 <script type="text/javascript" src="/static/js/json2.js"></script>
 
 <%--<script type="text/javascript" src="/static/js/commonUtils.js"></script>--%>
+
+<!-- layui -->
+<script type="text/javascript" src="/static/assets/layer/layer.js"></script>
