@@ -84,9 +84,10 @@ public class DomainService {
         String result = HttpUtils.sendPost("https://newly.faname.com/tools/newly/Newly03.ashx",
                 paramStr, headers);
         if (StringUtils.isNotEmpty(result)){
-            logger.info("万网域名：Total-" + JSONArray.parseObject(result).get("Total") + "  " + result
-            + "\nCookie：" + getDomainCookie() + "\n\n刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒"
-            + "  域名时间：" + now);
+            logger.info("万网域名：Total " + JSONArray.parseObject(result).get("Total")
+                    + "  刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒");
+            logger.debug("Cookie：" + getDomainCookie());
+            logger.debug("域名时间：" + now);
         }
         return result;
     }
