@@ -64,8 +64,9 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			if (wsSession.isOpen()) {
 				try {
 					wsSession.sendMessage(new TextMessage(JSON.toJSONString((messageMap))));
+					logger.info("消息推送：" + userName + "  " + JSON.toJSONString((messageMap)));
 				} catch (IOException e) {
-					logger.info("发送信息失败！");
+					logger.info("发送消息失败！");
 				}
 			}
 		}
@@ -83,6 +84,7 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			if (wsSession.isOpen()) {
 				try {
 					wsSession.sendMessage(new TextMessage(jsonString));
+					logger.info("消息推送：" + userName + "  " + jsonString);
 				} catch (IOException e) {
 					logger.info("发送信息失败！");
 				}

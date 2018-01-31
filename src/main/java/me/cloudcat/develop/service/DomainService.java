@@ -85,9 +85,8 @@ public class DomainService {
                 paramStr, headers);
         if (StringUtils.isNotEmpty(result)){
             logger.info("万网域名：Total-" + JSONArray.parseObject(result).get("Total") + "  " + result
-            + "\n\n刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒"
-            + "  域名时间：" + now
-            + "\n\nCookie：" + getDomainCookie());
+            + "\nCookie：" + getDomainCookie() + "\n\n刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒"
+            + "  域名时间：" + now);
         }
         return result;
     }
