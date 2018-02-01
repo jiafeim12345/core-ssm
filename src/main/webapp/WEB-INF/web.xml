@@ -10,11 +10,6 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 
-    <!-- 解决框架使用时可能产生的内存泄漏问题 -->
-    <listener>
-        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
-    </listener>
-
 	<!-- 加载配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -25,7 +20,11 @@
 	<listener > 
        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class> 
     </listener> 
-	
+
+    <!-- 解决框架使用时可能产生的内存泄漏问题 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
 	<!-- 配置spring监听器 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
