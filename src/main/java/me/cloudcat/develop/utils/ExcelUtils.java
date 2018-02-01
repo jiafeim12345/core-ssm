@@ -149,14 +149,12 @@ public class ExcelUtils {
         CellStyle cellStyle =wb.createCellStyle();
         // 设置这些样式
         cellStyle.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
-        cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
-        cellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-
-
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
         //5.创建Excel工作表指定行的单元格
         row.createCell(0).setCellStyle(cellStyle);
