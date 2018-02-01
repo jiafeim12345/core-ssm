@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 
 import me.cloudcat.develop.entity.User;
 
-public interface UserMapper {
+public interface UserDao {
 	
 	public User getUser(String username);
 	

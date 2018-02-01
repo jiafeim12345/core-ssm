@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import me.cloudcat.develop.dao.UserDao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import me.cloudcat.develop.entity.User;
-import me.cloudcat.develop.dao.UserMapper;
 
 /**
  *
@@ -25,7 +25,7 @@ import me.cloudcat.develop.dao.UserMapper;
 public class CacheController {
 
 	@Autowired
-	UserMapper userMapper;
+	UserDao userDao;
 	
 	@Autowired
 	SqlSessionFactory factory;
@@ -40,14 +40,14 @@ public class CacheController {
 	public String test1(HttpServletRequest request, Model model) {
 		// 同一session进行查询操作测试
 		/*SqlSession session = factory.openSession();
-		List<Object> list = session.selectList("me.cloudcat.develop.dao.UserMapper.getUserTest");
+		List<Object> list = session.selectList("me.cloudcat.develop.dao.UserDao.getUserTest");
 		System.out.println(list.size());
 		//此处会调用一级缓存
-		list = session.selectList("me.cloudcat.develop.dao.UserMapper.getUserTest");
+		list = session.selectList("me.cloudcat.develop.dao.UserDao.getUserTest");
 		System.out.println(list.size());*/
 		
 		SqlSession session = factory.openSession();
-		UserMapper mapper = session.getMapper(UserMapper.class);
+		UserDao mapper = session.getMapper(UserDao.class);
 		List<User> list = mapper.getUserTest("admin");
 		System.out.println(list.size());
 		//此处调用一级缓存
@@ -70,10 +70,10 @@ public class CacheController {
 	 */
 	@RequestMapping(value = "/testTwoLevel", method = RequestMethod.GET)
 	public String test2(HttpServletRequest request, Model model) {
-		List<User> list = userMapper.getUserTest("admin");
+		List<User> list = userDao.getUserTest("admin");
 		System.out.println(list.size());
 		//此处会调用二级缓存
-		list = userMapper.getUserTest("admin");
+		list = userDao.getUserTest("admin");
 		System.out.println(list.size());
 		return null;
 	}
@@ -86,13 +86,13 @@ public class CacheController {
 	@RequestMapping(value = "/testTwoLevel2", method = RequestMethod.GET)
 	public String test3(HttpServletRequest request, Model model) {
 		SqlSession session = factory.openSession();
-		UserMapper mapper = session.getMapper(UserMapper.class);
+		UserDao mapper = session.getMapper(UserDao.class);
 		List<User> list = mapper.getUserTest("admin");
 		System.out.println(list.size());
 		session.commit();
 		session.close();
 		SqlSession session2 = factory.openSession();
-		UserMapper mapper2 = session2.getMapper(UserMapper.class);
+		UserDao mapper2 = session2.getMapper(UserDao.class);
 		list = mapper2.getUserTest("admin");
 		System.out.println(list.size());
 		System.out.println("124323");

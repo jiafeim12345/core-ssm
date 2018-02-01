@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="me.cloudcat.develop.dao.UserMapper">
+
+<mapper namespace="me.cloudcat.develop.dao.UserDao">
     <!--启用缓存,设定缓存存储策略为先进先出，缓存刷新间隔为10秒钟，并发访问策略为只读 -->
     <!--    <cache eviction="FIFO" flushInterval="10000" size="512" readOnly="true"/>-->
 
     <!--设置ehcache缓存 -->
     <cache type="org.mybatis.caches.ehcache.EhcacheCache" />
 
-    <resultMap type="User" id="userResMap">
+    <resultMap type="User" id="userMap">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
-        <association property="person" column="person" javaType="Person">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
-            <result column="gender" property="gender"/>
-        </association>
     </resultMap>
-
-    <select id="getUserTest" parameterType="String" resultType="User">
-        <include refid="queryUserSQL" >
-        </include>
-    </select>
-
-    <select id="getUser" parameterType="String" resultMap="userResMap">
-        select *
-		from tbl_user t,tbl_person p
-		where username='${value}';
-    </select>
 
     <sql id="queryUserSQL">
         <choose>
@@ -43,7 +28,15 @@
         </choose>
     </sql>
 
-    <select id="getUserByType" resultMap="userResMap" parameterType="int">
+    <select id="getUser" parameterType="String" resultMap="userMap">
+        SELECT *
+		FROM tbl_user t
+		<where>
+            username=#{username};
+        </where>
+    </select>
+
+    <!--<select id="getUserByType" resultMap="userResMap" parameterType="int">
         select *
         from tbl_user u 
         <where>
@@ -57,5 +50,5 @@
                 and u.remark='测试byc'
             </if>
         </where>
-    </select>
+    </select>-->
 </mapper>

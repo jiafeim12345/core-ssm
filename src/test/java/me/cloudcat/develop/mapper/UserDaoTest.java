@@ -1,6 +1,6 @@
 package me.cloudcat.develop.mapper;
 
-import me.cloudcat.develop.dao.UserMapper;
+import me.cloudcat.develop.dao.UserDao;
 import me.cloudcat.develop.entity.User;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="classpath*:spring-context.xml")
-public class UserMapperTest {
+public class UserDaoTest {
 
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
@@ -22,7 +22,7 @@ public class UserMapperTest {
 	@Test
 	public void testGetUser() {
 		SqlSession session = sqlSessionFactory.openSession();
-		UserMapper mapper = session.getMapper(UserMapper.class);
+		UserDao mapper = session.getMapper(UserDao.class);
 		
 		List<User> user = mapper.getUserTest(null);
 		System.out.println(user.size());
@@ -34,14 +34,14 @@ public class UserMapperTest {
 		user.setUsername("test");
 		user.setId(2L);
 		SqlSession session = sqlSessionFactory.openSession();
-		UserMapper mapper = session.getMapper(UserMapper.class);
+		UserDao mapper = session.getMapper(UserDao.class);
 		mapper.insertUser(user);
 	}
 
 	@SQLGenerator
 	public void testDeleteUser() {
 		SqlSession session = sqlSessionFactory.openSession();
-		UserMapper mapper = session.getMapper(UserMapper.class);
+		UserDao mapper = session.getMapper(UserDao.class);
 		mapper.delete("%te%",2L);
 	}*/
 }

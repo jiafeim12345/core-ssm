@@ -10,7 +10,7 @@
                 timeToLiveSeconds="100"
                 overflowToDisk="false"/>  
   <!-- 指定区域cache：为特定Mapper制定策略-->  
-   <cache name="me.cloudcat.develop.dao.UserMapper"
+   <cache name="me.cloudcat.develop.dao.UserDao"
                 eternal="false"  
                 maxElementsInMemory="100"  
                 timeToIdleSeconds="10"  

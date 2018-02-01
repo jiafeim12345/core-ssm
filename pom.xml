@@ -33,6 +33,12 @@
 				<maven.compiler.source>1.8</maven.compiler.source>
 				<maven.compiler.target>1.8</maven.compiler.target>
 				<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+
+				<jdbc.dialect></jdbc.dialect>
+				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+				<jdbc.url>jdbc:mysql://47.95.10.198:3306/core-ssm?useUnicode=true&amp;characterEncoding=utf-8&amp;</jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>mysql@5851768</jdbc.password>
 			</properties>
 		</profile>
 	</profiles>
@@ -89,11 +95,6 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
@@ -112,6 +113,12 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 
 		<!-- springmvc -->
@@ -289,8 +296,14 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.44</version>
 		</dependency>
+        <!-- druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.6</version>
+        </dependency>
 
-		<!-- oracle -->
+        <!-- oracle -->
 		<!-- <dependency> <groupId>oracle</groupId> <artifactId>ojdbc6</artifactId> <version>6</version> </dependency> -->
 
 		<!-- shiro -->
@@ -360,7 +373,5 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.15</version>
         </dependency>
-
-
     </dependencies>
 </project>
