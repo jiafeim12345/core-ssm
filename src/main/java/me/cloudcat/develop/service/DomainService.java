@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
+import me.cloudcat.develop.redis.RedisMap;
+import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.utils.CommonUtils;
 import me.cloudcat.develop.utils.HttpUtils;
 import me.cloudcat.develop.utils.ThreadUtils;
@@ -28,14 +30,11 @@ public class DomainService {
 
     private static Logger logger = Logger.getLogger(DomainService.class);
 
-    // 域名总数（线程安全）
-    private static Integer total = 0;
-
-    // 已查域名记录（线程安全）
-    private static Set<String> domainRecords = new HashSet<String>();
-
     @Autowired
     ChatWebSocketHandler socketHandler;
+
+    static RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
+    static RedisMap configMap = RedisMapFactory.getRedisMap("config");
 
     // header封装
     HashMap<String, String> headers = new HashMap<>();
@@ -93,38 +92,9 @@ public class DomainService {
     }
 
     /**
-     * 获取最新Cookie
-     *
-     * @return
-     */
-    public String getDomainCookie() {
-        String now = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now());
-        String domainCookie = HttpUtils.getDomainCookie();
-        if (domainCookie != null && domainCookie.contains(now)) {
-            return domainCookie;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * 设置域名总数（线程安全）
-     * @param sum
-     */
-    public static void setTotal(Integer sum) {
-        synchronized (total) {
-            total = sum;
-        }
-    }
-
-    public static Integer getTotal() {
-        return total;
-    }
-
-    /**
      * 开启查询线程，每min~max秒内进行数据爬取
      */
-    public void startThread(){
+    public void startThread() {
         // 开启线程循环
         ThreadUtils.setInterrupt(false);
         Thread t = new Thread(() -> {
@@ -147,18 +117,18 @@ public class DomainService {
                         Thread.sleep(6000);
                         continue;
                     }
-                    Integer domainTotal = DomainService.getTotal();
+                    Integer domainTotal = (Integer) domainMap.get("total");
                     if (domainTotal.equals(currentTotal)) {
                         continue;
                     }
                     // 域名总数增加
                     if (currentTotal > domainTotal) {
                         // 更新记录总数
-                        DomainService.setTotal(currentTotal);
+                        domainMap.put("total", currentTotal);
                         // 获取更新的域名
                         resultMap.put("Rows", getNewDomain(rows));
                         // 更新域名记录
-                        DomainService.updateDomainRecords(rows);
+                        updateDomainRecords(rows);
                     }
                     resultMap.put("Total", currentTotal.toString());
                     socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
@@ -169,6 +139,8 @@ public class DomainService {
                 errorMap.put("error", "查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
                 logger.error("查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
                 socketHandler.sendMessageToUser(Constant.recieveUsername, errorMap);
+            } finally {
+
             }
         });
         t.start();
@@ -178,36 +150,49 @@ public class DomainService {
      * 更新域名记录
      * @param json
      */
-    public static void updateDomainRecords(JSONArray json) {
-        synchronized (domainRecords) {
-            for(Object ob : json){
-                domainRecords.add(JSON.parseObject(ob.toString()).get("Domain").toString());
-            }
+    public void updateDomainRecords(JSONArray json) {
+        Set<String> domainRecords = new HashSet<String>();
+        for(Object ob : json){
+            domainRecords.add(JSON.parseObject(ob.toString()).get("Domain").toString());
         }
+        domainMap.put("records", domainRecords);
     }
 
-    public static Set<String> getDomainRecords() {
-        return domainRecords;
+    public Set<String> getDomainRecords() {
+        return (Set<String>) domainMap.get("records");
     }
 
     /**
-     * 获取新域名(线程安全)
+     * 获取新域名
      * 通过新域名集合和旧域名记录的对比，获取新更新的域名
      * @param newDomainArray
      * @return
      */
     public JSONArray getNewDomain(JSONArray newDomainArray) {
-        synchronized (domainRecords) {
-            JSONArray result = new JSONArray();
-            for(Object ob : newDomainArray) {
-                String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
-                // 如果域名在旧域名记录中不存在，则返回
-                if (!domainRecords.contains(domain)) {
-                    result.add(ob);
-                }
+        JSONArray result = new JSONArray();
+        for(Object ob : newDomainArray) {
+            String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
+            // 如果域名在旧域名记录中不存在，则返回
+            Set<String> oldDomains = getDomainRecords();
+            if (!oldDomains.contains(domain)) {
+                result.add(ob);
             }
-            return result;
         }
+        return result;
     }
 
+    /**
+     * 获取最新Cookie
+     *
+     * @return
+     */
+    public String getDomainCookie() {
+        String now = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now());
+        String domainCookie = (String) configMap.get("cookie");
+        if (domainCookie != null && domainCookie.contains(now)) {
+            return domainCookie;
+        } else {
+            return null;
+        }
+    }
 }

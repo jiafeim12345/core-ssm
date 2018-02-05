@@ -137,7 +137,7 @@
     </thead>
     <tbody id="new_tbody" style="font-size: 20px">
         <tr id = "prompt">
-            <td colspan="5" align="center">暂无数据...</td>
+            <td colspan="6" align="center">暂无数据...</td>
         </tr>
     </tbody>
 

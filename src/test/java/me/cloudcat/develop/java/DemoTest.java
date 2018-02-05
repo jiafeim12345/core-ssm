@@ -1,19 +1,12 @@
 package me.cloudcat.develop.java;
 
-import me.cloudcat.develop.utils.CommonUtils;
-import me.cloudcat.develop.utils.DateUtils;
-import me.cloudcat.develop.utils.HttpUtils;
-import me.cloudcat.develop.utils.SignatureUtils;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * @Author: zhenzhong.wang
@@ -43,4 +36,5 @@ public class DemoTest {
             e.printStackTrace();
         }
     }
+
 }

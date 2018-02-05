@@ -1,7 +1,7 @@
 package me.cloudcat.develop.websocket.config;
 
 import me.cloudcat.develop.Constant;
-import me.cloudcat.develop.entity.User;
+import org.apache.log4j.Logger;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -13,12 +13,15 @@ import java.util.Map;
 
 
 /**
- * 
+ * 握手拦截器
+ *
  * @author ZZWang
  * @Time 2017年3月20日  上午11:07:40
  *
  */
 public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
+
+    private static Logger logger = Logger.getLogger(WebSocketHandshakeInterceptor.class);
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes)
@@ -31,6 +34,7 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 			// 向socketsession中设置username属性，作为其唯一标识
 			attributes.put(Constant.SESSION_SOCKET, userName);
 		}
+		logger.info("websocket连接成功!");
 		return true;
 	}
 

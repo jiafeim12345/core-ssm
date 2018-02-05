@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
+import me.cloudcat.develop.redis.RedisMap;
+import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.service.DomainService;
 import me.cloudcat.develop.utils.DNSUtils;
-import me.cloudcat.develop.utils.HttpUtils;
 import me.cloudcat.develop.utils.ThreadUtils;
 import me.cloudcat.develop.websocket.handler.ChatWebSocketHandler;
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +40,9 @@ public class DomainController {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
+    static RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
+    static RedisMap configMap = RedisMapFactory.getRedisMap("config");
+
     @RequestMapping(value = "/admin/wanwang/home", method = RequestMethod.GET)
     public String wanwangHome(Model model, HttpServletRequest request, @RequestParam(value = "username", defaultValue = "") String username) throws InterruptedException {
         if (!username.equals(Constant.recieveUsername)) {
@@ -48,6 +51,7 @@ public class DomainController {
         request.getSession().setAttribute(Constant.SESSION_USER, username);
         // 第一次域名查询
         String oldDomain = domainService.getWanWangDomain();
+        // cookie异常，返回首页
         if (StringUtils.isEmpty(oldDomain)) {
             model.addAttribute("error", "Cookie异常！点击进入Cookie设置！");
             return "/domain/wanwang";
@@ -60,9 +64,9 @@ public class DomainController {
             model.addAttribute("error", "查询频繁，请稍后再试！");
             return "/domain/wanwang";
         }
-        DomainService.setTotal(total);
+        domainMap.put("total", total);
         // 更新域名记录
-        DomainService.updateDomainRecords(JSONArray.parseArray(oldDomainMap.get("Rows").toString()));
+        domainService.updateDomainRecords(JSONArray.parseArray(oldDomainMap.get("Rows").toString()));
 
         // 封装页面信息
         model.addAttribute("oldDomainMap", oldDomainMap);
@@ -89,7 +93,7 @@ public class DomainController {
                              RedirectAttributes reAttributes) {
         HashMap<String, Object> resultMap = new HashMap<>();
         if (StringUtils.isNotEmpty(cookie)) {
-            HttpUtils.setDomainCookie(cookie);
+            configMap.put("cookie", cookie);
             reAttributes.addFlashAttribute("info", "设置成功！");
         }
         if (minTime != null && minTime > 0 && minTime <= maxTime) {

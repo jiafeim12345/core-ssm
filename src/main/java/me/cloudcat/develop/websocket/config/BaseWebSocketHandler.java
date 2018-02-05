@@ -27,7 +27,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		logger.info("websocket连接成功!");
 	}
 
 	// 抛出异常时处理

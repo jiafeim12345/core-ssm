@@ -17,8 +17,6 @@ import java.util.Map;
  */
 public class HttpUtils {
 
-    private static String domainCookie = "";
-
     /**
      * 向指定URL发送GET方法的请求
      *
@@ -137,19 +135,5 @@ public class HttpUtils {
             }
         }
         return result;
-    }
-
-    /**
-     * 设置cookie（线程安全）
-     * @param cookie
-     */
-    public static void setDomainCookie(String cookie) {
-        synchronized (domainCookie) {
-            domainCookie = cookie;
-        }
-    }
-
-    public static String getDomainCookie() {
-        return domainCookie;
     }
 }

@@ -27,6 +27,8 @@ public class ThreadUtils {
             Thread.sleep(randomSecond * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+
         }
     }
 

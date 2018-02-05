@@ -39,10 +39,8 @@ public class DNSUtils {
         encodeUrlParam = encodeUrlParam.replaceAll("%3A", "%253A");
         logger.info("Whois解析：" + domainName);
         String tosign= "POST" + "&" + "%2F" + "&" + encodeUrlParam;
-        logger.info("Tosign：" + tosign);
         String hmacSHA1 = SignatureUtils.hmacSHA1Base64(tosign, "DxgPChG1Z6D8mVV72Yc2hmhjoKnuoi&").trim();
         String signature = URLEncoder.encode(hmacSHA1, "utf-8");
-        logger.info("Signature：" + signature);
         map.put("Signature", signature);
         String responseStr = HttpUtils.sendPost("https://alidns.aliyuncs.com/", CommonUtils.formDataSerialize(map), null);
         logger.info("result：" + responseStr);
