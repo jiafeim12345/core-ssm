@@ -33,8 +33,8 @@ public class DomainService {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
-    static RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
-    static RedisMap configMap = RedisMapFactory.getRedisMap("config");
+    RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
+    RedisMap configMap = RedisMapFactory.getRedisMap("config");
 
     // header封装
     HashMap<String, String> headers = new HashMap<>();
