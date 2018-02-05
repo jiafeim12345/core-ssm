@@ -42,4 +42,8 @@
 			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 		</property>
 	</bean>
+
+    <bean id="redisMapFactory" class="me.cloudcat.develop.redis.RedisMapFactory">
+        <constructor-arg ref="redisTemplate" name="redisTemplate" />
+    </bean>
 </beans>
