@@ -1,6 +1,7 @@
 package me.cloudcat.develop;
 
-public class Constant {
+public abstract class Constant {
+
 	public static final String MALE = "男";
 	public static final String FEMALE = "女";
 
@@ -8,5 +9,4 @@ public class Constant {
 	public static final String SESSION_USER = "session_user";
 
 	public static final String recieveUsername = "caiyun";
-
 }

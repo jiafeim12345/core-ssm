@@ -12,12 +12,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class RedisMap {
 
     private RedisTemplate redisTemplate;
+
     private String hashKey;
     private HashOperations operations;
 
     public RedisMap(RedisTemplate redisTemplate, String hashKey) {
-        this.redisTemplate = redisTemplate;
         this.hashKey = hashKey;
+        this.redisTemplate = redisTemplate;
         operations = redisTemplate.opsForHash();
     }
 

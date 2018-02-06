@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -33,8 +34,16 @@ public class DomainService {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
-    static RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
-    static RedisMap configMap = RedisMapFactory.getRedisMap("config");
+    static RedisMapFactory redisFactory;
+    static RedisMap domainMap;
+    static RedisMap configMap;
+
+    @Autowired
+    public void setRedisFactory(RedisMapFactory redisFactory) {
+        this.redisFactory = redisFactory;
+        domainMap = redisFactory.getRedisMap("domain");
+        configMap = redisFactory.getRedisMap("config");
+    }
 
     // header封装
     HashMap<String, String> headers = new HashMap<>();
@@ -188,9 +197,9 @@ public class DomainService {
      */
     public String getDomainCookie() {
         String now = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now());
-        String domainCookie = (String) configMap.get("cookie");
-        if (domainCookie != null && domainCookie.contains(now)) {
-            return domainCookie;
+        Object domainCookie = configMap.get("cookie");
+        if (domainCookie != null && domainCookie.toString().contains(now)) {
+            return domainCookie.toString();
         } else {
             return null;
         }

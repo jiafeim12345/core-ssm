@@ -40,11 +40,20 @@ public class DomainController {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
-    static RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
-    static RedisMap configMap = RedisMapFactory.getRedisMap("config");
+    static RedisMapFactory redisFactory;
+    static RedisMap domainMap;
+    static RedisMap configMap;
+
+    @Autowired
+    public void setRedisFactory(RedisMapFactory redisFactory) {
+        this.redisFactory = redisFactory;
+        domainMap = redisFactory.getRedisMap("domain");
+        configMap = redisFactory.getRedisMap("config");
+    }
 
     @RequestMapping(value = "/admin/wanwang/home", method = RequestMethod.GET)
     public String wanwangHome(Model model, HttpServletRequest request, @RequestParam(value = "username", defaultValue = "") String username) throws InterruptedException {
+
         if (!username.equals(Constant.recieveUsername)) {
            return "/domain/wanwang";
         }
