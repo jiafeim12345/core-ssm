@@ -40,8 +40,8 @@ public class DomainController {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
-    RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
-    RedisMap configMap = RedisMapFactory.getRedisMap("config");
+    static RedisMap domainMap = RedisMapFactory.getRedisMap("domain");
+    static RedisMap configMap = RedisMapFactory.getRedisMap("config");
 
     @RequestMapping(value = "/admin/wanwang/home", method = RequestMethod.GET)
     public String wanwangHome(Model model, HttpServletRequest request, @RequestParam(value = "username", defaultValue = "") String username) throws InterruptedException {

@@ -1,8 +1,11 @@
 package me.cloudcat.develop.redis;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
+ * RedisMap工厂
+ *
  * @Author: zhenzhong.wang
  * @Time: 2018/2/5 16:07
  */
@@ -12,7 +15,8 @@ public class RedisMapFactory {
 
     public RedisMapFactory() {}
 
-    public RedisMapFactory(RedisTemplate redisTemplate) {
+    @Autowired
+    public void setRedisTemplate(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
