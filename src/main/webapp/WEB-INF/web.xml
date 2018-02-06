@@ -13,17 +13,29 @@
 	<!-- 加载配置文件 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring-context.xml,classpath:spring-rabbitmq.xml,classpath:spring-redis.xml</param-value>
+		<param-value>classpath:spring-context.xml,classpath:spring-rabbitmq.xml,classpath:spring-redis.xml,classpath:spring-security.xml</param-value>
 	</context-param>
 
 	<!--log4j监听器，必须配置在spring监听器之前 -->
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
-    <!-- 解决框架使用时可能产生的内存泄漏问题 -->
-    <listener>
-        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
-    </listener>
+
+	<!-- 解决框架使用时可能产生的内存泄漏问题 -->
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+
+	<!-- spring-security过滤器，需配置在其他如springmvc等拦截请求之前 -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<!-- 配置spring监听器 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
