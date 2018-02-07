@@ -1,39 +1,39 @@
 package me.cloudcat.develop.entity;
 
 /**
- * @author ZZWang
+ * 人员表
  *
- * 2017年7月9日 下午1:16:53
+ * @Author: zhenzhong.wang
+ * @Time: 2018/2/7 18:28
  */
-public class Person {
+public class Person extends BaseEntity<Person> {
 	
-	private Long id;
+	private String name;      // 姓名
+	private String gender;    // 性别
+	private Integer age;      // 年龄
 
-	private String name;
 
-	private String gender;
+	public String getGender() {
+		return gender;
+	}
 
-	public Long getId() {
-		return id;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public String getGender() {
-		return gender;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setGender(String gender) {
-		this.gender = gender;
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
 	}
 }

@@ -2,19 +2,13 @@ package me.cloudcat.develop.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-
 /**
- * 
+ * Entity基类
+ *
  * @author ZZWang
  * @Time 2017年1月17日 下午2:37:43
  *
  */
-@SuppressWarnings("rawtypes")
-@MappedSuperclass
 public abstract class BaseEntity<T extends BaseEntity> implements Comparable<Object>, Serializable {
 
 	/**
@@ -22,9 +16,6 @@ public abstract class BaseEntity<T extends BaseEntity> implements Comparable<Obj
 	 */
 	private static final long serialVersionUID = -5645931575055794188L;
 	
-	@Id
-	/*@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_STORE")*/
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 
 	public Long getId() {
@@ -37,6 +28,9 @@ public abstract class BaseEntity<T extends BaseEntity> implements Comparable<Obj
 
 	/**
 	 * 排序
+	 *
+	 * @param obj
+	 * @return
 	 */
 	@Override
 	public int compareTo(Object obj) {
@@ -46,7 +40,6 @@ public abstract class BaseEntity<T extends BaseEntity> implements Comparable<Obj
 		if (!obj.getClass().getName().equals(getClass().getName())) {
 			return  getClass().getName().hashCode()-obj.getClass().getName().hashCode();
 		}
-		@SuppressWarnings("unchecked")
 		T o = (T) obj;
 		if (equals(o)) {
 			return 0;

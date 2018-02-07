@@ -1,47 +1,64 @@
-/**
- * (c) 2006 JOVEN
- * 
- * http://www.joven.com.cn
- */
 package me.cloudcat.develop.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+
 /**
- * 
- * @author ZZWang
+ * 用户信息
  *
- * 2017年7月8日 下午9:51:07
+ * @Author: zhenzhong.wang
+ * @Time: 2018/2/7 18:28
  */
-public class User {
+public class User extends BaseEntity<User> implements UserDetails{
 
-	protected Long id;
 
-	private String username;
+	private String username;  // 用户名
+	private String password;  // 密码
+	private String email;     // 邮箱
 
-	private String email;
+	private Person person;    // 人员
 
-	private Person person;
-
-	public Person getPerson() {
-		return person;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	@Override
+	public String getPassword() {
+		return null;
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public Long getId() {
-		return id;
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
 	}
 
-	public void setUsername(String username) {
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return false;
+	}
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
 		this.username = username;
 	}
 
@@ -51,6 +68,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 }
