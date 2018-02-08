@@ -1,9 +1,12 @@
 package me.cloudcat.develop.entity;
 
+import me.cloudcat.develop.entity.type.Status;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户信息
@@ -14,11 +17,18 @@ import java.util.Collection;
 public class User extends BaseEntity<User> implements UserDetails{
 
 
-	private String username;  // 用户名
-	private String password;  // 密码
-	private String email;     // 邮箱
+	private String username;  	// 用户名
+	private String password;  	// 密码
+	private String email;     	// 邮箱
 
-	private Person person;    // 人员
+	private Person person;    	// 人员
+	private List<Role> roles;   // 角色
+
+	private Date createTime;     // 创建时间
+	private Date updateTime;     // 更新时间
+	private Date lastLoginTime;  // 最后登录时间
+
+	private Status status;       // 停启用状态
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -78,4 +88,43 @@ public class User extends BaseEntity<User> implements UserDetails{
 		this.person = person;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public Date getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(Date lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 }
