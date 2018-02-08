@@ -14,8 +14,7 @@ import java.util.List;
  * @Author: zhenzhong.wang
  * @Time: 2018/2/7 18:28
  */
-public class User extends BaseEntity<User> implements UserDetails{
-
+public class User extends BaseEntity<User> implements UserDetails {
 
 	private String username;  	// 用户名
 	private String password;  	// 密码
@@ -28,20 +27,20 @@ public class User extends BaseEntity<User> implements UserDetails{
 	private Date updateTime;     // 更新时间
 	private Date lastLoginTime;  // 最后登录时间
 
-	private Status status;       // 停启用状态
+	private Status status = Status.ENABLE;  // 停启用状态
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return roles;
 	}
 
 	@Override
 	public String getPassword() {
-		return null;
+		return password;
 	}
 
 	public String getUsername() {
-		return username;
+	    return username;
 	}
 
 	@Override

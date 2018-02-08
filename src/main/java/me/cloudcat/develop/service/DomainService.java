@@ -174,6 +174,7 @@ public class DomainService {
     /**
      * 获取新域名
      * 通过新域名集合和旧域名记录的对比，获取新更新的域名
+     *
      * @param newDomainArray
      * @return
      */

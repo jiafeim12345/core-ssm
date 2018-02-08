@@ -1,21 +1,13 @@
 package me.cloudcat.develop.dao;
 
-import java.util.List;
-
+import me.cloudcat.develop.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
 
-import me.cloudcat.develop.entity.User;
+import java.util.List;
 
-public interface UserDao {
-	
-	public User getUser(String username);
-	
-	public List<User> getUserTest(String username);
-	
-	@Select(value="select * from tbl_user")
-	public List<User> findAllUser();
-
-	public User getUserByType(@Param("type") int type);
+@Repository
+public interface UserDao extends BaseDao<User> {
 
 }

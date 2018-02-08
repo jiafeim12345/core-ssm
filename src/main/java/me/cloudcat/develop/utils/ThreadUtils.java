@@ -3,7 +3,7 @@ package me.cloudcat.develop.utils;
 import java.util.Random;
 
 /**
- * 线程工具类
+ * 线程工具
  *
  * @Author: zhenzhong.wang
  * @Time: 2018/1/23 10:27

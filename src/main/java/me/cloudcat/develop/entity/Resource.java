@@ -23,7 +23,7 @@ public class Resource extends BaseEntity<Resource> {
     private Date createTime;
     private Date updateTime;
 
-    private Status status;   // 停启用状态
+    private Status status = Status.ENABLE;   // 停启用状态
 
     public String getName() {
         return name;

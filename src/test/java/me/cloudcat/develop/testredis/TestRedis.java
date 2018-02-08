@@ -1,4 +1,4 @@
-package me.cloudcat.devlelop.testredis;
+package me.cloudcat.develop.testredis;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

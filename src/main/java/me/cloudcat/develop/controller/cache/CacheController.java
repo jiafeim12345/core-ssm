@@ -24,27 +24,27 @@ import me.cloudcat.develop.entity.User;
 @RequestMapping(value = "/cache")
 public class CacheController {
 
-	@Autowired
+	/*@Autowired
 	UserDao userDao;
 	
 	@Autowired
 	SqlSessionFactory factory;
 	
-	/**
+	*//**
 	 * 测试一级缓存
 	 * @param request
 	 * @param model
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/testOneLevel", method = RequestMethod.GET)
 	public String test1(HttpServletRequest request, Model model) {
 		// 同一session进行查询操作测试
-		/*SqlSession session = factory.openSession();
+		*//*SqlSession session = factory.openSession();
 		List<Object> list = session.selectList("me.cloudcat.develop.dao.UserDao.getUserTest");
 		System.out.println(list.size());
 		//此处会调用一级缓存
 		list = session.selectList("me.cloudcat.develop.dao.UserDao.getUserTest");
-		System.out.println(list.size());*/
+		System.out.println(list.size());*//*
 		
 		SqlSession session = factory.openSession();
 		UserDao mapper = session.getMapper(UserDao.class);
@@ -62,12 +62,12 @@ public class CacheController {
 		return null;
 	}
 	
-	/**
+	*//**
 	 * 测试二级缓存（spring注入情况）
 	 * @param request
 	 * @param model
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/testTwoLevel", method = RequestMethod.GET)
 	public String test2(HttpServletRequest request, Model model) {
 		List<User> list = userDao.getUserTest("admin");
@@ -77,12 +77,12 @@ public class CacheController {
 		System.out.println(list.size());
 		return null;
 	}
-	/**
+	*//**
 	 * 测试二级缓存（session获取mapper）
 	 * @param request
 	 * @param model
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/testTwoLevel2", method = RequestMethod.GET)
 	public String test3(HttpServletRequest request, Model model) {
 		SqlSession session = factory.openSession();
@@ -97,6 +97,6 @@ public class CacheController {
 		System.out.println(list.size());
 		System.out.println("124323");
 		return null;
-	}
+	}*/
 
 }

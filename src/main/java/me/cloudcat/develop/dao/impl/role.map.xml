@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="me.cloudcat.develop.dao.UserDao">
+<mapper namespace="me.cloudcat.develop.dao.RoleDao">
     <!--启用缓存,设定缓存存储策略为先进先出，缓存刷新间隔为10秒钟，并发访问策略为只读 -->
     <!--    <cache eviction="FIFO" flushInterval="10000" size="512" readOnly="true"/>-->
 
     <!--设置ehcache缓存 -->
     <cache type="org.mybatis.caches.ehcache.EhcacheCache" />
 
-    <resultMap type="User" id="userMap" autoMapping="true">
-        <collection property="roles" ofType="Role">
-            <id property="id" column="role_id"/>
-            <id property="name" column="role_name"/>
-        </collection>
+    <resultMap type="Role" id="roleMap" autoMapping="true">
+        <collection property="resources" ofType="Resource" autoMapping="true"/>
     </resultMap>
 
     <sql id="basic_header">
-        SELECT u.*
-        FROM tbl_user u
+        SELECT r.*
+        FROM tbl_role r
     </sql>
 
     <sql id="detail_header">
-        SELECT u.*,r.id role_id,r.name role_name
-        FROM tbl_user u
-        LEFT JOIN tbl_user_role_rel rel ON rel.user_id = u.id
-        LEFT JOIN tbl_role r on rel.role_id = r.id
+        SELECT r.*, re.
     </sql>
 
     <select id="getBasic" resultMap="userMap">

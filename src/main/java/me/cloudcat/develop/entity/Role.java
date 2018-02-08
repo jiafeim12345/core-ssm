@@ -1,6 +1,8 @@
 package me.cloudcat.develop.entity;
 
 import me.cloudcat.develop.entity.type.Status;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
@@ -10,13 +12,13 @@ import java.util.List;
  * @Author: zhenzhong.wang
  * @Time: 2018/2/7 18:28
  */
-public class Role extends BaseEntity<Role> {
+public class Role extends BaseEntity<Role> implements GrantedAuthority {
 
     private String name;
     private String description;
 
-    private List<Resource> resources;  // 资源集合
-    private Status status;             // 停启用状态
+    private List<Resource> resources;       // 资源集合
+    private Status status = Status.ENABLE;  // 停启用状态
 
     public String getName() {
         return name;
@@ -48,5 +50,10 @@ public class Role extends BaseEntity<Role> {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
     }
 }
