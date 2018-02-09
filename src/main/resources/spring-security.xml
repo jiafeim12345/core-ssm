@@ -10,14 +10,56 @@
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd ">
 
-    <security:http auto-config="true">
+    <security:http auto-config="true" access-decision-manager-ref="accessDecisionManager" >
         <security:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
         <security:intercept-url pattern="/api/**" access="ROLE_USER"/>
+
+        <!-- 防止重复登录 -->
+        <security:session-management session-fixation-protection="none">
+            <security:concurrency-control max-sessions="10" error-if-maximum-exceeded="false"
+                                          expired-url="/" session-registry-alias="sessionRegistry"/>
+        </security:session-management>
+
+        <!-- 记住我：默认两周 -->
+        <security:remember-me remember-me-parameter="remember"/>
+
+        <!-- 403控制 -->
+        <security:access-denied-handler ref="accessDeniedHandler"/>
+        <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->
+        <security:custom-filter ref="apiFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
     </security:http>
 
-    <!--认证管理器(提供用户名、密码验证) -->
+    <!-- 403控制 -->
+    <bean id="accessDeniedHandler" class="me.cloudcat.develop.security.ResourceAccessDeniedHandler"/>
+
+    <!-- 访问决策管理器，AffirmativeBased表示只要有一个Voter通过权限要求，就可以访问 -->
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <constructor-arg name="decisionVoters">
+            <list>
+                <bean class="me.cloudcat.develop.security.AuthenticatedVoter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- 自定义api过滤器,拦截api请求，进行用户认证，访问控制，资源权限管理 -->
+    <bean id="apiFilter" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+        <!-- 设定每次请求都检查 -->
+        <property name="observeOncePerRequest" value="false"/>
+        <!-- 用户认证 -->
+        <property name="authenticationManager" ref="authenticationManager" />
+        <!-- 自定义资源访问决策管理器 -->
+        <property name="accessDecisionManager" ref="resourceAccessDecisionManager" />
+        <!-- 自定义资源数据源，从数据库拿出权限-资源信息 -->
+        <property name="securityMetadataSource" ref="securityMetadataSource" />
+    </bean>
+
+    <!-- 认证管理器(提供用户名、密码验证) -->
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider user-service-ref="userDetailsService" />
     </security:authentication-manager>
+    <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
+    <bean id="resourceAccessDecisionManager" class="me.cloudcat.develop.security.ResourceAccessDecisionManager"/>
+    <!-- 资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色去访问。 -->
+    <bean id="securityMetadataSource" class="me.cloudcat.develop.security.SecurityMetadataSource"/>
 
 </beans>

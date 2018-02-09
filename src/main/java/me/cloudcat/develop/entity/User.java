@@ -29,6 +29,10 @@ public class User extends BaseEntity<User> implements UserDetails {
 
 	private Status status = Status.ENABLE;  // 停启用状态
 
+    private boolean accountNonExpired;      // 账户未过期
+    private boolean accountNonLocked;       // 账户未被锁
+    private boolean credentialsNonExpired;  // 认证未过期
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
@@ -45,22 +49,22 @@ public class User extends BaseEntity<User> implements UserDetails {
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return false;
+		return accountNonExpired;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return false;
+		return accountNonLocked;
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return false;
+		return credentialsNonExpired;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return false;
+		return status.equals(Status.ENABLE) ? true : false;
 	}
 
     public void setPassword(String password) {
@@ -126,4 +130,23 @@ public class User extends BaseEntity<User> implements UserDetails {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+
+    /**
+     * 设定账户安全状态
+     *
+     * @param accountNonLocked
+     * @param accountNonExpired
+     * @param credentialsNonExpired
+     */
+	public void setSecurityStatus(Boolean accountNonLocked, Boolean accountNonExpired, Boolean credentialsNonExpired) {
+        if (accountNonLocked != null){
+            this.accountNonLocked = accountNonLocked;
+        }
+        if (accountNonExpired != null) {
+            this.accountNonExpired = accountNonExpired;
+        }
+        if (credentialsNonExpired != null) {
+            this.credentialsNonExpired = credentialsNonExpired;
+        }
+    }
 }

@@ -2,11 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="me.cloudcat.develop.dao.UserDao">
-    <!--启用缓存,设定缓存存储策略为先进先出，缓存刷新间隔为10秒钟，并发访问策略为只读 -->
-    <!--    <cache eviction="FIFO" flushInterval="10000" size="512" readOnly="true"/>-->
-
-    <!--设置ehcache缓存 -->
-    <cache type="org.mybatis.caches.ehcache.EhcacheCache" />
 
     <resultMap type="User" id="userMap" autoMapping="true">
         <collection property="roles" ofType="Role">
@@ -41,7 +36,7 @@
         </where>
     </select>
 
-    <select id="findByCondition" resultMap="userMap" >
+    <select id="findByCondition" resultMap="userMap">
         <include refid="detail_header"/>
         <where>
             <if test="e.email!=null}">
@@ -56,6 +51,15 @@
         </where>
     </select>
 
+    <select id="findByUsernameOrEmail" resultMap="userMap">
+        <include refid="detail_header"/>
+        <where>
+            username = #{value}
+            OR
+            email = #{value}
+        </where>
+    </select>
+
     <select id="findAll" resultMap="userMap">
         <include refid="detail_header"/>
     </select>
@@ -64,5 +68,16 @@
         insert into tbl_user(username, email, password, status)
         VALUES(#{e.username}, #{e.email}, #{e.password}, #{e.status})
     </insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_user
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateLastLoginTime">
+        UPDATE tbl_user
+        SET last_login_time = now()
+        WHERE id = #{id}
+    </update>
 
 </mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="me.cloudcat.develop.dao.ResourceDao">
+
+    <resultMap type="Resource" id="resourceMap" autoMapping="true">
+    </resultMap>
+
+    <sql id="basic_header">
+        SELECT re.*
+        FROM tbl_resource re
+    </sql>
+
+    <select id="getBasic" resultMap="resourceMap">
+        <include refid="basic_header"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <select id="findByCondition" resultMap="resourceMap" >
+        <include refid="basic_header"/>
+        <where>
+            <if test="e.name!=null}">
+                AND re.name = #{e.name}
+            </if>
+            <if test="e.method!=null}">
+                AND re.method = #{e.method}
+            </if>
+            <if test="e.api!=null}">
+                AND re.api = #{e.api}
+            </if>
+            <if test="e.status!=null}">
+                AND re.status = #{e.status}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAll" resultMap="resourceMap">
+        <include refid="basic_header"/>
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
+        insert into tbl_resource(name, description, method, api, status)
+        VALUES(#{e.name}, #{e.description}, #{e.method}, #{e.api}, #{e.status})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_resource
+        WHERE id = #{id}
+    </delete>
+
+</mapper>

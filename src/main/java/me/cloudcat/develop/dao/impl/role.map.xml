@@ -2,14 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="me.cloudcat.develop.dao.RoleDao">
-    <!--启用缓存,设定缓存存储策略为先进先出，缓存刷新间隔为10秒钟，并发访问策略为只读 -->
-    <!--    <cache eviction="FIFO" flushInterval="10000" size="512" readOnly="true"/>-->
-
-    <!--设置ehcache缓存 -->
-    <cache type="org.mybatis.caches.ehcache.EhcacheCache" />
 
     <resultMap type="Role" id="roleMap" autoMapping="true">
-        <collection property="resources" ofType="Resource" autoMapping="true"/>
+        <collection property="resources" ofType="Resource" column="re_id"
+                    select="me.cloudcat.develop.dao.ResourceDao.getBasic"/>
     </resultMap>
 
     <sql id="basic_header">
@@ -18,45 +14,50 @@
     </sql>
 
     <sql id="detail_header">
-        SELECT r.*, re.
+        SELECT r.*, re.id re_id
+        FROM tbl_role r
+        LEFT JOIN tbl_role_resource_rel rel ON rel.role_id = r.id
+        LEFT JOIN tbl_resource re ON rel.resource_id = re.id
     </sql>
 
-    <select id="getBasic" resultMap="userMap">
+    <select id="getBasic" resultMap="roleMap">
         <include refid="basic_header"/>
         <where>
             id = #{id}
         </where>
     </select>
 
-    <select id="findOne" resultMap="userMap">
+    <select id="findOne" resultMap="roleMap">
         <include refid="detail_header"/>
         <where>
             id = #{id}
         </where>
     </select>
 
-    <select id="findByCondition" resultMap="userMap" >
+    <select id="findByCondition" resultMap="roleMap" >
         <include refid="detail_header"/>
         <where>
-            <if test="e.email!=null}">
-                AND u.email = #{e.email}
-            </if>
-            <if test="e.username!=null}">
-                AND u.email = #{e.username}
+            <if test="e.name!=null}">
+                AND r.name = #{e.name}
             </if>
             <if test="e.status!=null}">
-                AND u.status = #{e.status}
+                AND r.status = #{e.status}
             </if>
         </where>
     </select>
 
-    <select id="findAll" resultMap="userMap">
+    <select id="findAll" resultMap="roleMap">
         <include refid="detail_header"/>
     </select>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
-        insert into tbl_user(username, email, password, status)
-        VALUES(#{e.username}, #{e.email}, #{e.password}, #{e.status})
+        insert into tbl_role(name, description, status)
+        VALUES(#{e.name}, #{e.description}, #{e.status})
     </insert>
+
+    <delete id="delete">
+        DELETE FROM tbl_role
+        WHERE id = #{id}
+    </delete>
 
 </mapper>

@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface UserDao extends BaseDao<User> {
 
+    public void updateLastLoginTime(Long id);
+
+    public User findByUsernameOrEmail(String value);
 }
