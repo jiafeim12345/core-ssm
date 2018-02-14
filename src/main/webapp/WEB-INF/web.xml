@@ -48,6 +48,11 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/error/404.jsp</location>
+    </error-page>
+
 	<!-- log4j -->
 	<context-param>
 		<param-name>webAppRootKey</param-name>
