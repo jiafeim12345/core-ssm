@@ -10,7 +10,7 @@ import org.quartz.TriggerListener;
  * @Author: zhenzhong.wang
  * @Time: 2018/2/5 11:20
  */
-public class TaskTriggerListener implements TriggerListener{
+public class TaskTriggerListener implements TriggerListener {
 
     @Override
     public String getName() {
