@@ -8,11 +8,9 @@ package me.cloudcat.develop.entity.type;
  */
 public enum Status implements BaseType {
 
-    // 启用
-    ENABLE(1),
+    DISABLE(0),   // 停用
 
-    // 停用
-    DISABLE(0);
+    ENABLE(1);    // 启用
 
     private int value;
 

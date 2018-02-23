@@ -27,7 +27,7 @@ public class User extends BaseEntity<User> implements UserDetails {
 	private Date updateTime;     // 更新时间
 	private Date lastLoginTime;  // 最后登录时间
 
-	private Status status = Status.ENABLE;  // 停启用状态
+	private Status status;  // 停启用状态
 
     private boolean accountNonExpired;      // 账户未过期
     private boolean accountNonLocked;       // 账户未被锁

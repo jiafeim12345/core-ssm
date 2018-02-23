@@ -8,11 +8,9 @@ package me.cloudcat.develop.entity.type;
  */
 public enum RoleType implements BaseType {
 
-    // 超级管理员
-    ROOT(1),
+    ROOT(0),   // 超级管理员
 
-    // 普通用户
-    USER(2);
+    USER(1);   // 普通用户
 
     private int value;
 

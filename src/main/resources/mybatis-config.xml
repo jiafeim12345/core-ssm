@@ -20,7 +20,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     <!-- 枚举类型处理 -->
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Status" />
-        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Method" />
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="RoleType" />
     </typeHandlers>
 

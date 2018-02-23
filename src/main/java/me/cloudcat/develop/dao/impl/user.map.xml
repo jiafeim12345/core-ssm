@@ -6,7 +6,7 @@
     <resultMap type="User" id="userMap" autoMapping="true">
         <collection property="roles" ofType="Role">
             <id property="id" column="role_id"/>
-            <id property="name" column="role_name"/>
+            <result property="name" column="role_name"/>
         </collection>
     </resultMap>
 

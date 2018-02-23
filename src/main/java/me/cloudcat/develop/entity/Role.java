@@ -18,7 +18,7 @@ public class Role extends BaseEntity<Role> implements GrantedAuthority {
     private String description;
 
     private List<Resource> resources;       // 资源集合
-    private Status status = Status.ENABLE;  // 停启用状态
+    private Status status;  // 停启用状态
 
     public String getName() {
         return name;

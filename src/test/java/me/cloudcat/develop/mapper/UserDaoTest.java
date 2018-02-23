@@ -1,6 +1,8 @@
 package me.cloudcat.develop.mapper;
 
+import me.cloudcat.develop.dao.RoleDao;
 import me.cloudcat.develop.dao.UserDao;
+import me.cloudcat.develop.entity.Role;
 import me.cloudcat.develop.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,9 @@ public class UserDaoTest {
 	@Autowired
 	UserDao userDao;
 
+    @Autowired
+    RoleDao roleDao;
+
 	@Test
 	public void testGet() {
         List<User> all = userDao.findAll();
@@ -33,6 +38,12 @@ public class UserDaoTest {
                 }
             }
         });
+    }
+
+    @Test
+    public void testOne() {
+        List<Role> all = roleDao.findAll();
+        System.out.println(all.size());
     }
 
 }

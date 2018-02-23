@@ -16,14 +16,13 @@ public class Resource extends BaseEntity<Resource> {
     private String name;
     private String description;
 
-
     private Method method;   // 资源类型
-    private String api;      // 接口信息
+    private String api;          // 接口信息
 
     private Date createTime;
     private Date updateTime;
 
-    private Status status = Status.ENABLE;   // 停启用状态
+    private Status status;       // 停启用状态
 
     public String getName() {
         return name;
