@@ -17,7 +17,7 @@
 </script>
 <body>
     <h4><span id="total">${info}</span></h4>
-    <form id="info-form" action="${ctx}/admin/wanwang/config" method="post" >
+    <form id="info-form" action="${ctx}/api/admin/domainConfig" method="post" >
         <table class="table table-hover table-condensed">
             <caption  style="text-align:center"><h2><b>cookie更新</b></h2></caption>
             <tbody id="new_tbody" style="font-size: 20px">

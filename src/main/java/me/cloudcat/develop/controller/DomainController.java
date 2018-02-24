@@ -51,7 +51,7 @@ public class DomainController {
         configMap = redisFactory.getRedisMap("config");
     }
 
-    @RequestMapping(value = "/admin/wanwang/home", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/admin/domain", method = RequestMethod.GET)
     public String wanwangHome(Model model, HttpServletRequest request, @RequestParam(value = "username", defaultValue = "") String username) throws InterruptedException {
 
         if (!username.equals(Constant.recieveUsername)) {
@@ -89,14 +89,14 @@ public class DomainController {
     }
 
 
-    @RequestMapping(value = "/admin/wanwang/config", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.GET)
     public String getCookie(Model model) {
         model.addAttribute("minTime", ThreadUtils.getMinTime());
         model.addAttribute("maxTime", ThreadUtils.getMaxTime());
         return "/domain/config";
     }
 
-    @RequestMapping(value = "/admin/wanwang/config", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.POST)
     public String saveCookie(Model model, @RequestParam("cookie") String cookie,
                              @RequestParam("minTime") Integer minTime, @RequestParam("maxTime") Integer maxTime,
                              RedirectAttributes reAttributes) {
@@ -119,7 +119,7 @@ public class DomainController {
             resultMap.put("value", maxTime);
             socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
         }
-        return "redirect:/admin/wanwang/config";
+        return "redirect:/api/admin/domainConfig";
     }
 
     /**
@@ -129,7 +129,7 @@ public class DomainController {
      * @throws UnsupportedEncodingException
      * @throws SignatureException
      */
-    @RequestMapping(value = "/admin/whois", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/admin/whois", method = RequestMethod.GET)
     public String whois(@RequestParam("domainName") String domainName, Model model) throws UnsupportedEncodingException, SignatureException {
         Map<String, Object> whoisInfo = DNSUtils.getWhois(domainName);
         model.addAttribute("whoisInfo", whoisInfo);
