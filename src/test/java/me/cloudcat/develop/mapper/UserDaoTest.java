@@ -25,7 +25,7 @@ public class UserDaoTest {
 		UserDao mapper = session.getMapper(UserDao.class);
 		
 		List<User> user = mapper.getUserTest(null);
-		System.out.println(user.sconstantize());
+		System.out.println(user.size());
 	}
 
 /*	@SQLGenerator
