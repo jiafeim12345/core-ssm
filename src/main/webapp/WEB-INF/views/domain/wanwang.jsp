@@ -113,14 +113,14 @@
                 zIndex: 10,
                 shadeClose: true, //点击遮罩关闭层
                 area : ['600px' , '400px'],
-                content: '${ctx}/admin/whois?domainName=' +domainName
+                content: '${ctx}/api/admin/whois?domainName=' +domainName
             });
         }
     </script>
 </head>
 
 <body>
-<h4><span id="error"><a href="${ctx}/admin/wanwang/config">${error}</a></span></h4>
+<h4><span id="error"><a href="${ctx}/api/admin/domainConfig">${error}</a></span></h4>
 <h4>域名总数：<span id="total"></span>&nbsp;&nbsp;&nbsp;&nbsp;
     <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;<span id="maxTime">${maxTime}</span>&nbsp;秒</span></h4>
 <table class="table table-hover table-condensed">
