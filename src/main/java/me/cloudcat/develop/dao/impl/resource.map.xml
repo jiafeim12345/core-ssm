@@ -40,6 +40,13 @@
         <include refid="basic_header"/>
     </select>
 
+    <select id="getResourcesByRole" resultMap="resourceMap">
+        SELECT re.*
+        FROM tbl_resource re
+        LEFT JOIN tbl_role_resource_rel rel ON rel.resource_id = re.id
+        WHERE rel.role_id = #{roleId}
+    </select>
+
     <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
         insert into tbl_resource(name, description, method, api, status)
         VALUES(#{e.name}, #{e.description}, #{e.method}, #{e.api}, #{e.status})

@@ -4,8 +4,9 @@
 <mapper namespace="me.cloudcat.develop.dao.RoleDao">
 
     <resultMap type="Role" id="roleMap" autoMapping="true">
-        <collection property="resources" ofType="Resource" column="re_id"
-                    select="me.cloudcat.develop.dao.ResourceDao.getBasic"/>
+        <collection property="resources" ofType="Resource" column="id"
+                    select="me.cloudcat.develop.dao.ResourceDao.getResourcesByRole">
+        </collection>
     </resultMap>
 
     <sql id="basic_header">
