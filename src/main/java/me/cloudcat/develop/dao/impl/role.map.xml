@@ -3,7 +3,10 @@
 
 <mapper namespace="me.cloudcat.develop.dao.RoleDao">
 
-    <resultMap type="Role" id="roleMap" autoMapping="true">
+    <resultMap type="Role" id="roleBasicMap" autoMapping="true">
+    </resultMap>
+
+    <resultMap type="Role" id="roleDetailMap" autoMapping="true">
         <collection property="resources" ofType="Resource" column="id"
                     select="me.cloudcat.develop.dao.ResourceDao.getResourcesByRole">
         </collection>
@@ -21,22 +24,22 @@
         LEFT JOIN tbl_resource re ON rel.resource_id = re.id
     </sql>
 
-    <select id="getBasic" resultMap="roleMap">
+    <select id="getBasic" resultMap="roleBasicMap">
         <include refid="basic_header"/>
         <where>
             id = #{id}
         </where>
     </select>
 
-    <select id="findOne" resultMap="roleMap">
-        <include refid="detail_header"/>
+    <select id="findOne" resultMap="roleDetailMap">
+        <include refid="basic_header"/>
         <where>
             id = #{id}
         </where>
     </select>
 
-    <select id="findByCondition" resultMap="roleMap" >
-        <include refid="detail_header"/>
+    <select id="findByCondition" resultMap="roleDetailMap" >
+        <include refid="basic_header"/>
         <where>
             <if test="e.name!=null}">
                 AND r.name = #{e.name}
@@ -47,8 +50,8 @@
         </where>
     </select>
 
-    <select id="findAll" resultMap="roleMap">
-        <include refid="detail_header"/>
+    <select id="findAll" resultMap="roleDetailMap">
+        <include refid="basic_header"/>
     </select>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="e.id">

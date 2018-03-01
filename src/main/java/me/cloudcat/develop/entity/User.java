@@ -29,9 +29,9 @@ public class User extends BaseEntity<User> implements UserDetails {
 
 	private Status status;  // 停启用状态
 
-    private boolean accountNonExpired;      // 账户未过期
-    private boolean accountNonLocked;       // 账户未被锁
-    private boolean credentialsNonExpired;  // 认证未过期
+    private boolean accountNonExpired;      // 账户是否过期
+    private boolean accountNonLocked;       // 账户是否被锁
+    private boolean credentialsNonExpired;  // 认证是否过期
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

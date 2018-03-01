@@ -26,7 +26,8 @@ public class LoginServiceImpl implements UserDetailsService {
         User user = userDao.findByUsernameOrEmail(username);
         if (user != null) {
             // 更新用户状态
-            user.setSecurityStatus(true, null, null);
+            user.setSecurityStatus(true, true, true);
+
             userDao.updateLastLoginTime(user.getId());
         }
         return user;

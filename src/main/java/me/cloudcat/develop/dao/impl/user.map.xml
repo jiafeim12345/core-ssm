@@ -3,7 +3,10 @@
 
 <mapper namespace="me.cloudcat.develop.dao.UserDao">
 
-    <resultMap type="User" id="userMap" autoMapping="true">
+    <resultMap type="User" id="userBasicMap" autoMapping="true">
+    </resultMap>
+
+    <resultMap type="User" id="userDetailMap" autoMapping="true">
         <collection property="roles" ofType="Role">
             <id property="id" column="role_id"/>
             <result property="name" column="role_name"/>
@@ -22,22 +25,22 @@
         LEFT JOIN tbl_role r on rel.role_id = r.id
     </sql>
 
-    <select id="getBasic" resultMap="userMap">
+    <select id="getBasic" resultMap="userBasicMap">
         <include refid="basic_header"/>
         <where>
             id = #{id}
         </where>
     </select>
 
-    <select id="findOne" resultMap="userMap">
-        <include refid="detail_header"/>
+    <select id="findOne" resultMap="userDetailMap">
+        <include refid="basic_header"/>
         <where>
             id = #{id}
         </where>
     </select>
 
-    <select id="findByCondition" resultMap="userMap">
-        <include refid="detail_header"/>
+    <select id="findByCondition" resultMap="userDetailMap">
+        <include refid="basic_header"/>
         <where>
             <if test="e.email!=null}">
                 AND u.email = #{e.email}
@@ -51,8 +54,8 @@
         </where>
     </select>
 
-    <select id="findByUsernameOrEmail" resultMap="userMap">
-        <include refid="detail_header"/>
+    <select id="findByUsernameOrEmail" resultMap="userDetailMap">
+        <include refid="basic_header"/>
         <where>
             username = #{value}
             OR
@@ -60,8 +63,8 @@
         </where>
     </select>
 
-    <select id="findAll" resultMap="userMap">
-        <include refid="detail_header"/>
+    <select id="findAll" resultMap="roleDetailMap">
+        <include refid="basic_header"/>
     </select>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="e.id">

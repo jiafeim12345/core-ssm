@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*: spring-context.xml", "classpath:spring-mvc.xml",
+@ContextConfiguration(locations={"classpath:spring-context.xml",
         "classpath:spring-redis.xml", "classpath:spring-rabbitmq.xml", "classpath:spring-security.xml"})
 public class UserDaoTest {
 

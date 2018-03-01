@@ -18,7 +18,7 @@ public class ResourceAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
-
+        System.out.println(configAttributes.size());
     }
 
     @Override
