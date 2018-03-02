@@ -45,5 +45,4 @@ public class UserDaoTest {
         List<Role> all = roleDao.findAll();
         System.out.println(all.size());
     }
-
 }

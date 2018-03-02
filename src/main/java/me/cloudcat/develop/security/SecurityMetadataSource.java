@@ -109,6 +109,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         if (resourceMap != null) {
             Map<Resource, Collection<ConfigAttribute>> map = (Map<Resource, Collection<ConfigAttribute>>) resourceMap;
             for (Map.Entry<Resource, Collection<ConfigAttribute>> entry : map .entrySet()) {
+                String name = entry.getValue().iterator().next().getClass().getName();
                 allAttributes.addAll(entry.getValue());
             }
         }

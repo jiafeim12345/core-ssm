@@ -13,6 +13,6 @@
 </head>
 
 <body>
-    <b><h1 align="center">404</h1></b>
+    <b><h1 align="center">403</h1></b>
 </body>
 </html>

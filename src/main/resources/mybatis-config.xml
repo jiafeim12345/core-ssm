@@ -14,7 +14,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<setting name="logImpl" value="LOG4J"/>
         <!-- 开启自动映射 -->
         <setting name="autoMappingBehavior" value="PARTIAL"/>
-
+        <!-- 自动映射时使用驼峰命名规则映射 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
     <!-- 枚举类型处理 -->

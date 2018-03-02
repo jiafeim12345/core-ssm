@@ -1,8 +1,8 @@
 package me.cloudcat.develop.entity;
 
+import me.cloudcat.develop.entity.type.Method;
 import me.cloudcat.develop.entity.type.Status;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 
 /**

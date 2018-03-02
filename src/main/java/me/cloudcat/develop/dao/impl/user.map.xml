@@ -63,7 +63,7 @@
         </where>
     </select>
 
-    <select id="findAll" resultMap="roleDetailMap">
+    <select id="findAll" resultMap="userDetailMap">
         <include refid="basic_header"/>
     </select>
 
