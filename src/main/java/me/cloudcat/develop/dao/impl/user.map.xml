@@ -7,9 +7,8 @@
     </resultMap>
 
     <resultMap type="User" id="userDetailMap" autoMapping="true">
-        <collection property="roles" ofType="Role">
-            <id property="id" column="role_id"/>
-            <result property="name" column="role_name"/>
+        <collection property="roles" ofType="Role" javaType="list" column="id"
+                    select="me.cloudcat.develop.dao.RoleDao.getRolesByUserId">
         </collection>
     </resultMap>
 
@@ -81,6 +80,22 @@
         UPDATE tbl_user
         SET last_login_time = now()
         WHERE id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        UPDATE tbl_user
+        SET password = #{e.password}
+        <where>
+            <if test="e.email!=null">
+               AND email = #{e.email}
+            </if>
+            <if test="e.username!=null">
+               AND username = #{e.username}
+            </if>
+            <if test="e.id!=null">
+                AND id = #{e.id}
+            </if>
+        </where>
     </update>
 
 </mapper>

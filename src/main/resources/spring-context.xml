@@ -18,6 +18,18 @@
 	<!-- spring基本配置 -->
 	<context:component-scan base-package="me.cloudcat.develop" />
 
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <array>
+                <value>config</value>
+                <value>jdbc</value>
+                <value>mq</value>
+            </array>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="true" />
+    </bean>
+
 	<!-- 数据源配置 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 		<!-- 基本属性 url、user、password -->

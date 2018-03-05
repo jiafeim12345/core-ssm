@@ -10,7 +10,10 @@
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd ">
 
-    <security:http auto-config="true" access-decision-manager-ref="accessDecisionManager" >
+    <context:property-placeholder location="classpath:config.properties" />
+
+    <security:http auto-config="true" use-expressions="false"
+                   access-decision-manager-ref="accessDecisionManager" >
 
         <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
         <security:intercept-url pattern="/api/**" access="IS_AUTHENTICATED_FULLY"/>
@@ -21,6 +24,9 @@
                                           expired-url="/" session-registry-alias="sessionRegistry"/>
         </security:session-management>
 
+        <!-- csrf攻击保护，默认开启 -->
+        <security:csrf disabled="true" />
+
         <!-- 记住我：默认两周 -->
         <security:remember-me remember-me-parameter="remember"/>
 
@@ -28,6 +34,7 @@
         <security:access-denied-handler ref="accessDeniedHandler"/>
         <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->
         <security:custom-filter ref="apiFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
+        <security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER" />
     </security:http>
 
     <!-- 403控制 -->
@@ -55,16 +62,42 @@
     </bean>
 
     <!-- 认证管理器(提供用户名、密码验证)
-         erase-credentials默认为true，会在ProviderManager（默认的AuthenticationManager实现）
-         的方法返回前调用，清除credentials等信息。
-         将erase-credentials设置为false后，不会清除这些保密信息，建议在使用完之后自己调用eraseCredentials()清楚这些信息。
+           1、erase-credentials默认为true，会在ProviderManager（默认的AuthenticationManager实现）的方法返回前调用，清除credentials等信息。
+           2、erase-credentials设置为false后，不会清除这些保密信息，建议在使用完之后自己调用eraseCredentials()清楚这些信息。
      -->
     <security:authentication-manager alias="authenticationManager" erase-credentials="true">
-        <security:authentication-provider user-service-ref="userDetailsService" />
+        <security:authentication-provider user-service-ref="userDetailsService">
+            <!-- 密码加密 -->
+            <security:password-encoder hash="sha-256" ref="passwordEncoder"/>
+        </security:authentication-provider>
     </security:authentication-manager>
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <bean id="saltSource" class="me.cloudcat.develop.security.password.CustomSaltSource"/>
+
+
     <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
     <bean id="resourceAccessDecisionManager" class="me.cloudcat.develop.security.ResourceAccessDecisionManager"/>
     <!-- 资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色去访问。 -->
     <bean id="securityMetadataSource" class="me.cloudcat.develop.security.SecurityMetadataSource"/>
+
+
+    <!-- 退出处理 -->
+    <bean id="customLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+        <!-- 处理退出的url -->
+        <property name="filterProcessesUrl" value="/api/logout" />
+        <!--<property name="logoutSuccessHandler" ref="logoutSuccessHandler" />-->
+
+        <!-- 退出处理成功后的默认显示url -->
+        <constructor-arg index="0" value="/" />
+        <constructor-arg index="1">
+            <!-- 退出成功后的handler列表 -->
+            <array>
+                <bean id="securityContextLogoutHandler"
+                      class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+            </array>
+        </constructor-arg>
+    </bean>
+    <bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler" />
+
 
 </beans>

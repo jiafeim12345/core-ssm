@@ -13,4 +13,6 @@ public interface UserDao extends BaseDao<User> {
     public void updateLastLoginTime(Long id);
 
     public User findByUsernameOrEmail(String value);
+
+    public void updatePassword(@Param("e") User user);
 }

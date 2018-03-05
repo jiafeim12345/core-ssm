@@ -14,15 +14,14 @@
  */
 package me.cloudcat.develop.security;
 
-import java.util.Collection;
-
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
+
+import java.util.Collection;
 
 
 /**
