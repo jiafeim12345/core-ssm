@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service("userDetailsService")
 public class LoginServiceImpl implements UserDetailsService {
 
-    private Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger("security");
 
     @Autowired
     UserDao userDao;
@@ -34,7 +34,6 @@ public class LoginServiceImpl implements UserDetailsService {
         if (user != null) {
             // 更新用户状态
             user.setSecurityStatus(true, true, true);
-            logger.info("Login success: " + user.getUsername());
             userDao.updateLastLoginTime(user.getId());
         }
         return user;

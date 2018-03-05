@@ -7,6 +7,7 @@ import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.service.DomainService;
+import me.cloudcat.develop.utils.BusinessUtils;
 import me.cloudcat.develop.utils.DNSUtils;
 import me.cloudcat.develop.utils.ThreadUtils;
 import me.cloudcat.develop.websocket.handler.ChatWebSocketHandler;
@@ -52,12 +53,8 @@ public class DomainController {
     }
 
     @RequestMapping(value = "/api/admin/domain", method = RequestMethod.GET)
-    public String wanwangHome(Model model, HttpServletRequest request, @RequestParam(value = "username", defaultValue = "") String username) throws InterruptedException {
+    public String wanwangHome(Model model, HttpServletRequest request) throws InterruptedException {
 
-        if (!username.equals(Constant.recieveUsername)) {
-           return "/domain/wanwang";
-        }
-        request.getSession().setAttribute(Constant.SESSION_USER, username);
         // 第一次域名查询
         String oldDomain = domainService.getWanWangDomain();
         // cookie异常，返回首页
@@ -110,14 +107,14 @@ public class DomainController {
             reAttributes.addFlashAttribute("info", "设置成功！");
             resultMap.put("option", "updateMinTime");
             resultMap.put("value", minTime);
-            socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
+            socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
         }
         if (maxTime != null && maxTime > 0 && minTime <= maxTime) {
             ThreadUtils.setMaxTime(maxTime);
             reAttributes.addFlashAttribute("info", "设置成功！");
             resultMap.put("option", "updateMaxTime");
             resultMap.put("value", maxTime);
-            socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
+            socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
         }
         return "redirect:/api/admin/domainConfig";
     }

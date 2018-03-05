@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
+import me.cloudcat.develop.utils.BusinessUtils;
 import me.cloudcat.develop.utils.CommonUtils;
 import me.cloudcat.develop.utils.HttpUtils;
 import me.cloudcat.develop.utils.ThreadUtils;
@@ -140,14 +141,14 @@ public class DomainService {
                         updateDomainRecords(rows);
                     }
                     resultMap.put("Total", currentTotal.toString());
-                    socketHandler.sendMessageToUser(Constant.recieveUsername, resultMap);
+                    socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 HashMap<String, Object> errorMap = new HashMap<>();
                 errorMap.put("error", "查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
                 logger.error("查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
-                socketHandler.sendMessageToUser(Constant.recieveUsername, errorMap);
+                socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), errorMap);
             } finally {
 
             }

@@ -2,6 +2,7 @@ package me.cloudcat.develop.websocket.config;
 
 import com.alibaba.fastjson.JSON;
 import me.cloudcat.develop.Constant;
+import me.cloudcat.develop.utils.BusinessUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -36,14 +37,14 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			session.close();
 		}
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
-		logger.info("websocket出现异常！");
+		logger.info("websocket error !");
 	}
 
 	// 连接关闭后处理
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
-		logger.info("websocket已关闭！");
+		logger.info("websocket closed.");
 	}
 
 	@Override
@@ -63,9 +64,9 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			if (wsSession.isOpen()) {
 				try {
 					wsSession.sendMessage(new TextMessage(JSON.toJSONString((messageMap))));
-					logger.info("消息推送：" + userName + "  " + JSON.toJSONString((messageMap)));
+					logger.info("send message : " + userName + "  " + JSON.toJSONString((messageMap)));
 				} catch (IOException e) {
-					logger.info("发送消息失败！");
+					logger.info("send message error ！");
 				}
 			}
 		}
@@ -83,9 +84,9 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			if (wsSession.isOpen()) {
 				try {
 					wsSession.sendMessage(new TextMessage(jsonString));
-					logger.info("消息推送：" + userName + "  " + jsonString);
+					logger.info("send message : " + userName + "  " + jsonString);
 				} catch (IOException e) {
-					logger.info("发送信息失败！");
+					logger.info("send message error ！");
 				}
 			}
 		}

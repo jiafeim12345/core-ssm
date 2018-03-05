@@ -14,6 +14,9 @@
  */
 package me.cloudcat.develop.security;
 
+import me.cloudcat.develop.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
@@ -42,6 +45,8 @@ import java.util.Collection;
  */
 public class AuthenticatedVoter implements AccessDecisionVoter<Object> {
     //~ Static fields/initializers =====================================================================================
+
+    private Logger logger = LoggerFactory.getLogger("security");
 
     public static final String IS_AUTHENTICATED_FULLY = "IS_AUTHENTICATED_FULLY";
     public static final String IS_AUTHENTICATED_REMEMBERED = "IS_AUTHENTICATED_REMEMBERED";

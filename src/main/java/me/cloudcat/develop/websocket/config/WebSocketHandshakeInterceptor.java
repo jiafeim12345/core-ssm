@@ -1,6 +1,7 @@
 package me.cloudcat.develop.websocket.config;
 
 import me.cloudcat.develop.Constant;
+import me.cloudcat.develop.utils.BusinessUtils;
 import org.apache.log4j.Logger;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -26,15 +27,14 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes)
 			throws Exception {
-		if (request instanceof ServletServerHttpRequest) {
-			// 获取用户名并封装
-			HttpSession session = ((ServletServerHttpRequest) request).getServletRequest().getSession();
-//			User user = (User) session.getAttribute(Constant.SESSION_USER);
-			String userName = (String) session.getAttribute(Constant.SESSION_USER);
-			// 向socketsession中设置username属性，作为其唯一标识
-			attributes.put(Constant.SESSION_SOCKET, userName);
-		}
-		logger.info("websocket连接成功!");
+
+        if (request instanceof ServletServerHttpRequest) {
+            String username = BusinessUtils.getUser().getUsername();
+            // 向socket session中设置username属性，作为其唯一标识
+            attributes.put(Constant.SESSION_SOCKET, username);
+            logger.info("websocket connect success : " + username);
+        }
+
 		return true;
 	}
 

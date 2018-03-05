@@ -14,8 +14,9 @@
 
     <security:http auto-config="true" use-expressions="false"
                    access-decision-manager-ref="accessDecisionManager" >
-
         <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
+        <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"
+        />
         <security:intercept-url pattern="/api/**" access="IS_AUTHENTICATED_FULLY"/>
 
         <!-- 防止重复登录 -->
@@ -34,8 +35,13 @@
         <security:access-denied-handler ref="accessDeniedHandler"/>
         <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->
         <security:custom-filter ref="apiFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
-        <security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER" />
+        <!--<security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER" />-->
     </security:http>
+
+    <!-- 登录成功处理 -->
+    <bean id="authenticationSuccessHandler" class="me.cloudcat.develop.security.LoginSuccessHandler">
+        <constructor-arg name="redirectUrl" value="${login.success.redirect}"/>
+    </bean>
 
     <!-- 403控制 -->
     <bean id="accessDeniedHandler" class="me.cloudcat.develop.security.ResourceAccessDeniedHandler"/>
@@ -72,7 +78,7 @@
         </security:authentication-provider>
     </security:authentication-manager>
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-    <bean id="saltSource" class="me.cloudcat.develop.security.password.CustomSaltSource"/>
+    <!--<bean id="saltSource" class="me.cloudcat.develop.security.password.CustomSaltSource"/>-->
 
 
     <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
