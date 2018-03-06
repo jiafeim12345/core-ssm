@@ -2,7 +2,6 @@ package me.cloudcat.develop.websocket.config;
 
 import com.alibaba.fastjson.JSON;
 import me.cloudcat.develop.Constant;
-import me.cloudcat.develop.utils.BusinessUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -37,7 +36,7 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			session.close();
 		}
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
-		logger.info("websocket error !");
+		logger.error("websocket error! " + exception.toString());
 	}
 
 	// 连接关闭后处理
