@@ -17,6 +17,7 @@ import java.security.SignatureException;
  * @Time: 2018/1/25 14:18
  */
 public class SignatureUtils {
+
     private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 
     /**

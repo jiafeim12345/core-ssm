@@ -15,8 +15,8 @@
 
 package me.cloudcat.develop.security;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -43,7 +43,7 @@ import java.io.IOException;
 public class ResourceAccessDeniedHandler implements AccessDeniedHandler {
     //~ Static fields/initializers =====================================================================================
 
-    protected static final Log logger = LogFactory.getLog(ResourceAccessDeniedHandler.class);
+    protected static final Logger logger = LoggerFactory.getLogger("security");
 
     //~ Instance fields ================================================================================================
 

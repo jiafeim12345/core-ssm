@@ -29,7 +29,7 @@ import java.util.Set;
 @Service
 public class DomainService {
 
-    private static Logger logger = LoggerFactory.getLogger(DomainService.class);
+    private static Logger logger = LoggerFactory.getLogger("domain");
 
     @Autowired
     ChatWebSocketHandler socketHandler;

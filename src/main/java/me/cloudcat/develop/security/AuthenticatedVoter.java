@@ -14,7 +14,6 @@
  */
 package me.cloudcat.develop.security;
 
-import me.cloudcat.develop.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionVoter;

@@ -20,7 +20,7 @@ import me.cloudcat.develop.entity.Resource;
 import me.cloudcat.develop.entity.Role;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -40,7 +40,7 @@ import java.util.*;
  */
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private Logger logger = Logger.getLogger("security");
+    private Logger logger = LoggerFactory.getLogger("security");
 
     @Autowired
     RoleDao roleDao;

@@ -1,8 +1,8 @@
 package me.cloudcat.develop.utils;
 
 import me.cloudcat.develop.entity.User;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class BusinessUtils {
 
-    static Log log = LogFactory.getLog(BusinessUtils.class);
+    static Logger logger = LoggerFactory.getLogger(BusinessUtils.class);
 
     /**
      * 获取当前用户
