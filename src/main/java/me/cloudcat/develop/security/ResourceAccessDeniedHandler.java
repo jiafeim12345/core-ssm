@@ -47,7 +47,7 @@ public class ResourceAccessDeniedHandler implements AccessDeniedHandler {
 
     //~ Instance fields ================================================================================================
 
-    private String errorPage = "/error/403";
+    private String errorPage = "/WEB-INF/error/403.jsp";
 
     //~ Methods ========================================================================================================
 

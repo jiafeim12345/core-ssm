@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class DNSUtils {
 
-    private static Logger logger =  Logger.getLogger(DNSUtils.class);
+    private static Logger logger =  Logger.getLogger("DNS");
 
     public static Map<String, Object> getWhois(String domainName) throws UnsupportedEncodingException, SignatureException {
         //字典序排序

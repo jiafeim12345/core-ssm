@@ -53,7 +53,7 @@ public class DomainController {
     }
 
     @RequestMapping(value = "/api/admin/domain", method = RequestMethod.GET)
-    public String wanwangHome(Model model, HttpServletRequest request) throws InterruptedException {
+    public String getDomain(Model model, HttpServletRequest request) throws InterruptedException {
 
         // 第一次域名查询
         String oldDomain = domainService.getWanWangDomain();
@@ -87,17 +87,17 @@ public class DomainController {
 
 
     @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.GET)
-    public String getCookie(Model model) {
+    public String getConfig(Model model) {
         model.addAttribute("minTime", ThreadUtils.getMinTime());
         model.addAttribute("maxTime", ThreadUtils.getMaxTime());
         return "/domain/config";
     }
 
     @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.POST)
-    public String saveCookie(Model model, @RequestParam("cookie") String cookie,
+    public String saveConfig(Model model, @RequestParam("cookie") String cookie,
                              @RequestParam("minTime") Integer minTime, @RequestParam("maxTime") Integer maxTime,
                              RedirectAttributes reAttributes) {
-        HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> messageMap = new HashMap<>();
         if (StringUtils.isNotEmpty(cookie)) {
             configMap.put("cookie", cookie);
             reAttributes.addFlashAttribute("info", "设置成功！");
@@ -105,16 +105,16 @@ public class DomainController {
         if (minTime != null && minTime > 0 && minTime <= maxTime) {
             ThreadUtils.setMinTime(minTime);
             reAttributes.addFlashAttribute("info", "设置成功！");
-            resultMap.put("option", "updateMinTime");
-            resultMap.put("value", minTime);
-            socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
+            messageMap.put("option", "updateMinTime");
+            messageMap.put("value", minTime);
+            socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), messageMap);
         }
         if (maxTime != null && maxTime > 0 && minTime <= maxTime) {
             ThreadUtils.setMaxTime(maxTime);
             reAttributes.addFlashAttribute("info", "设置成功！");
-            resultMap.put("option", "updateMaxTime");
-            resultMap.put("value", maxTime);
-            socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
+            messageMap.put("option", "updateMaxTime");
+            messageMap.put("value", maxTime);
+            socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), messageMap);
         }
         return "redirect:/api/admin/domainConfig";
     }
@@ -127,7 +127,7 @@ public class DomainController {
      * @throws SignatureException
      */
     @RequestMapping(value = "/api/admin/whois", method = RequestMethod.GET)
-    public String whois(@RequestParam("domainName") String domainName, Model model) throws UnsupportedEncodingException, SignatureException {
+    public String getWhois(@RequestParam("domainName") String domainName, Model model) throws UnsupportedEncodingException, SignatureException {
         Map<String, Object> whoisInfo = DNSUtils.getWhois(domainName);
         model.addAttribute("whoisInfo", whoisInfo);
         return "/domain/whoisDialog";

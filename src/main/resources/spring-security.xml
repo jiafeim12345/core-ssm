@@ -12,13 +12,17 @@
 
     <context:property-placeholder location="classpath:config.properties" />
 
+    <security:http pattern="/static/**" security="none"/>
+
     <security:http auto-config="true" use-expressions="false"
                    access-decision-manager-ref="accessDecisionManager" >
         <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
-        <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"
-        />
+        <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"/>
+        <security:headers>
+            <!-- 允许网页加载同源下的frame -->
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
         <security:intercept-url pattern="/api/**" access="IS_AUTHENTICATED_FULLY"/>
-
         <!-- 防止重复登录 -->
         <security:session-management session-fixation-protection="none">
             <security:concurrency-control max-sessions="10" error-if-maximum-exceeded="false"
@@ -30,7 +34,6 @@
 
         <!-- 记住我：默认两周 -->
         <security:remember-me remember-me-parameter="remember"/>
-
         <!-- 403控制 -->
         <security:access-denied-handler ref="accessDeniedHandler"/>
         <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->

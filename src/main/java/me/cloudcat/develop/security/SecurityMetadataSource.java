@@ -20,6 +20,8 @@ import me.cloudcat.develop.entity.Resource;
 import me.cloudcat.develop.entity.Role;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -37,6 +39,8 @@ import java.util.*;
  * @Time: 2018/2/9 15:22
  */
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+
+    private Logger logger = Logger.getLogger("security");
 
     @Autowired
     RoleDao roleDao;
@@ -56,10 +60,10 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     private void init() {
 
 		/**
-		 * 应当是资源为key， 权限为value。 资源为URL-Method的Map， 权限就是那些以ROLE_为前缀的角色。
+		 * 应当是资源(格式：method,api)为key， 权限为value。 资源为URL-Method的Map， 权限就是那些以ROLE_为前缀的角色。
 		 * 一个资源可以由多个权限来访问。
 		 */
-        Map<Resource, Collection<ConfigAttribute>> resourceMap = new HashMap<Resource, Collection<ConfigAttribute>>();
+        Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
 
 		/*
 		 * 在Web服务器启动时，提取系统中的所有权限。
@@ -79,13 +83,14 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
 				/*
 				 * 判断资源文件和权限的对应关系，如果已经存在相关的资源url，则要限通过该url为key提取出权集合，将权限增加到权限集合中
 				 */
-                if (resourceMap.containsKey(res)) {
-                    Collection<ConfigAttribute> value = resourceMap.get(res);
+				String resKey = res.getMethod().toString() + "," + res.getApi();
+                if (resourceMap.containsKey(resKey)) {
+                    Collection<ConfigAttribute> value = resourceMap.get(resKey);
                     value.add(attr);
                 } else {
                     Collection<ConfigAttribute> attibutes = new ArrayList<ConfigAttribute>();
                     attibutes.add(attr);
-                    resourceMap.put(res, attibutes);
+                    resourceMap.put(resKey, attibutes);
                 }
             }
         }
@@ -107,9 +112,8 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
 
         Object resourceMap = securityMap.get("resourceMap");
         if (resourceMap != null) {
-            Map<Resource, Collection<ConfigAttribute>> map = (Map<Resource, Collection<ConfigAttribute>>) resourceMap;
-            for (Map.Entry<Resource, Collection<ConfigAttribute>> entry : map .entrySet()) {
-                String name = entry.getValue().iterator().next().getClass().getName();
+            Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
+            for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
                 allAttributes.addAll(entry.getValue());
             }
         }
@@ -122,16 +126,23 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         Object resourceMap = securityMap.get("resourceMap");
         if (resourceMap != null) {
             final HttpServletRequest request = ((FilterInvocation) object).getRequest();
-            Map<Resource, Collection<ConfigAttribute>> map = (Map<Resource, Collection<ConfigAttribute>>) resourceMap;
-            for (Map.Entry<Resource, Collection<ConfigAttribute>> entry : map.entrySet()) {
+            Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
+            for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
                 /**
 			     * 做URL-Method匹配,并且区分URL中的大小写
                  */
-                AntPathRequestMatcher um = new AntPathRequestMatcher(entry.getKey().getApi(), entry.getKey().getMethod()
-                        .toString(), false);
-                if (um.matches(request)) {
-                    return entry.getValue();
+                try {
+                    String[] res = entry.getKey().split(",");
+                    AntPathRequestMatcher um = new AntPathRequestMatcher(res[1], res[0], false);
+                    if (um.matches(request)) {
+                        return entry.getValue();
+                    }
+                } catch (Exception e) {
+                    logger.error("资源解析异常：" + e.getMessage());
+                } finally {
+
                 }
+
             }
         }
         return null;
