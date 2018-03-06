@@ -2,7 +2,8 @@ package me.cloudcat.develop.websocket.config;
 
 import com.alibaba.fastjson.JSON;
 import me.cloudcat.develop.Constant;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
@@ -16,7 +17,8 @@ import java.util.Map;
 
 public abstract class BaseWebSocketHandler implements WebSocketHandler {
 
-	private static Logger logger = Logger.getLogger(BaseWebSocketHandler.class);
+	private static Logger logger = LoggerFactory.getLogger("socket");
+
 	private static Map<Object, WebSocketSession> wsSessions = new HashMap<Object, WebSocketSession>();
 
 	// 连接建立后处理
@@ -36,14 +38,14 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			session.close();
 		}
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
-		logger.error("websocket error! " + exception.toString());
+		logger.error("socket error! " + exception.toString());
 	}
 
 	// 连接关闭后处理
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
-		logger.info("websocket closed.");
+		logger.info("socket closed.");
 	}
 
 	@Override

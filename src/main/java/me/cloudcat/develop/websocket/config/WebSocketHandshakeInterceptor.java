@@ -2,14 +2,14 @@ package me.cloudcat.develop.websocket.config;
 
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.utils.BusinessUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 
@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 
-    private static Logger logger = Logger.getLogger(WebSocketHandshakeInterceptor.class);
+    private static Logger logger = LoggerFactory.getLogger("socket");
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes)
@@ -32,7 +32,7 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
             String username = BusinessUtils.getUser().getUsername();
             // 向socket session中设置username属性，作为其唯一标识
             attributes.put(Constant.SESSION_SOCKET, username);
-            logger.info("websocket connect success : " + username);
+            logger.info("socket connect success : " + username);
         }
 
 		return true;
