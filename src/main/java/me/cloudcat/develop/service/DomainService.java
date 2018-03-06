@@ -141,7 +141,12 @@ public class DomainService {
                         updateDomainRecords(rows);
                     }
                     resultMap.put("Total", currentTotal.toString());
-                    socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
+                    try {
+                        socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
+                    } catch (Exception e) {
+                        socketHandler.sendMessageToUser("lvlv", resultMap);
+                        logger.error("send message error, send to lvlv instead !" + e.getMessage());
+                    }
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
