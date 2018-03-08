@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.cloudcat.develop.security;
+package me.cloudcat.develop.security.handler;
 
 import me.cloudcat.develop.utils.BusinessUtils;
 import org.slf4j.Logger;
@@ -55,6 +55,5 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("Login success: " + BusinessUtils.getUser().getUsername());
         response.sendRedirect(redirectUrl);
-//        request.getRequestDispatcher(forwardUrl).forward(request, response);
     }
 }

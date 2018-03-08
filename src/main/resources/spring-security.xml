@@ -14,15 +14,26 @@
 
     <security:http pattern="/static/**" security="none"/>
 
-    <security:http auto-config="true" use-expressions="false"
+    <security:http auto-config="false" use-expressions="false"
                    access-decision-manager-ref="accessDecisionManager" >
-        <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
-        <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"/>
+
+        <!-- 登录操作，配置处理器，登录拦截地址等 -->
+        <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"
+                             authentication-failure-handler-ref="authenticationFailureHandler"
+                             login-processing-url="/login/authenticate"
+                             username-parameter="username"
+                             password-parameter="password"
+                             login-page="/login"
+        />
         <security:headers>
             <!-- 允许网页加载同源下的frame -->
             <security:frame-options policy="SAMEORIGIN"/>
         </security:headers>
+        <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
         <security:intercept-url pattern="/api/**" access="IS_AUTHENTICATED_FULLY"/>
+
+        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+
         <!-- 防止重复登录 -->
         <security:session-management session-fixation-protection="none">
             <security:concurrency-control max-sessions="10" error-if-maximum-exceeded="false"
@@ -42,8 +53,12 @@
     </security:http>
 
     <!-- 登录成功处理 -->
-    <bean id="authenticationSuccessHandler" class="me.cloudcat.develop.security.LoginSuccessHandler">
+    <bean id="authenticationSuccessHandler" class="me.cloudcat.develop.security.handler.LoginSuccessHandler">
         <constructor-arg name="redirectUrl" value="${login.success.redirect}"/>
+    </bean>
+    <!-- 登录失败处理 -->
+    <bean id="authenticationFailureHandler" class="me.cloudcat.develop.security.handler.LoginFailureHandler">
+        <constructor-arg name="forwardUrl" value="${login.failure.forward}"/>
     </bean>
 
     <!-- 403控制 -->
@@ -82,7 +97,6 @@
     </security:authentication-manager>
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
     <!--<bean id="saltSource" class="me.cloudcat.develop.security.password.CustomSaltSource"/>-->
-
 
     <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
     <bean id="resourceAccessDecisionManager" class="me.cloudcat.develop.security.ResourceAccessDecisionManager"/>
