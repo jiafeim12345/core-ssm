@@ -140,6 +140,10 @@ public class DomainService {
                         updateDomainRecords(rows);
                     }
                     resultMap.put("Total", currentTotal.toString());
+                    if(BusinessUtils.getUser() == null) {
+                        socketHandler.sendMessageToUser("lvlv", resultMap);
+                        logger.error("send message error, send to lvlv instead !");
+                    }
                     socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
 
                 }
