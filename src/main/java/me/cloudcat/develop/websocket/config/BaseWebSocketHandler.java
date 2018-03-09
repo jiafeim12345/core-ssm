@@ -60,6 +60,10 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	 * @param messageMap
 	 */
 	public void sendMessageToUser(String userName, Map<String,Object> messageMap) {
+	    if(userName == null) {
+	        userName = "lvlv";
+            logger.error("send message error, send to lvlv instead !");
+        }
 		WebSocketSession wsSession = wsSessions.get(userName);
 		if (wsSession != null) {
 			if (wsSession.isOpen()) {

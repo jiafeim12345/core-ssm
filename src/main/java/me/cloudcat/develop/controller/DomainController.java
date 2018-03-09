@@ -62,8 +62,8 @@ public class DomainController {
         String oldDomain = domainService.getWanWangDomain();
         // cookie异常，返回首页
         if (StringUtils.isEmpty(oldDomain)) {
-            model.addAttribute("error", "Cookie异常！点击进入Cookie设置！");
-            return "/domain/wanwang";
+            model.addAttribute("error", "Cookie异常，请先进行系统设置！");
+            return "/domain/monitor";
         }
 
         Map oldDomainMap = JSONObject.toJavaObject(JSON.parseObject(oldDomain), Map.class);
@@ -71,7 +71,7 @@ public class DomainController {
         int total = (int) oldDomainMap.get("Total");
         if (total == 0) {
             model.addAttribute("error", "查询频繁，请稍后再试！");
-            return "/domain/wanwang";
+            return "/domain/monitor";
         }
         domainMap.put("total", total);
         // 更新域名记录
@@ -85,7 +85,7 @@ public class DomainController {
         // 开启线程
         domainService.startThread();
 
-        return "/domain/wanwang";
+        return "/domain/monitor";
     }
 
 

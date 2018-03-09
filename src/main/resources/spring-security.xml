@@ -49,7 +49,7 @@
         <security:access-denied-handler ref="accessDeniedHandler"/>
         <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->
         <security:custom-filter ref="apiFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
-        <!--<security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER" />-->
+        <security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER" />
     </security:http>
 
     <!-- 登录成功处理 -->
@@ -108,10 +108,9 @@
     <bean id="customLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
         <!-- 处理退出的url -->
         <property name="filterProcessesUrl" value="/api/logout" />
-        <!--<property name="logoutSuccessHandler" ref="logoutSuccessHandler" />-->
 
         <!-- 退出处理成功后的默认显示url -->
-        <constructor-arg index="0" value="/" />
+        <constructor-arg index="0" value="/login" />
         <constructor-arg index="1">
             <!-- 退出成功后的handler列表 -->
             <array>
@@ -120,7 +119,5 @@
             </array>
         </constructor-arg>
     </bean>
-    <bean id="logoutSuccessHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler" />
-
 
 </beans>
