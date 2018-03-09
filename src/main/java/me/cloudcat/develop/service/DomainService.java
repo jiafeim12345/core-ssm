@@ -143,8 +143,9 @@ public class DomainService {
                     if(BusinessUtils.getUser() == null) {
                         socketHandler.sendMessageToUser("lvlv", resultMap);
                         logger.error("send message error, send to lvlv instead !");
+                    } else {
+                        socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
                     }
-                    socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
 
                 }
             } catch (Exception e) {
