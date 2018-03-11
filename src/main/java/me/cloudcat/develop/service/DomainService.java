@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -103,7 +104,7 @@ public class DomainService {
     /**
      * 开启查询线程，每min~max秒内进行数据爬取
      */
-    public void startThread() {
+    public void startThread(HttpServletRequest request) {
         // 开启线程循环
         ThreadUtils.setInterrupt(false);
         Thread t = new Thread(() -> {
@@ -140,11 +141,11 @@ public class DomainService {
                         updateDomainRecords(rows);
                     }
                     resultMap.put("Total", currentTotal.toString());
-                    if(BusinessUtils.getUser() == null) {
+                    if(BusinessUtils.getUser(request) == null) {
                         socketHandler.sendMessageToUser("lvlv", resultMap);
                         logger.error("send message error, send to lvlv instead !");
                     } else {
-                        socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), resultMap);
+                        socketHandler.sendMessageToUser(BusinessUtils.getUser(request).getUsername(), resultMap);
                     }
 
                 }
@@ -153,7 +154,7 @@ public class DomainService {
                 HashMap<String, Object> errorMap = new HashMap<>();
                 errorMap.put("error", "查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
                 logger.error("查询出现异常，请刷新页面并检查Cookie，如果异常仍然存在，请联系球球！");
-                socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(), errorMap);
+                socketHandler.sendMessageToUser(BusinessUtils.getUser(request).getUsername(), errorMap);
             } finally {
 
             }

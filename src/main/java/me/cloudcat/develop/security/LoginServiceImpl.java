@@ -35,6 +35,8 @@ public class LoginServiceImpl implements UserDetailsService {
             // 更新用户状态
             user.setSecurityStatus(true, true, true);
             userDao.updateLastLoginTime(user.getId());
+        } else {
+            user = new User();
         }
         return user;
     }

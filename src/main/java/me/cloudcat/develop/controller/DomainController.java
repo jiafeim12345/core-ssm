@@ -3,6 +3,7 @@ package me.cloudcat.develop.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import me.cloudcat.develop.entity.User;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.service.DomainService;
@@ -14,6 +15,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
 import java.util.HashMap;
@@ -83,14 +87,14 @@ public class DomainController {
         model.addAttribute("maxTime", ThreadUtils.getMaxTime());
 
         // 开启线程
-        domainService.startThread();
+        domainService.startThread(request);
 
         return "/domain/monitor";
     }
 
 
     @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.GET)
-    public String getConfig(Model model) {
+    public String getConfig(Model model, HttpServletRequest request) {
         model.addAttribute("minTime", ThreadUtils.getMinTime());
         model.addAttribute("maxTime", ThreadUtils.getMaxTime());
         return "/domain/config";
