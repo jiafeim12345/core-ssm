@@ -42,19 +42,17 @@ public class RedisMap {
 
     /**
      * 删除RedisMap中键值
-     * @param hashKey
      * @param key
      * @return
      */
-    public Long remove(String hashKey, Object... key) {
+    public Long remove(Object... key) {
         return operations.delete(hashKey, key);
     }
 
     /**
      * 删除RedisMap
-     * @param hashKey
      */
-    public void removeAll(String hashKey) {
+    public void removeAll() {
         redisTemplate.delete(hashKey);
     }
 }

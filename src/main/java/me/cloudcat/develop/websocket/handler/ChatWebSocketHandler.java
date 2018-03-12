@@ -24,7 +24,5 @@ public class ChatWebSocketHandler extends BaseWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		super.afterConnectionClosed(session, closeStatus);
-		// 中断线程
-		ThreadUtils.setInterrupt(true);
 	}
 }
