@@ -91,7 +91,6 @@ public class DomainController {
         return "/domain/monitor";
     }
 
-
     @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.GET)
     public String getConfig(Model model, HttpServletRequest request) {
         model.addAttribute("minTime", ThreadUtils.getMinTime());
