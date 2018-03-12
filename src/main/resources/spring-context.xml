@@ -22,9 +22,9 @@
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
             <array>
-                <value>config</value>
-                <value>jdbc</value>
-                <value>mq</value>
+                <value>classpath:config</value>
+                <value>classpath:jdbc</value>
+                <value>classpath:mq</value>
             </array>
         </property>
         <property name="useCodeAsDefaultMessage" value="true" />

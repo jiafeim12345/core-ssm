@@ -42,8 +42,6 @@ public class BusinessUtils {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
-//        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal != null && UserDetails.class.isAssignableFrom(principal.getClass())) {
             User user = (User) principal;

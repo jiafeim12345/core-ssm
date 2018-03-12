@@ -6,10 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.entity.User;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
+import me.cloudcat.develop.security.SessionManager;
 import me.cloudcat.develop.service.DomainService;
-import me.cloudcat.develop.utils.BusinessUtils;
-import me.cloudcat.develop.utils.DNSUtils;
-import me.cloudcat.develop.utils.ThreadUtils;
+import me.cloudcat.develop.utils.*;
 import me.cloudcat.develop.websocket.handler.ChatWebSocketHandler;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +61,6 @@ public class DomainController {
 
     @RequestMapping(value = "/api/admin/domain", method = RequestMethod.GET)
     public String getDomain(Model model, HttpServletRequest request) throws InterruptedException {
-
         // 第一次域名查询
         String oldDomain = domainService.getWanWangDomain();
         // cookie异常，返回首页

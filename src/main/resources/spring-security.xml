@@ -39,11 +39,11 @@
         <!-- 防止重复登录 -->
         <security:session-management session-fixation-protection="none">
             <security:concurrency-control max-sessions="10" error-if-maximum-exceeded="false"
-                                          expired-url="/" session-registry-alias="sessionRegistry"/>
+                                          expired-url="/" session-registry-ref="sessionRegistry"/>
         </security:session-management>
 
         <!-- csrf攻击保护，默认开启 -->
-        <security:csrf disabled="true" />
+        <security:csrf disabled="true"/>
 
         <!-- 记住我：默认两周 -->
         <security:remember-me remember-me-parameter="remember"/>
@@ -55,7 +55,7 @@
     </security:http>
 
     <!-- 403控制 -->
-    <bean id="accessDeniedHandler" class="me.cloudcat.develop.security.ResourceAccessDeniedHandler"/>
+    <bean id="accessDeniedHandler" class="me.cloudcat.develop.security.handler.ResourceAccessDeniedHandler"/>
 
     <!-- 访问决策管理器，AffirmativeBased表示只要有一个Voter通过权限要求，就可以访问 -->
     <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
@@ -118,11 +118,11 @@
 
     <!-- ##################### 退出处理 ###################### -->
     <bean id="customLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-        <!-- 处理退出的url -->
-        <property name="filterProcessesUrl" value="/api/logout" />
+        <!-- 退出操作需调用的URL -->
+        <property name="filterProcessesUrl" value="${logout.process.url}" />
 
         <!-- 退出处理成功后的默认显示url -->
-        <constructor-arg index="0" value="/login" />
+        <constructor-arg index="0" value="${logout.success.redirect}" />
         <constructor-arg index="1">
             <!-- 退出成功后的handler列表 -->
             <array>
@@ -132,5 +132,9 @@
         </constructor-arg>
     </bean>
     <!-- ##################################################### -->
+
+    <!-- #################### Session管理 ################### -->
+    <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+    <!-- ################################################## -->
 
 </beans>
