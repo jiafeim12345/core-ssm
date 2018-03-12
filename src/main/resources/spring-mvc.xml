@@ -13,7 +13,7 @@
 	
 	<!-- controller必须放在springmvc.xml中加载 -->
 	<context:component-scan base-package="me.cloudcat.develop.controller" />
-
+    <context:property-placeholder location="classpath:config.properties"/>
 	<!-- 注解映射器、适配器，3.1版本后的 -->
 	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"
 		/> <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
@@ -49,6 +49,6 @@
 	</bean>
 	
 	<!-- 定义无需Controller的url<->view直接映射 -->
-	<!--  <mvc:view-controller path="/" view-name="redirect:/index" /> -->
+    <mvc:view-controller path="/" view-name="redirect:${root.path}" />
 	
 </beans>

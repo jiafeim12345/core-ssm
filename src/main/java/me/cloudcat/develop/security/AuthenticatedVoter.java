@@ -14,6 +14,9 @@
  */
 package me.cloudcat.develop.security;
 
+import me.cloudcat.develop.entity.User;
+import me.cloudcat.develop.utils.BusinessUtils;
+import me.cloudcat.develop.utils.SSOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -23,6 +26,7 @@ import org.springframework.security.authentication.AuthenticationTrustResolverIm
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 
@@ -91,6 +95,16 @@ public class AuthenticatedVoter implements AccessDecisionVoter<Object> {
     // 自定义vote
     public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
         int result = ACCESS_ABSTAIN;
+
+        // Todo:模拟登陆
+        HttpServletRequest request = SSOUtils.getRequest();
+        if (request != null) {
+            String usernameOrEmail = request.getParameter("sso_user");
+            if (usernameOrEmail != null) {
+                SSOUtils.ssoLogin(usernameOrEmail);
+                result = ACCESS_GRANTED;
+            }
+        }
 
         for (ConfigAttribute attribute : attributes) {
             if (this.supports(attribute)) {

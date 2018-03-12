@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package me.cloudcat.develop.security;
+package me.cloudcat.develop.security.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -42,8 +42,6 @@ public class BusinessUtils {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
-//        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal != null && UserDetails.class.isAssignableFrom(principal.getClass())) {
             User user = (User) principal;
@@ -61,9 +59,15 @@ public class BusinessUtils {
      */
     public static User getUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
+
         SecurityContextImpl securityContextImpl = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
+        if (securityContextImpl == null) {
+            logger.error("securityContextImpl is null, get user failed");
+            return null;
+        }
         Authentication authentication = securityContextImpl.getAuthentication();
         if (authentication == null) {
+            logger.error("authentication is null, get user failed");
             return null;
         }
         Object principal = authentication.getPrincipal();
