@@ -65,8 +65,13 @@ public class DomainController {
         configMap = redisFactory.getRedisMap("config");
     }
 
-    @RequestMapping(value = "/api/admin/domain", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/domain", method = RequestMethod.GET)
     public String getDomain(Model model, HttpServletRequest request) throws InterruptedException {
+
+        // 当没人监听时，清空redis中Domain
+        if (ThreadUtils.getObserver() <= 0) {
+            domainMap.removeAll();
+        }
 
         // 封装页面信息
         model.addAttribute("minTime", ThreadUtils.getMinTime());
@@ -76,7 +81,7 @@ public class DomainController {
     }
 
     /**
-     * 页面初始化
+     * 获取初始化域名数据
      *
      * @param model
      * @param request
@@ -84,13 +89,13 @@ public class DomainController {
      * @throws InterruptedException
      */
     @ResponseBody
-    @RequestMapping(value = "/api/admin/domain/init", method = RequestMethod.GET)
-    public Set<String> intDomain(Model model, HttpServletRequest request) throws InterruptedException {
+    @RequestMapping(value = "/admin/domain/init", method = RequestMethod.GET)
+    public JSONArray intDomain(Model model, HttpServletRequest request) throws InterruptedException {
 
         // init
         for (int i = 0; i < 12; i++) {
-            if (domainService.getDomainRecords() != null){
-                return domainService.getDomainRecords();
+            if (domainService.getDomainArray() != null) {
+                return domainService.getDomainArray();
             } else {
                 ThreadUtils.sleep(5);
             }
@@ -98,14 +103,14 @@ public class DomainController {
         return null;
     }
 
-    @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/domainConfig", method = RequestMethod.GET)
     public String getConfig(Model model, HttpServletRequest request) {
         model.addAttribute("minTime", ThreadUtils.getMinTime());
         model.addAttribute("maxTime", ThreadUtils.getMaxTime());
         return "/domain/config";
     }
 
-    @RequestMapping(value = "/api/admin/domainConfig", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/domainConfig", method = RequestMethod.POST)
     public String saveConfig(Model model, @RequestParam("cookie") String cookie,
                              @RequestParam("minTime") Integer minTime, @RequestParam("maxTime") Integer maxTime,
                              RedirectAttributes reAttributes) {
@@ -138,7 +143,7 @@ public class DomainController {
      * @throws UnsupportedEncodingException
      * @throws SignatureException
      */
-    @RequestMapping(value = "/api/admin/whois", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/whois", method = RequestMethod.GET)
     public String getWhois(@RequestParam("domainName") String domainName, Model model) throws UnsupportedEncodingException, SignatureException {
         Map<String, Object> whoisInfo = DNSUtils.getWhois(domainName);
         model.addAttribute("whoisInfo", whoisInfo);

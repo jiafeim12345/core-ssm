@@ -73,10 +73,12 @@ public class DomainService {
     }
 
     /**
-     * 查询万网域名
+     * 爬去万网域名
+     * 发送HTTP请求，返回域名数据
+     *
      * @return
      */
-    public String getWanWangDomain() throws InterruptedException {
+    public String getDomainFromRemote() throws InterruptedException {
         // 查询参数初始化
         int pageSize = 200;
         int pageIndex = 1;
@@ -102,26 +104,36 @@ public class DomainService {
 
     /**
      * 更新域名记录
+     *
      * @param json
      */
-    public void updateDomainRecords(JSONArray json) {
-        Set<String> domainRecords = new HashSet<String>();
-        for(Object ob : json){
-            domainRecords.add(JSON.parseObject(ob.toString()).get("Domain").toString());
+    public void updateRecords(JSONArray json) {
+
+        domainMap.put("records", json);
+        // 更新记录总数
+        domainMap.put("total", json.size());
+    }
+
+    public JSONArray getDomainArray() {
+        if (domainMap.get("records") == null) {
+            return null;
         }
-        domainMap.put("records", domainRecords);
+        JSONArray records = (JSONArray) domainMap.get("records");
+        return records ;
     }
 
-    public Set<String> getDomainRecords() {
-        return (Set<String>) domainMap.get("records");
+    public Set<String> getDomainSet() {
+
+        if (domainMap.get("records") == null) {
+            return null;
+        }
+        Set<String> domainSet = new HashSet<String>();
+        for(Object ob : getDomainArray()){
+            domainSet.add(((JSONObject) ob).get("Domain").toString());
+        }
+        return domainSet;
     }
 
-    /**
-     * 清除redis中域名
-     */
-    public void clearDomain() {
-        domainMap.remove("records");
-    }
 
     /**
      * 获取新域名
@@ -135,7 +147,7 @@ public class DomainService {
         for(Object ob : newDomainArray) {
             String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
             // 如果域名在旧域名记录中不存在，则返回
-            Set<String> oldDomains = getDomainRecords();
+            Set<String> oldDomains = getDomainSet();
             if (!oldDomains.contains(domain)) {
                 result.add(ob);
             }
@@ -156,5 +168,12 @@ public class DomainService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 清除redis中域名
+     */
+    public void clearDomain() {
+        domainMap.remove("records", "total");
     }
 }

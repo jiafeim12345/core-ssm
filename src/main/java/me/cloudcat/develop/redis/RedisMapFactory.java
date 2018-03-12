@@ -1,5 +1,6 @@
 package me.cloudcat.develop.redis;
 
+import me.cloudcat.develop.utils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class RedisMapFactory {
     }
 
     public static RedisMap getRedisMap(String hashKey) {
-        RedisMap redisMap = new RedisMap(redisTemplate, hashKey);
+        RedisMap redisMap = new RedisMap(redisTemplate, PropertyUtils.getString("redis.key") + hashKey);
         return redisMap;
     }
 }

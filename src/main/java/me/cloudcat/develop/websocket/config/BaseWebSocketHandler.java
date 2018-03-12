@@ -51,9 +51,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
         ThreadUtils.setObserver(ThreadUtils.getObserver() - 1);
         logger.info("socket closed.");
-        if (ThreadUtils.getObserver() <= 0) {
-            ThreadUtils.setRefreshStatus(RefreshStatus.NONE);
-        }
 	}
 
 	@Override

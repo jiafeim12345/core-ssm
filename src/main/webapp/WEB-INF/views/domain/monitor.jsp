@@ -56,24 +56,33 @@
             websocket.onerror = function(evnt) {}
             websocket.onclose = function(evnt) {}
             websocket.onmessage = function(evnt) {
-                var dataJson = JSON.parse(evnt.data);
-                if (dataJson['option'] == 'updateMaxTime') {
-                    $("#maxTime").text(dataJson['value']);
+                var jsonData = JSON.parse(evnt.data);
+
+                alert(jsonData.code);
+
+                // 出现异常
+                if (jsonData.code != '200') {
+                    $("#info").text(jsonData.code['message'])
                     return;
                 }
 
-                if (dataJson['option'] == 'updateMinTime') {
-                    $("#minTime").text(dataJson['value']);
+                if (jsonData == 'updateMaxTime') {
+                    $("#maxTime").text(jsonData['value']);
+                    return;
+                }
+
+                if (jsonData['option'] == 'updateMinTime') {
+                    $("#minTime").text(jsonData['value']);
                     return;
                 }
 
                 // 异常处理
-                if (dataJson['error'] != null && dataJson['error'] != undefined && dataJson['error'] != '') {
-                    alert(dataJson['error']);
+                if (jsonData['error'] != null && jsonData['error'] != undefined && jsonData['error'] != '') {
+                    alert(jsonData['error']);
                     return;
                 }
                 // 更新总数
-                var total = dataJson['Total'];
+                var total = jsonData['Total'];
                 if (total != null && total != undefined && total != '') {
                     $("#total").text(total);
                 }
@@ -82,7 +91,7 @@
                 $("#old_tbody tr").each(function(){
                     $(this).removeClass("danger");
                 })
-                $.each(dataJson['Rows'], function(i, item){
+                $.each(jsonData['Rows'], function(i, item){
                     if (item.Domain == undefined) {
                         return;
                     }
@@ -101,21 +110,13 @@
 
         $(function($){
             socketConn();
-            var oldDomainMap = ${oldDomainMap};
-            $("#total").text(oldDomainMap['Total']);
+            <%--var oldDomainMap = ${oldDomainMap};--%>
+            <%--$("#total").text(oldDomainMap['Total']);--%>
+            init();
 
-            $.each(oldDomainMap['Rows'], function(i,item){
-                $("#prompt").remove();
-                $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
-                $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
-                $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
-                $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
-            })
         })
 
+        // whois 域名解析
         function whois(domainName) {
             layer.open({
                 type: 2,
@@ -124,9 +125,38 @@
                 zIndex: 10,
                 shadeClose: true, //点击遮罩关闭层
                 area : ['600px' , '400px'],
-                content: '${ctx}/api/admin/whois?domainName=' +domainName
+                content: '${ctx}/admin/whois?domainName=' +domainName
             });
         }
+
+        // 初始化
+        function init() {
+            $.ajax({
+                type : "GET",
+                url : "${ctx}/admin/domain/init",
+                dataType : "json",
+                success : function(jsonData) {
+                    alert(jsonData)
+                    $.each(jsonData, function(i,item){
+                        $("#prompt").remove();
+                        $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
+                        $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
+                        $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
+                        $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
+                    })
+
+                },
+                error : function(e) {
+                    alert("json error");
+                }
+
+            });
+
+        }
+
     </script>
 
 </head>
@@ -185,10 +215,10 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domain" class="active"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
+                            <a href="${ctx}/admin/domain" class="active"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domainConfig"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
+                            <a href="${ctx}/admin/domainConfig"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
                             <%--<ul class="nav nav-second-level">
                                 <li>
                                     <a href="flot.html">Flot Charts</a>
@@ -218,9 +248,10 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <c:if test="${not empty error}">
-                                <div id="error" class="alert alert-danger">${error}</div>
-                            </c:if>
+
+                                <!-- 消息提示 -->
+                                <div id="info" class="alert alert-danger sr-only" />
+
 
                             域名总数：<span id="total"></span>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;

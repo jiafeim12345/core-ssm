@@ -81,10 +81,10 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domain"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
+                            <a href="${ctx}/admin/domain"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domainConfig" class="active"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
+                            <a href="${ctx}/admin/domainConfig" class="active"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
                             <%--<ul class="nav nav-second-level">
                                 <li>
                                     <a href="flot.html">Flot Charts</a>
