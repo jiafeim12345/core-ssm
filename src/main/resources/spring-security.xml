@@ -32,7 +32,7 @@
             <security:frame-options policy="SAMEORIGIN"/>
         </security:headers>
         <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
-        <security:intercept-url pattern="/api/**" access="IS_AUTHENTICATED_FULLY"/>
+        <security:intercept-url pattern="/admin/**" access="IS_AUTHENTICATED_FULLY"/>
 
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 
