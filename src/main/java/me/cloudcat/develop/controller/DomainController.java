@@ -1,26 +1,20 @@
 package me.cloudcat.develop.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
-import me.cloudcat.develop.entity.User;
 import me.cloudcat.develop.entity.message.OutputObject;
-import me.cloudcat.develop.entity.type.RefreshStatus;
+import me.cloudcat.develop.entity.vo.ConfigVO;
+import me.cloudcat.develop.entity.vo.DomainOutputVO;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
-import me.cloudcat.develop.security.SessionManager;
 import me.cloudcat.develop.service.DomainService;
-import me.cloudcat.develop.utils.*;
+import me.cloudcat.develop.utils.BusinessUtils;
+import me.cloudcat.develop.utils.DNSUtils;
+import me.cloudcat.develop.utils.ThreadUtils;
 import me.cloudcat.develop.websocket.handler.ChatWebSocketHandler;
-import net.sf.json.util.JSONUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 新注册域名
@@ -90,17 +81,21 @@ public class DomainController {
      */
     @ResponseBody
     @RequestMapping(value = "/admin/domain/init", method = RequestMethod.GET)
-    public JSONArray intDomain(Model model, HttpServletRequest request) throws InterruptedException {
+    public OutputObject intDomain(Model model, HttpServletRequest request) throws InterruptedException {
 
         // init
+        OutputObject opo = new OutputObject();
         for (int i = 0; i < 12; i++) {
             if (domainService.getDomainArray() != null) {
-                return domainService.getDomainArray();
+                opo.setResult(new DomainOutputVO(domainService.getTotal(), domainService.getDomainArray()));
+                return opo;
             } else {
                 ThreadUtils.sleep(5);
             }
         }
-        return null;
+        opo.setCode(Constant.RESPONSE_CODE_500);
+        opo.setMessage("初始化失败，请刷新页面或检查Cookie！");
+        return opo;
     }
 
     @RequestMapping(value = "/admin/domainConfig", method = RequestMethod.GET)
@@ -114,26 +109,27 @@ public class DomainController {
     public String saveConfig(Model model, @RequestParam("cookie") String cookie,
                              @RequestParam("minTime") Integer minTime, @RequestParam("maxTime") Integer maxTime,
                              RedirectAttributes reAttributes) {
-        HashMap<String, Object> messageMap = new HashMap<>();
+        OutputObject opo = new OutputObject();
+
+        // 校验参数正确性
         if (StringUtils.isNotEmpty(cookie)) {
             configMap.put("cookie", cookie);
-            reAttributes.addFlashAttribute("info", "设置成功！");
+        } else {
+            cookie = null;
         }
         if (minTime != null && minTime > 0 && minTime <= maxTime) {
             ThreadUtils.setMinTime(minTime);
-            reAttributes.addFlashAttribute("info", "设置成功！");
-            messageMap.put("option", "updateMinTime");
-            messageMap.put("value", minTime);
+        } else {
+            minTime = null;
         }
         if (maxTime != null && maxTime > 0 && minTime <= maxTime) {
             ThreadUtils.setMaxTime(maxTime);
-            reAttributes.addFlashAttribute("info", "设置成功！");
-            messageMap.put("option", "updateMaxTime");
-            messageMap.put("value", maxTime);
+        } else {
+            maxTime = null;
         }
         socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(),
-                new OutputObject(Constant.RESPONSE_CODE_200, "OK", messageMap, null));
-        return "redirect:/api/admin/domainConfig";
+                new OutputObject(Constant.RESPONSE_CODE_200, "OK", new ConfigVO(minTime, maxTime, cookie), null));
+        return "redirect:/admin/domainConfig";
     }
 
     /**

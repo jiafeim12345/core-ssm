@@ -22,6 +22,7 @@
                 <value>classpath:config</value>
                 <value>classpath:jdbc</value>
                 <value>classpath:mq</value>
+				<value>classpath:redis</value>
             </array>
         </property>
         <property name="useCodeAsDefaultMessage" value="true" />

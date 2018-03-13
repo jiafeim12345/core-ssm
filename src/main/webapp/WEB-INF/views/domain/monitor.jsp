@@ -38,6 +38,14 @@
             return uuid;
         }
 
+        function isNull(s) {
+            if (s != null && s != "" && s != "undefined") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         // 建立socket连接
         function socketConn() {
             var websocket;
@@ -58,40 +66,33 @@
             websocket.onmessage = function(evnt) {
                 var jsonData = JSON.parse(evnt.data);
 
-                alert(jsonData.code);
-
                 // 出现异常
                 if (jsonData.code != '200') {
                     $("#info").text(jsonData.code['message'])
                     return;
                 }
-
-                if (jsonData == 'updateMaxTime') {
-                    $("#maxTime").text(jsonData['value']);
+                if (!isNull(jsonData.option) && jsonData.option == "config") {
+                    // 更新查询时间
+                    if (!isNull(jsonData.result["updateMaxTime"])) {
+                        $("#maxTime").text(jsonData.result["updateMaxTime"]);
+                    }
+                    if (!isNull(jsonData.result["updateMinTime"])) {
+                        $("#minTime").text(jsonData.result["updateMinTime"]);
+                    }
                     return;
                 }
 
-                if (jsonData['option'] == 'updateMinTime') {
-                    $("#minTime").text(jsonData['value']);
-                    return;
-                }
-
-                // 异常处理
-                if (jsonData['error'] != null && jsonData['error'] != undefined && jsonData['error'] != '') {
-                    alert(jsonData['error']);
-                    return;
-                }
                 // 更新总数
-                var total = jsonData['Total'];
+                var total = jsonData.result['Total'];
                 if (total != null && total != undefined && total != '') {
                     $("#total").text(total);
                 }
-                $("#prompt").remove();
+                $("#prompt_tr").remove();
                 // 清空样式
                 $("#old_tbody tr").each(function(){
                     $(this).removeClass("danger");
                 })
-                $.each(jsonData['Rows'], function(i, item){
+                $.each(jsonData.result['Rows'], function(i, item){
                     if (item.Domain == undefined) {
                         return;
                     }
@@ -136,9 +137,15 @@
                 url : "${ctx}/admin/domain/init",
                 dataType : "json",
                 success : function(jsonData) {
-                    alert(jsonData)
-                    $.each(jsonData, function(i,item){
-                        $("#prompt").remove();
+
+                    if (jsonData.code != "200") {
+                        $("#prompt_td").val(jsonData.message);
+                        return;
+                    }
+                    // 刷新域名和总数
+                    $("#total").text(jsonData.result["total"]);
+                    $.each(jsonData.result["rows"], function(i,item){
+                        $("#prompt_tr").remove();
                         $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
                         $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
                         $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
@@ -150,7 +157,8 @@
 
                 },
                 error : function(e) {
-                    alert("json error");
+                    $("#prompt_td").val(jsonData.message);
+                    return;
                 }
 
             });
@@ -272,8 +280,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="old_tbody">
-                                    <tr id = "prompt">
-                                        <td colspan="6" align="center">暂无数据 ...</td>
+                                    <tr id = "prompt_tr">
+                                        <td colspan="6" align="center" id="prompt_td">正在初始化 ...</td>
                                     </tr>
                                     <%--<tr>
                                         <td>Trident</td>

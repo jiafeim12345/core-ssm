@@ -126,7 +126,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <form role="form" action="${ctx}/api/admin/domainConfig" method="post">
+                                    <form role="form" action="${ctx}/admin/domainConfig" method="post">
                                         <div class="form-group">
                                             <label class="">刷新频率：秒</label>
                                             <div class="row">

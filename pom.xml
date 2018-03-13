@@ -36,7 +36,7 @@
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>mysql@5851768</jdbc.password>
 
-                <redis.key>core-ssm</redis.key>
+                <redis.key>dev</redis.key>
 			</properties>
 		</profile>
 

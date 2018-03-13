@@ -13,10 +13,11 @@ public class OutputObject {
     String code;        // 状态码
     String message;     // 消息
     Object result;      // 结果
+    String option;      // 操作
 
     private Map<String, Error> fields;
 
-    public OutputObject(String code, String message, Object result, Map<String, Error> fields) {
+    public OutputObject(String code, String message, Object result, String option) {
         this.code = code;
         this.message = message;
         this.result = result;
@@ -55,5 +56,13 @@ public class OutputObject {
 
     public void setFields(Map<String, Error> fields) {
         this.fields = fields;
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
     }
 }

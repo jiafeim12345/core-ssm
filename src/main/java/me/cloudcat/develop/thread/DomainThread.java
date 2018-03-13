@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.entity.message.OutputObject;
+import me.cloudcat.develop.entity.vo.DomainOutputVO;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.service.DomainService;
@@ -99,7 +100,7 @@ public class DomainThread {
                 }
 
                 // redis中域名数据为空时，先进行初始化
-                Integer domainTotal = (Integer) domainMap.get("total");
+                Integer domainTotal = domainService.getTotal();
                 if (domainTotal == null) {
                     domainService.updateRecords(rows);
                     // 等待后查询
@@ -115,15 +116,11 @@ public class DomainThread {
 
                 // 域名总数增加
                 if (currentTotal > domainTotal) {
-                    HashMap<String, Object> resultMap = new HashMap<>();
-                    resultMap.put("Rows", domainService.getNewDomain(rows));
-                    resultMap.put("Total", currentTotal.toString());
+                    DomainOutputVO vo = new DomainOutputVO(currentTotal, domainService.getNewDomain(rows));
                     // 更新域名记录
                     domainService.updateRecords(rows);
-                    // 封装返回消息
-                    opo.setCode(Constant.RESPONSE_CODE_200);
-                    opo.setResult(resultMap);
-                    socketHandler.sendMessageToAll(opo);
+                    // 发送消息
+                    socketHandler.sendMessageToAll(new OutputObject(Constant.RESPONSE_CODE_200, "OK", vo, null));
                     // 等待后查询
                     ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
                     continue;

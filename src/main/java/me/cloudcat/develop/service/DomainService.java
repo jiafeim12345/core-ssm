@@ -118,8 +118,14 @@ public class DomainService {
         if (domainMap.get("records") == null) {
             return null;
         }
-        JSONArray records = (JSONArray) domainMap.get("records");
-        return records ;
+        return (JSONArray) domainMap.get("records");
+    }
+
+    public Integer getTotal() {
+        if (domainMap.get("total") == null) {
+            return null;
+        }
+        return (Integer) domainMap.get("total");
     }
 
     public Set<String> getDomainSet() {
@@ -129,7 +135,7 @@ public class DomainService {
         }
         Set<String> domainSet = new HashSet<String>();
         for(Object ob : getDomainArray()){
-            domainSet.add(((JSONObject) ob).get("Domain").toString());
+            domainSet.add(((JSONObject) ob).get("DomainOutputVO").toString());
         }
         return domainSet;
     }
@@ -145,7 +151,7 @@ public class DomainService {
     public JSONArray getNewDomain(JSONArray newDomainArray) {
         JSONArray result = new JSONArray();
         for(Object ob : newDomainArray) {
-            String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
+            String domain = JSON.parseObject(ob.toString()).get("DomainOutputVO").toString();
             // 如果域名在旧域名记录中不存在，则返回
             Set<String> oldDomains = getDomainSet();
             if (!oldDomains.contains(domain)) {
