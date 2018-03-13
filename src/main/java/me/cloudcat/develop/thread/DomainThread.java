@@ -57,7 +57,7 @@ public class DomainThread {
             while (ThreadUtils.getObserver() >= 0) {
 
                 // 观察者为0的情况，清空redis中domain
-                if (ThreadUtils.getObserver() == 0) {
+                if (ThreadUtils.getObserver() <= 0) {
                     if (domainService.getDomainArray() != null) {
                         domainService.clearDomain();
                     }
@@ -78,8 +78,11 @@ public class DomainThread {
                     // 等待后查询
                     ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
                     continue;
+                } finally {
+
                 }
                 if (StringUtils.isBlank(domainStr)) {
+                    ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
                     continue;
                 }
 
@@ -123,6 +126,7 @@ public class DomainThread {
                     socketHandler.sendMessageToAll(opo);
                     // 等待后查询
                     ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
+                    continue;
                 }
 
             }
