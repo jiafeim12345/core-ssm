@@ -61,7 +61,9 @@
             }
 
             websocket.onopen = function(evnt) {}
-            websocket.onerror = function(evnt) {}
+            websocket.onerror = function(evnt) {
+                $("#info").text("消息推送异常！")
+            }
             websocket.onclose = function(evnt) {}
             websocket.onmessage = function(evnt) {
                 var jsonData = JSON.parse(evnt.data);
@@ -89,7 +91,7 @@
                 }
                 $("#prompt_tr").remove();
                 // 清空样式
-                $("#old_tbody tr").each(function(){
+                $("#old_tbody tr").each(function() {
                     $(this).removeClass("danger");
                 })
                 $.each(jsonData.result.rows, function(i, item){
@@ -135,30 +137,22 @@
                 url : "${ctx}/admin/domain/init",
                 dataType : "json",
                 success : function(jsonData) {
-                    alert(jsonData.code);
-                    alert(typeof jsonData.code);
-                    alert(jsonData.result.rows[0].Domain);
-//                    alert(JSON.stringify(jsonData));
-                    if (jsonData != '200') {
-                        alert(jsonData.message);
+                    if (jsonData.code != '200') {
                         $("#prompt_td").text(jsonData.message);
                         return;
                     }
-//                    alert(jsonData.result.total);
                     // 刷新域名和总数
-//                    $("#total").text(jsonData.result.total);
-//                    alert(jsonData.result.rows);
-//                    $.each(jsonData.result.rows, function(i,item){
-//                        $("#prompt_tr").remove();
-//                        $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
-//                        $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
-//                        $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
-//                        $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
-//                        $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
-//                        $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
-//                        $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
-//                    })
-
+                    $("#total").text(jsonData.result.total);
+                    $.each(jsonData.result.rows, function(i,item) {
+                        $("#prompt_tr").remove();
+                        $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
+                        $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
+                        $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
+                        $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
+                    })
                 },
                 error : function(e) {
                     $("#prompt_td").text(jsonData.message);
@@ -259,16 +253,18 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
+
                         <div class="panel-heading">
 
-                                <!-- 消息提示 -->
-                                <div id="info" class="alert alert-danger sr-only" />
-
-
+                            <!-- 消息提示 -->
+                            <div>
                             域名总数：<span id="total"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;
-                                    <span id="maxTime">${maxTime}</span>&nbsp;秒</span>
-                            <br>
+                                     <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;
+                                     <span id="maxTime">${maxTime}</span>&nbsp;秒</span>
+                                  <br>
+                                     <span id="info" style="color: red"></span>
+                            </div>
+
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">

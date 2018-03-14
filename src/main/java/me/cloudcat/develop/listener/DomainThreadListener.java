@@ -1,7 +1,5 @@
 package me.cloudcat.develop.listener;
 
-import me.cloudcat.develop.redis.RedisMap;
-import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.thread.DomainThread;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;

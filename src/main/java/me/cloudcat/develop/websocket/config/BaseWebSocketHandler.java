@@ -3,7 +3,6 @@ package me.cloudcat.develop.websocket.config;
 import com.alibaba.fastjson.JSON;
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.entity.message.OutputObject;
-import me.cloudcat.develop.entity.type.RefreshStatus;
 import me.cloudcat.develop.utils.ThreadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +28,9 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		try {
 			wsSessions.put(session.getAttributes().get(Constant.SESSION_SOCKET).toString(), session);
             ThreadUtils.setObserver(ThreadUtils.getObserver() + 1);
+            logger.info("当前监听人数：{}", ThreadUtils.getObserver());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -50,6 +50,7 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
         ThreadUtils.setObserver(ThreadUtils.getObserver() - 1);
         logger.info("socket closed.");
+		logger.info("当前监听人数：{}", ThreadUtils.getObserver());
 	}
 
 	@Override

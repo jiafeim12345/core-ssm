@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.redis.RedisMap;
 import me.cloudcat.develop.redis.RedisMapFactory;
-import me.cloudcat.develop.utils.BusinessUtils;
 import me.cloudcat.develop.utils.CommonUtils;
 import me.cloudcat.develop.utils.HttpUtils;
 import me.cloudcat.develop.utils.ThreadUtils;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -136,7 +134,7 @@ public class DomainService {
         }
         Set<String> domainSet = new HashSet<String>();
         for(Object ob : getDomainArray()){
-            domainSet.add(((JSONObject) ob).get("DomainOutputVO").toString());
+            domainSet.add(((JSONObject) ob).get("Domain").toString());
         }
         return domainSet;
     }
@@ -152,7 +150,7 @@ public class DomainService {
     public JSONArray getNewDomain(JSONArray newDomainArray) {
         JSONArray result = new JSONArray();
         for(Object ob : newDomainArray) {
-            String domain = JSON.parseObject(ob.toString()).get("DomainOutputVO").toString();
+            String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
             // 如果域名在旧域名记录中不存在，则返回
             Set<String> oldDomains = getDomainSet();
             if (!oldDomains.contains(domain)) {

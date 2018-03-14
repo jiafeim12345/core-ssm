@@ -21,7 +21,7 @@ public class OutputObject {
         this.code = code;
         this.message = message;
         this.result = result;
-        this.fields = fields;
+        this.option = option;
     }
 
     public OutputObject() {}
