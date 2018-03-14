@@ -83,6 +83,8 @@ public class DomainController {
     @RequestMapping(value = "/admin/domain/init", method = RequestMethod.GET)
     public OutputObject intDomain(Model model, HttpServletRequest request) throws InterruptedException {
 
+        // 暂停两秒，避免短时间内多次刷新导致Redis中的旧域名数据没来得及删除
+        ThreadUtils.sleep(2);
         // init
         OutputObject opo = new OutputObject();
         for (int i = 0; i < 12; i++) {
