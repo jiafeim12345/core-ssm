@@ -38,6 +38,14 @@
             return uuid;
         }
 
+        function isNull(s) {
+            if (s != null && s != "" && s != "undefined") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         // 建立socket连接
         function socketConn() {
             var websocket;
@@ -53,36 +61,40 @@
             }
 
             websocket.onopen = function(evnt) {}
-            websocket.onerror = function(evnt) {}
+            websocket.onerror = function(evnt) {
+                $("#info").text("消息推送异常！")
+            }
             websocket.onclose = function(evnt) {}
             websocket.onmessage = function(evnt) {
-                var dataJson = JSON.parse(evnt.data);
-                if (dataJson['option'] == 'updateMaxTime') {
-                    $("#maxTime").text(dataJson['value']);
+                var jsonData = JSON.parse(evnt.data);
+
+                // 出现异常
+                if (jsonData != '200') {
+                    $("#info").text(jsonData.code.message)
+                    return;
+                }
+                if (!isNull(jsonData.option) && jsonData.option == "config") {
+                    // 更新查询时间
+                    if (!isNull(jsonData.result.maxTime)) {
+                        $("#maxTime").text(jsonData.result.maxTime);
+                    }
+                    if (!isNull(jsonData.result.minTime)) {
+                        $("#minTime").text(jsonData.result.minTime);
+                    }
                     return;
                 }
 
-                if (dataJson['option'] == 'updateMinTime') {
-                    $("#minTime").text(dataJson['value']);
-                    return;
-                }
-
-                // 异常处理
-                if (dataJson['error'] != null && dataJson['error'] != undefined && dataJson['error'] != '') {
-                    alert(dataJson['error']);
-                    return;
-                }
                 // 更新总数
-                var total = dataJson['Total'];
+                var total = jsonData.result.total;
                 if (total != null && total != undefined && total != '') {
                     $("#total").text(total);
                 }
-                $("#prompt").remove();
+                $("#prompt_tr").remove();
                 // 清空样式
-                $("#old_tbody tr").each(function(){
+                $("#old_tbody tr").each(function() {
                     $(this).removeClass("danger");
                 })
-                $.each(dataJson['Rows'], function(i, item){
+                $.each(jsonData.result.rows, function(i, item){
                     if (item.Domain == undefined) {
                         return;
                     }
@@ -101,21 +113,11 @@
 
         $(function($){
             socketConn();
-            var oldDomainMap = ${oldDomainMap};
-            $("#total").text(oldDomainMap['Total']);
+            init();
 
-            $.each(oldDomainMap['Rows'], function(i,item){
-                $("#prompt").remove();
-                $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
-                $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
-                $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
-                $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
-                $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
-            })
         })
 
+        // whois 域名解析
         function whois(domainName) {
             layer.open({
                 type: 2,
@@ -124,9 +126,43 @@
                 zIndex: 10,
                 shadeClose: true, //点击遮罩关闭层
                 area : ['600px' , '400px'],
-                content: '${ctx}/api/admin/whois?domainName=' +domainName
+                content: '${ctx}/admin/whois?domainName=' +domainName
             });
         }
+
+        // 初始化
+        function init() {
+            $.ajax({
+                type : "GET",
+                url : "${ctx}/admin/domain/init",
+                dataType : "json",
+                success : function(jsonData) {
+                    if (jsonData.code != '200') {
+                        $("#prompt_td").text(jsonData.message);
+                        return;
+                    }
+                    // 刷新域名和总数
+                    $("#total").text(jsonData.result.total);
+                    $.each(jsonData.result.rows, function(i,item) {
+                        $("#prompt_tr").remove();
+                        $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
+                        $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
+                        $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
+                        $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
+                        $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
+                    })
+                },
+                error : function(e) {
+                    $("#prompt_td").text(jsonData.message);
+                    return;
+                }
+
+            });
+
+        }
+
     </script>
 
 </head>
@@ -185,10 +221,10 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domain" class="active"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
+                            <a href="${ctx}/admin/domain" class="active"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domainConfig"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
+                            <a href="${ctx}/admin/domainConfig"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
                             <%--<ul class="nav nav-second-level">
                                 <li>
                                     <a href="flot.html">Flot Charts</a>
@@ -217,15 +253,18 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <c:if test="${not empty error}">
-                                <div id="error" class="alert alert-danger">${error}</div>
-                            </c:if>
 
+                        <div class="panel-heading">
+
+                            <!-- 消息提示 -->
+                            <div>
                             域名总数：<span id="total"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;
-                                    <span id="maxTime">${maxTime}</span>&nbsp;秒</span>
-                            <br>
+                                     <span>刷新频率：<span id="minTime">${minTime}</span>&nbsp;~&nbsp;
+                                     <span id="maxTime">${maxTime}</span>&nbsp;秒</span>
+                                  <br>
+                                     <span id="info" style="color: red"></span>
+                            </div>
+
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -241,8 +280,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="old_tbody">
-                                    <tr id = "prompt">
-                                        <td colspan="6" align="center">暂无数据 ...</td>
+                                    <tr id = "prompt_tr">
+                                        <td colspan="6" align="center" id="prompt_td">正在初始化 ...</td>
                                     </tr>
                                     <%--<tr>
                                         <td>Trident</td>

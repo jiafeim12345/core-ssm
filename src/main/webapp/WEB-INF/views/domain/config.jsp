@@ -23,7 +23,9 @@
     <link href="/static/assets/manage/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <script type="text/javascript">
+        $(function($){
 
+        })
     </script>
 
 </head>
@@ -81,10 +83,10 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domain"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
+                            <a href="${ctx}/admin/domain"><i class="fa fa-bar-chart-o fa-fw"></i> 域名监测</a>
                         </li>
                         <li>
-                            <a href="${ctx}/api/admin/domainConfig" class="active"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
+                            <a href="${ctx}/admin/domainConfig" class="active"><i class="fa fa-wrench fa-fw"></i> 系统设置<%--<span class="fa arrow"></span>--%></a>
                             <%--<ul class="nav nav-second-level">
                                 <li>
                                     <a href="flot.html">Flot Charts</a>
@@ -114,19 +116,16 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <c:if test="${not empty error}">
-                                <div id="error" class="alert alert-danger">${error}</div>
-                            </c:if>
                             系统设置
-                            <c:if test="${not empty info}">
-                                <span style="color: #2aabd2">&nbsp;&nbsp;${info}</span>
+                            <c:if test="${not empty message}">
+                                <span style="color: #2aabd2">&nbsp;&nbsp;${message}</span>
                             </c:if>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <form role="form" action="${ctx}/api/admin/domainConfig" method="post">
+                                    <form role="form" action="${ctx}/admin/domainConfig" method="post">
                                         <div class="form-group">
                                             <label class="">刷新频率：秒</label>
                                             <div class="row">

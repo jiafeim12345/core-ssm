@@ -25,18 +25,59 @@
 	<profiles>
 		<profile>
 			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-				<jdk>1.8</jdk>
-			</activation>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
 			<properties>
+
 				<jdbc.dialect></jdbc.dialect>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
 				<jdbc.url>jdbc:mysql://47.95.10.198:3306/core-ssm?useUnicode=true&amp;characterEncoding=utf-8&amp;</jdbc.url>
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>mysql@5851768</jdbc.password>
+
+                <redis.key>core-ssm_dev</redis.key>
+                <redis.host>47.95.10.198</redis.host>
+                <redis.port>6379</redis.port>
+                <redis.password>123456</redis.password>
+                <redis.timeout>10000</redis.timeout>
+
+                <mq.host>47.95.10.198</mq.host>
+                <mq.username>admin</mq.username>
+                <mq.password>rabbitmq@5851768</mq.password>
+                <mq.port>5672</mq.port>
+                <mq.vhost>core-ssm_dev</mq.vhost>
+                <mq.timeout>10000</mq.timeout>
+
 			</properties>
 		</profile>
+
+        <profile>
+            <id>product</id>
+            <properties>
+
+                <jdbc.dialect></jdbc.dialect>
+                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://47.95.10.198:3306/core-ssm?useUnicode=true&amp;characterEncoding=utf-8&amp;</jdbc.url>
+                <jdbc.username>root</jdbc.username>
+                <jdbc.password>mysql@5851768</jdbc.password>
+
+                <redis.key>core-ssm_product</redis.key>
+                <redis.host>47.95.10.198</redis.host>
+                <redis.port>6379</redis.port>
+                <redis.password>123456</redis.password>
+                <redis.timeout>10000</redis.timeout>
+
+                <mq.host>47.95.10.198</mq.host>
+                <mq.username>admin</mq.username>
+                <mq.password>rabbitmq@5851768</mq.password>
+                <mq.port>5672</mq.port>
+                <mq.vhost>core-ssm_product</mq.vhost>
+                <mq.timeout>10000</mq.timeout>
+
+            </properties>
+        </profile>
 	</profiles>
 
 
@@ -62,7 +103,6 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
-
 		<spring.version>4.2.5.RELEASE</spring.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
         <jackson-version>2.7.7</jackson-version>

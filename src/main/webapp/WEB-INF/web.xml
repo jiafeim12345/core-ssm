@@ -26,9 +26,6 @@
 		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
 
-	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
 
 	<!-- spring-security过滤器，需配置在其他如springmvc等拦截请求之前 -->
 	<filter>
@@ -44,8 +41,18 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
-	
+
+
+	<!-- 请求上下文监听，用户随时获取Request对象 -->
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+
+	<!-- 域名线程启动监听器,用户在服务加载后启动域名查询线程 -->
+	<listener>
+		<listener-class>me.cloudcat.develop.listener.DomainThreadListener</listener-class>
+	</listener>
+
 	<!-- 加载springmvc配置文件 -->
 	<servlet>
 		<servlet-name>springmvc</servlet-name>

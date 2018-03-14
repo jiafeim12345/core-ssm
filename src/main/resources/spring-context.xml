@@ -15,9 +15,6 @@
 	<context:property-placeholder location="classpath:jdbc.properties,classpath:mq.properties,
 	    classpath:redis.properties,classpath:config.properties" />
 
-	<!-- spring基本配置 -->
-	<context:component-scan base-package="me.cloudcat.develop" />
-
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
@@ -25,10 +22,18 @@
                 <value>classpath:config</value>
                 <value>classpath:jdbc</value>
                 <value>classpath:mq</value>
+				<value>classpath:redis</value>
             </array>
         </property>
         <property name="useCodeAsDefaultMessage" value="true" />
     </bean>
+
+    <!-- 需放到业务bean之前，保证比业务类先初始化，避免空指针异常 -->
+    <bean id="propertyUtils" class="me.cloudcat.develop.utils.PropertyUtils"/>
+
+	<!-- 加载bean -->
+	<context:component-scan base-package="me.cloudcat.develop" />
+
 
 	<!-- 数据源配置 -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
