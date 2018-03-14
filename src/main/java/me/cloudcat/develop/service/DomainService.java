@@ -110,6 +110,7 @@ public class DomainService {
     public void updateRecords(JSONArray json) {
 
         domainMap.put("records", json);
+        int size = json.size();
         // 更新记录总数
         domainMap.put("total", json.size());
     }

@@ -67,23 +67,23 @@
                 var jsonData = JSON.parse(evnt.data);
 
                 // 出现异常
-                if (jsonData.code != '200') {
-                    $("#info").text(jsonData.code['message'])
+                if (jsonData != '200') {
+                    $("#info").text(jsonData.code.message)
                     return;
                 }
                 if (!isNull(jsonData.option) && jsonData.option == "config") {
                     // 更新查询时间
-                    if (!isNull(jsonData.result["updateMaxTime"])) {
-                        $("#maxTime").text(jsonData.result["updateMaxTime"]);
+                    if (!isNull(jsonData.result.maxTime)) {
+                        $("#maxTime").text(jsonData.result.maxTime);
                     }
-                    if (!isNull(jsonData.result["updateMinTime"])) {
-                        $("#minTime").text(jsonData.result["updateMinTime"]);
+                    if (!isNull(jsonData.result.minTime)) {
+                        $("#minTime").text(jsonData.result.minTime);
                     }
                     return;
                 }
 
                 // 更新总数
-                var total = jsonData.result['Total'];
+                var total = jsonData.result.total;
                 if (total != null && total != undefined && total != '') {
                     $("#total").text(total);
                 }
@@ -92,7 +92,7 @@
                 $("#old_tbody tr").each(function(){
                     $(this).removeClass("danger");
                 })
-                $.each(jsonData.result['Rows'], function(i, item){
+                $.each(jsonData.result.rows, function(i, item){
                     if (item.Domain == undefined) {
                         return;
                     }
@@ -111,8 +111,6 @@
 
         $(function($){
             socketConn();
-            <%--var oldDomainMap = ${oldDomainMap};--%>
-            <%--$("#total").text(oldDomainMap['Total']);--%>
             init();
 
         })
@@ -137,27 +135,33 @@
                 url : "${ctx}/admin/domain/init",
                 dataType : "json",
                 success : function(jsonData) {
-
-                    if (jsonData.code != "200") {
-                        $("#prompt_td").val(jsonData.message);
+                    alert(jsonData.code);
+                    alert(typeof jsonData.code);
+                    alert(jsonData.result.rows[0].Domain);
+//                    alert(JSON.stringify(jsonData));
+                    if (jsonData != '200') {
+                        alert(jsonData.message);
+                        $("#prompt_td").text(jsonData.message);
                         return;
                     }
+//                    alert(jsonData.result.total);
                     // 刷新域名和总数
-                    $("#total").text(jsonData.result["total"]);
-                    $.each(jsonData.result["rows"], function(i,item){
-                        $("#prompt_tr").remove();
-                        $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
-                        $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
-                        $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
-                        $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
-                        $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
-                        $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
-                        $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
-                    })
+//                    $("#total").text(jsonData.result.total);
+//                    alert(jsonData.result.rows);
+//                    $.each(jsonData.result.rows, function(i,item){
+//                        $("#prompt_tr").remove();
+//                        $("#old_tbody").append("<tr id='old_tr_"+i+"'></tr>");
+//                        $("#old_tr_"+i).append("<td>"+item.Domain+"</td>");
+//                        $("#old_tr_"+i).append("<td>"+item.tel+"</td>");
+//                        $("#old_tr_"+i).append("<td>"+item.EMail+"</td>");
+//                        $("#old_tr_"+i).append("<td>"+item.RegDate+"</td>");
+//                        $("#old_tr_"+i).append("<td>"+ new Date().toLocaleTimeString() +"</td>");
+//                        $("#old_tr_"+i).append("<td>"+ "<button type=\"button\" class=\"btn btn-info\"  onclick=\"whois(\'"+item.Domain+"\')\">Whois</button>" +"</td>");
+//                    })
 
                 },
                 error : function(e) {
-                    $("#prompt_td").val(jsonData.message);
+                    $("#prompt_td").text(jsonData.message);
                     return;
                 }
 

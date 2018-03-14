@@ -41,7 +41,6 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 			session.close();
 		}
 		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
-        ThreadUtils.setObserver(ThreadUtils.getObserver() - 1);
 		logger.error("socket error! " + exception.toString());
 	}
 

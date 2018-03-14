@@ -122,7 +122,7 @@ public class HttpUtils {
         }
         //使用finally块来关闭输出流、输入流
         finally{
-            try{
+            try {
                 if(out!=null){
                     out.close();
                 }

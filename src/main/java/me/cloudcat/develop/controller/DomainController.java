@@ -87,6 +87,7 @@ public class DomainController {
         OutputObject opo = new OutputObject();
         for (int i = 0; i < 12; i++) {
             if (domainService.getDomainArray() != null) {
+                opo.setCode(Constant.RESPONSE_CODE_200);
                 opo.setResult(new DomainOutputVO(domainService.getTotal(), domainService.getDomainArray()));
                 return opo;
             } else {
@@ -129,6 +130,7 @@ public class DomainController {
         }
         socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(),
                 new OutputObject(Constant.RESPONSE_CODE_200, "OK", new ConfigVO(minTime, maxTime, cookie), null));
+        reAttributes.addFlashAttribute("message", "设置成功！");
         return "redirect:/admin/domainConfig";
     }
 

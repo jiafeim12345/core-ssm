@@ -23,7 +23,9 @@
     <link href="/static/assets/manage/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <script type="text/javascript">
+        $(function($){
 
+        })
     </script>
 
 </head>
@@ -114,12 +116,9 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <c:if test="${not empty error}">
-                                <div id="error" class="alert alert-danger">${error}</div>
-                            </c:if>
                             系统设置
-                            <c:if test="${not empty info}">
-                                <span style="color: #2aabd2">&nbsp;&nbsp;${info}</span>
+                            <c:if test="${not empty message}">
+                                <span style="color: #2aabd2">&nbsp;&nbsp;${message}</span>
                             </c:if>
                         </div>
                         <!-- /.panel-heading -->

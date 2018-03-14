@@ -8,7 +8,7 @@ public class DomainOutputVO {
     private JSONArray rows;
 
     public DomainOutputVO(Integer total, JSONArray rows) {
-        total = total;
+        this.total = total;
         this.rows = rows;
     }
 
@@ -19,7 +19,7 @@ public class DomainOutputVO {
     }
 
     public void setTotal(Integer total) {
-        total = total;
+        this.total = total;
     }
 
     public JSONArray getRows() {
