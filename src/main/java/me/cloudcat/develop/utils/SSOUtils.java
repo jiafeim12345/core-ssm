@@ -10,11 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * 单点登录处理
@@ -61,7 +56,7 @@ public class SSOUtils {
                     Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                     // 注册session
-                    sessionRegistry.registerNewSession(getSession().getId(), user);
+                    sessionRegistry.registerNewSession(HttpUtils.getSession().getId(), user);
                     logger.info("Login success: {}", arg);
 
                 } else {
@@ -77,29 +72,4 @@ public class SSOUtils {
         }
     }
 
-    /**
-     * 获取当前线程请求
-     *
-     * @return
-     */
-    public static HttpServletRequest getRequest() {
-        HttpServletRequest request = null;
-        if (RequestContextHolder.getRequestAttributes() != null) {
-            request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        }
-        return request;
-    }
-
-    /**
-     * 获取当前线程Session
-     *
-     * @return
-     */
-    public static HttpSession getSession() {
-        HttpSession session = null;
-        if (RequestContextHolder.getRequestAttributes() != null) {
-            session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
-        }
-        return session;
-    }
 }
