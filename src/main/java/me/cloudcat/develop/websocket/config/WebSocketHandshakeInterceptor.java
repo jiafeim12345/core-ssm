@@ -2,6 +2,7 @@ package me.cloudcat.develop.websocket.config;
 
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.utils.BusinessUtils;
+import me.cloudcat.develop.utils.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.server.ServerHttpRequest;

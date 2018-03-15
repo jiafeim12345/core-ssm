@@ -14,6 +14,7 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public abstract class BaseWebSocketHandler implements WebSocketHandler {
@@ -26,7 +27,8 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		try {
-			wsSessions.put(session.getAttributes().get(Constant.SESSION_SOCKET).toString(), session);
+			wsSessions.put(session.getAttributes().get(Constant.SESSION_SOCKET).toString() + "-" + session.getId()
+                    , session);
             ThreadUtils.setObserver(ThreadUtils.getObserver() + 1);
             logger.info("当前监听人数：{}", ThreadUtils.getObserver());
 		} catch (Exception e) {
@@ -40,14 +42,14 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 		if (session.isOpen()) {
 			session.close();
 		}
-		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
+		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET) + "-" + session.getId());
 		logger.error("socket error! " + exception.toString());
 	}
 
 	// 连接关闭后处理
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET));
+        wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET) + "-" + session.getId());
         ThreadUtils.setObserver(ThreadUtils.getObserver() - 1);
         logger.info("socket closed.");
 		logger.info("当前监听人数：{}", ThreadUtils.getObserver());
@@ -65,17 +67,22 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	 * @param opo
 	 */
 	public void sendMessageToUser(String userName, OutputObject opo) {
-		WebSocketSession wsSession = wsSessions.get(userName);
-		if (wsSession != null) {
-			if (wsSession.isOpen()) {
-				try {
-					wsSession.sendMessage(new TextMessage(JSON.toJSONString((opo))));
-					logger.info("send message : " + userName + "  " + JSON.toJSONString((opo)));
-				} catch (IOException e) {
-					logger.info("send message error ！");
-				}
-			}
-		}
+        for (Map.Entry<String, WebSocketSession> entry : wsSessions.entrySet()) {
+            if (entry.getKey().split("-")[0].equals(userName)) {
+                WebSocketSession wsSession = entry.getValue();
+                if (wsSession != null) {
+                    if (wsSession.isOpen()) {
+                        try {
+                            wsSession.sendMessage(new TextMessage(JSON.toJSONString((opo))));
+                            logger.info("send message : " + userName + "  " + JSON.toJSONString((opo)));
+                        } catch (IOException e) {
+                            logger.info("send message error ！");
+                        }
+                    }
+                }
+            }
+        }
+
 	}
 
 	/**

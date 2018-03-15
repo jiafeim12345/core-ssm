@@ -14,8 +14,7 @@
  */
 package me.cloudcat.develop.security;
 
-import me.cloudcat.develop.entity.User;
-import me.cloudcat.develop.utils.BusinessUtils;
+import me.cloudcat.develop.utils.HttpUtils;
 import me.cloudcat.develop.utils.SSOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +96,7 @@ public class AuthenticatedVoter implements AccessDecisionVoter<Object> {
         int result = ACCESS_ABSTAIN;
 
         // Todo:模拟登陆
-        HttpServletRequest request = SSOUtils.getRequest();
+        HttpServletRequest request = HttpUtils.getRequest();
         if (request != null) {
             String usernameOrEmail = request.getParameter("sso_user");
             if (usernameOrEmail != null) {

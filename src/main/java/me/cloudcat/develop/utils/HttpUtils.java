@@ -1,5 +1,10 @@
 package me.cloudcat.develop.utils;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -136,4 +141,33 @@ public class HttpUtils {
         }
         return result;
     }
+
+
+    /**
+     * 获取当前线程请求
+     *
+     * @return
+     */
+    public static HttpServletRequest getRequest() {
+        HttpServletRequest request = null;
+        if (RequestContextHolder.getRequestAttributes() != null) {
+            request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        }
+        return request;
+    }
+
+    /**
+     * 获取当前线程Session
+     *
+     * @return
+     */
+    public static HttpSession getSession() {
+        HttpSession session = null;
+        if (RequestContextHolder.getRequestAttributes() != null) {
+            session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        }
+        return session;
+    }
+
+
 }

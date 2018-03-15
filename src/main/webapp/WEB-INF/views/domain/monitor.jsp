@@ -69,8 +69,8 @@
                 var jsonData = JSON.parse(evnt.data);
 
                 // 出现异常
-                if (jsonData != '200') {
-                    $("#info").text(jsonData.code.message)
+                if (jsonData.code != '200') {
+                    $("#info").text(jsonData.message)
                     return;
                 }
                 if (!isNull(jsonData.option) && jsonData.option == "config") {
