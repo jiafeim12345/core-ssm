@@ -14,7 +14,6 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 
 public abstract class BaseWebSocketHandler implements WebSocketHandler {
@@ -69,20 +68,9 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	public void sendMessageToUser(String userName, OutputObject opo) {
         for (Map.Entry<String, WebSocketSession> entry : wsSessions.entrySet()) {
             if (entry.getKey().split("-")[0].equals(userName)) {
-                WebSocketSession wsSession = entry.getValue();
-                if (wsSession != null) {
-                    if (wsSession.isOpen()) {
-                        try {
-                            wsSession.sendMessage(new TextMessage(JSON.toJSONString((opo))));
-                            logger.info("send message : " + userName + "  " + JSON.toJSONString((opo)));
-                        } catch (IOException e) {
-                            logger.info("send message error ！");
-                        }
-                    }
-                }
+                sendMessage(entry.getKey(), opo);
             }
         }
-
 	}
 
 	/**
@@ -91,10 +79,29 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
 	 * @param opo
 	 */
 	public void sendMessageToAll(OutputObject opo) {
-        for (Object username : wsSessions.keySet()){
-            sendMessageToUser(username.toString(), opo);
+        for (String key : wsSessions.keySet()){
+            sendMessage(key, opo);
         }
 	}
+
+    /**
+     * 发送消息
+     *
+     * @param opo
+     */
+    public void sendMessage(String key, OutputObject opo) {
+        WebSocketSession wsSession = wsSessions.get(key);
+        if (wsSession != null) {
+            if (wsSession.isOpen()) {
+                try {
+                    wsSession.sendMessage(new TextMessage(JSON.toJSONString((opo))));
+                    logger.info("send message to : " + key + "  " + JSON.toJSONString((opo)));
+                } catch (IOException e) {
+                    logger.info("send message error ！");
+                }
+            }
+        }
+    }
 
 	/**
 	 * 获取socket session
