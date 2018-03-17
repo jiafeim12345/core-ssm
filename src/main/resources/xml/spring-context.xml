@@ -12,8 +12,9 @@
 
 
 	<!-- 加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
-	<context:property-placeholder location="classpath:jdbc.properties,classpath:mq.properties,
-	    classpath:redis.properties,classpath:config.properties" />
+	<context:property-placeholder location="classpath:properties/jdbc.properties,classpath:properties/secret.properties,
+	                                        classpath:properties/redis.properties,classpath:properties/mq.properties,
+	                                        classpath:properties/config.properties" />
 
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -96,7 +97,7 @@
 		<!-- 指定mapper.xml的位置 -->
 		<property name="mapperLocations" value="classpath:me/cloudcat/develop/dao/impl/*.xml" />
 		<!-- 加载mybatis的全局配置文件 -->
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<property name="configLocation" value="classpath:xml/mybatis-config.xml" />
         <property name="databaseIdProvider" ref="databaseIdProvider" />
         <property name="typeAliasesPackage" value="me.cloudcat.develop.entity"/>
 	</bean>

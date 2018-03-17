@@ -18,7 +18,7 @@
 			<properties>
 
 				<!-- ###### 私密信息 ########## -->
-				<jdbc.url></jdbc.url>
+				<!--<jdbc.url></jdbc.url>
 				<jdbc.username></jdbc.username>
 				<jdbc.password></jdbc.password>
 
@@ -29,17 +29,17 @@
 				<mq.host></mq.host>
 				<mq.username></mq.username>
 				<mq.password></mq.password>
-				<mq.port></mq.port>
+				<mq.port></mq.port>-->
 				<!-- ######################### -->
 
 				<jdbc.dialect></jdbc.dialect>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
 
 				<redis.timeout>10000</redis.timeout>
-				<redis.key>core-spring-boot_dev</redis.key>
+				<redis.key>core-ssm_dev</redis.key>
 
 				<mq.timeout>10000</mq.timeout>
-				<mq.vhost>core-spring-boot_dev</mq.vhost>
+				<mq.vhost>core-ssm_dev</mq.vhost>
 
 			</properties>
 		</profile>
@@ -49,7 +49,7 @@
 			<properties>
 
 				<!-- ###### 私密信息 ########## -->
-				<jdbc.url></jdbc.url>
+				<!--<jdbc.url></jdbc.url>
 				<jdbc.username></jdbc.username>
 				<jdbc.password></jdbc.password>
 
@@ -60,17 +60,17 @@
 				<mq.host></mq.host>
 				<mq.username></mq.username>
 				<mq.password></mq.password>
-				<mq.port></mq.port>
+				<mq.port></mq.port>-->
 				<!-- ######################### -->
 
 				<jdbc.dialect></jdbc.dialect>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
 
 				<redis.timeout>10000</redis.timeout>
-				<redis.key>core-spring-boot_product</redis.key>
+				<redis.key>core-ssm_product</redis.key>
 
 				<mq.timeout>10000</mq.timeout>
-				<mq.vhost>core-spring-boot_product</mq.vhost>
+				<mq.vhost>core-ssm_product</mq.vhost>
 
 			</properties>
 		</profile>
@@ -79,7 +79,7 @@
 
 	<build>
 		<resources>
-			<!-- 加载src/main/java目录下的xml和properties文件，默认情况下idea会自动忽略这些文件 -->
+			<!-- 加载资源文件 -->
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
@@ -87,7 +87,6 @@
 					<include>**/*.properties</include>
 				</includes>
 			</resource>
-			<!-- 使resources目录下的文件使用pom中的键值 -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
