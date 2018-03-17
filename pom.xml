@@ -6,84 +6,80 @@
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 
-	<!-- 加载maven私服 -->
-	<repositories>
-        <repository>
-		    <id>aliyun</id>
-            <name>Team Nexus Repository</name>
-            <url>http://47.95.10.198:8081/nexus/content/groups/public</url>
-        </repository>
-	</repositories>
-	<pluginRepositories>
-	    <pluginRepository>
-            <id>aliyun</id>
-            <name>Team Nexus Repository</name>
-			<url>http://47.95.10.198:8081/nexus/content/groups/public</url>
-        </pluginRepository>
-	</pluginRepositories>
 
 	<profiles>
 		<profile>
 			<id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>1.8</jdk>
-            </activation>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<jdk>1.8</jdk>
+			</activation>
+
 			<properties>
+
+				<!-- ###### 私密信息 ########## -->
+				<!--<jdbc.url></jdbc.url>
+				<jdbc.username></jdbc.username>
+				<jdbc.password></jdbc.password>
+
+				<redis.host></redis.host>
+				<redis.port></redis.port>
+				<redis.password></redis.password>
+
+				<mq.host></mq.host>
+				<mq.username></mq.username>
+				<mq.password></mq.password>
+				<mq.port></mq.port>-->
+				<!-- ######################### -->
 
 				<jdbc.dialect></jdbc.dialect>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-				<jdbc.url>jdbc:mysql://47.95.10.198:3306/core-ssm?useUnicode=true&amp;characterEncoding=utf-8&amp;</jdbc.url>
-				<jdbc.username>root</jdbc.username>
-				<jdbc.password>mysql@5851768</jdbc.password>
 
-                <redis.key>core-ssm_dev</redis.key>
-                <redis.host>47.95.10.198</redis.host>
-                <redis.port>6379</redis.port>
-                <redis.password>123456</redis.password>
-                <redis.timeout>10000</redis.timeout>
+				<redis.timeout>10000</redis.timeout>
+				<redis.key>core-ssm_dev</redis.key>
 
-                <mq.host>47.95.10.198</mq.host>
-                <mq.username>admin</mq.username>
-                <mq.password>rabbitmq@5851768</mq.password>
-                <mq.port>5672</mq.port>
-                <mq.vhost>core-ssm_dev</mq.vhost>
-                <mq.timeout>10000</mq.timeout>
+				<mq.timeout>10000</mq.timeout>
+				<mq.vhost>core-ssm_dev</mq.vhost>
 
 			</properties>
 		</profile>
 
-        <profile>
-            <id>product</id>
-            <properties>
+		<profile>
+			<id>product</id>
+			<properties>
 
-                <jdbc.dialect></jdbc.dialect>
-                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
-                <jdbc.url>jdbc:mysql://47.95.10.198:3306/core-ssm?useUnicode=true&amp;characterEncoding=utf-8&amp;</jdbc.url>
-                <jdbc.username>root</jdbc.username>
-                <jdbc.password>mysql@5851768</jdbc.password>
+				<!-- ###### 私密信息 ########## -->
+				<!--<jdbc.url></jdbc.url>
+				<jdbc.username></jdbc.username>
+				<jdbc.password></jdbc.password>
 
-                <redis.key>core-ssm_product</redis.key>
-                <redis.host>47.95.10.198</redis.host>
-                <redis.port>6379</redis.port>
-                <redis.password>123456</redis.password>
-                <redis.timeout>10000</redis.timeout>
+				<redis.host></redis.host>
+				<redis.port></redis.port>
+				<redis.password></redis.password>
 
-                <mq.host>47.95.10.198</mq.host>
-                <mq.username>admin</mq.username>
-                <mq.password>rabbitmq@5851768</mq.password>
-                <mq.port>5672</mq.port>
-                <mq.vhost>core-ssm_product</mq.vhost>
-                <mq.timeout>10000</mq.timeout>
+				<mq.host></mq.host>
+				<mq.username></mq.username>
+				<mq.password></mq.password>
+				<mq.port></mq.port>-->
+				<!-- ######################### -->
 
-            </properties>
-        </profile>
+				<jdbc.dialect></jdbc.dialect>
+				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+
+				<redis.timeout>10000</redis.timeout>
+				<redis.key>core-ssm_product</redis.key>
+
+				<mq.timeout>10000</mq.timeout>
+				<mq.vhost>core-ssm_product</mq.vhost>
+
+			</properties>
+		</profile>
 	</profiles>
 
 
 	<build>
 		<resources>
-			<!-- 加载src/main/java目录下的xml和properties文件，默认情况下idea会自动忽略这些文件 -->
+			<!-- 加载资源文件 -->
 			<resource>
 				<directory>src/main/java</directory>
 				<includes>
@@ -91,7 +87,6 @@
 					<include>**/*.properties</include>
 				</includes>
 			</resource>
-			<!-- 使resources目录下的文件使用pom中的键值 -->
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>

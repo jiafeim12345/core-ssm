@@ -43,7 +43,7 @@ public class DNSUtils {
         String signature = URLEncoder.encode(hmacSHA1, "utf-8");
         map.put("Signature", signature);
         String responseStr = HttpUtils.sendPost("https://alidns.aliyuncs.com/", CommonUtils.formDataSerialize(map), null);
-        logger.info("result：" + responseStr);
+        logger.debug("result：" + responseStr);
         HashMap<String, Object> resultMap = new HashMap<>();
         try {
             JSONObject domainInfoJson = JSON.parseObject(responseStr);

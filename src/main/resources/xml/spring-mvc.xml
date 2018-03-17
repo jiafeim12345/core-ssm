@@ -12,8 +12,8 @@
 	
 	
 	<!-- controller必须放在springmvc.xml中加载 -->
+	<context:property-placeholder location="classpath:properties/config.properties"/>
 	<context:component-scan base-package="me.cloudcat.develop.controller" />
-    <context:property-placeholder location="classpath:config.properties"/>
 	<!-- 注解映射器、适配器，3.1版本后的 -->
 	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"
 		/> <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"
