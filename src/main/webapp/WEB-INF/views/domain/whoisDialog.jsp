@@ -7,8 +7,8 @@
 --%>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ include file="../../taglibs.jsp"%>
-
+<%--<%@ include file="../../taglibs.jsp"%>--%>
+<link href="/static/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 <html>
 <body>
     <table class="table table-hover" >
