@@ -19,9 +19,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     </settings>
 
     <!-- 枚举类型处理 -->
-    <typeHandlers>
-        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Status" />
-        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="RoleType" />
-    </typeHandlers>
+    <!--<typeHandlers>-->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Status" />-->
+        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="RoleType" />-->
+    <!--</typeHandlers>-->
 
 </configuration>
