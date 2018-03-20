@@ -22,7 +22,7 @@ public class RedisMapFactory {
     }
 
     public static RedisMap getRedisMap(String hashKey) {
-        RedisMap redisMap = new RedisMap(redisTemplate, PropertyUtils.getString("redis.key") + "_" + hashKey);
+        RedisMap redisMap = new RedisMap(redisTemplate, PropertyUtils.getString("redis.key") + ":" + hashKey);
         return redisMap;
     }
 }

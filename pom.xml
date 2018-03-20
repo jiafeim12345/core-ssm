@@ -36,10 +36,10 @@
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
 
 				<redis.timeout>10000</redis.timeout>
-				<redis.key>core-ssm_dev</redis.key>
+				<redis.key>core-ssm:dev</redis.key>
 
 				<mq.timeout>10000</mq.timeout>
-				<mq.vhost>core-ssm_dev</mq.vhost>
+				<mq.vhost>core-ssm:dev</mq.vhost>
 
 			</properties>
 		</profile>
@@ -67,10 +67,10 @@
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
 
 				<redis.timeout>10000</redis.timeout>
-				<redis.key>core-ssm_product</redis.key>
+				<redis.key>core-ssm:product</redis.key>
 
 				<mq.timeout>10000</mq.timeout>
-				<mq.vhost>core-ssm_product</mq.vhost>
+				<mq.vhost>core-ssm:product</mq.vhost>
 
 			</properties>
 		</profile>
