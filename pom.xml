@@ -17,21 +17,6 @@
 
 			<properties>
 
-				<!-- ###### 私密信息 ########## -->
-				<!--<jdbc.url></jdbc.url>
-				<jdbc.username></jdbc.username>
-				<jdbc.password></jdbc.password>
-
-				<redis.host></redis.host>
-				<redis.port></redis.port>
-				<redis.password></redis.password>
-
-				<mq.host></mq.host>
-				<mq.username></mq.username>
-				<mq.password></mq.password>
-				<mq.port></mq.port>-->
-				<!-- ######################### -->
-
 				<jdbc.dialect></jdbc.dialect>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
 
@@ -47,21 +32,6 @@
 		<profile>
 			<id>product</id>
 			<properties>
-
-				<!-- ###### 私密信息 ########## -->
-				<!--<jdbc.url></jdbc.url>
-				<jdbc.username></jdbc.username>
-				<jdbc.password></jdbc.password>
-
-				<redis.host></redis.host>
-				<redis.port></redis.port>
-				<redis.password></redis.password>
-
-				<mq.host></mq.host>
-				<mq.username></mq.username>
-				<mq.password></mq.password>
-				<mq.port></mq.port>-->
-				<!-- ######################### -->
 
 				<jdbc.dialect></jdbc.dialect>
 				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
