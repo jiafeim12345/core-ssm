@@ -8,24 +8,24 @@ package me.cloudcat.develop.entity.type;
  */
 public enum Method implements BaseType {
 
-    GET(0),
+  GET(0),
 
-    POST(1),
+  POST(1),
 
-    PUT(2),
+  PUT(2),
 
-    PATCH(3),
+  PATCH(3),
 
-    DELETE(4);
+  DELETE(4);
 
-    private int value;
+  private int value;
 
-    Method(int value) {
-        this.value = value;
-    }
+  Method(int value) {
+    this.value = value;
+  }
 
-    @Override
-    public int getValue() {
-        return value;
-    }
+  @Override
+  public int getValue() {
+    return value;
+  }
 }

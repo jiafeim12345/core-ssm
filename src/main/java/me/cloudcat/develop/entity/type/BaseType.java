@@ -8,5 +8,5 @@ package me.cloudcat.develop.entity.type;
  */
 public interface BaseType {
 
-    public int getValue();
+  public int getValue();
 }

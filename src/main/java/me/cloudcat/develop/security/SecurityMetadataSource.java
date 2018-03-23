@@ -40,116 +40,116 @@ import java.util.*;
  */
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private Logger logger = LoggerFactory.getLogger("security");
+  private Logger logger = LoggerFactory.getLogger("security");
 
-    @Autowired
-    RoleDao roleDao;
+  @Autowired
+  RoleDao roleDao;
 
-    static RedisMapFactory redisFactory;
-    static RedisMap securityMap;
+  static RedisMapFactory redisFactory;
+  static RedisMap securityMap;
 
-    @Autowired
-    public void setRedisFactory(RedisMapFactory redisFactory) {
-        this.redisFactory = redisFactory;
-        this.securityMap = redisFactory.getRedisMap("security");
-    }
+  @Autowired
+  public void setRedisFactory(RedisMapFactory redisFactory) {
+    this.redisFactory = redisFactory;
+    this.securityMap = redisFactory.getRedisMap("security");
+  }
+
+  /**
+   * 加载数据库中 权限-资源关系表
+   */
+  private void init() {
 
     /**
-     * 加载数据库中 权限-资源关系表
+     * 应当是资源(格式：method,api)为key， 权限为value。 资源为URL-Method的Map， 权限就是那些以ROLE_为前缀的角色。
+     * 一个资源可以由多个权限来访问。
      */
-    private void init() {
-
-		/**
-		 * 应当是资源(格式：method,api)为key， 权限为value。 资源为URL-Method的Map， 权限就是那些以ROLE_为前缀的角色。
-		 * 一个资源可以由多个权限来访问。
-		 */
-        Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
+    Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
 
 		/*
-		 * 在Web服务器启动时，提取系统中的所有权限。
+     * 在Web服务器启动时，提取系统中的所有权限。
 		 */
-        List<Role> authorityList = roleDao.findAll();
+    List<Role> authorityList = roleDao.findAll();
 
 		/*
 		 * 取得所有权限名
 		 */
-        for (Role auth : authorityList) {
-            ConfigAttribute attr = new SecurityConfig(auth.getName());
+    for (Role auth : authorityList) {
+      ConfigAttribute attr = new SecurityConfig(auth.getName());
 
 			/*
 			 * 然后，取得资源名：根据权限名 取得 资源名
 			 */
-            for (Resource res : auth.getResources()) {
+      for (Resource res : auth.getResources()) {
 				/*
 				 * 判断资源文件和权限的对应关系，如果已经存在相关的资源url，则要限通过该url为key提取出权集合，将权限增加到权限集合中
 				 */
-				String resKey = res.getMethod().toString() + "," + res.getApi();
-                if (resourceMap.containsKey(resKey)) {
-                    Collection<ConfigAttribute> value = resourceMap.get(resKey);
-                    value.add(attr);
-                } else {
-                    Collection<ConfigAttribute> attibutes = new ArrayList<ConfigAttribute>();
-                    attibutes.add(attr);
-                    resourceMap.put(resKey, attibutes);
-                }
-            }
+        String resKey = res.getMethod().toString() + "," + res.getApi();
+        if (resourceMap.containsKey(resKey)) {
+          Collection<ConfigAttribute> value = resourceMap.get(resKey);
+          value.add(attr);
+        } else {
+          Collection<ConfigAttribute> attibutes = new ArrayList<ConfigAttribute>();
+          attibutes.add(attr);
+          resourceMap.put(resKey, attibutes);
         }
+      }
+    }
 
 		/*
 		 * 更新redis缓存
 		 */
-        securityMap.put("resourceMap", resourceMap);
+    securityMap.put("resourceMap", resourceMap);
+  }
+
+  // ~ Methods
+  // ========================================================================================================
+
+  public Collection<ConfigAttribute> getAllConfigAttributes() {
+    // 初始化
+    init();
+
+    Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
+
+    Object resourceMap = securityMap.get("resourceMap");
+    if (resourceMap != null) {
+      Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
+      for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
+        allAttributes.addAll(entry.getValue());
+      }
     }
 
-    // ~ Methods
-    // ========================================================================================================
+    return allAttributes;
+  }
 
-    public Collection<ConfigAttribute> getAllConfigAttributes() {
-        // 初始化
-        init();
+  public Collection<ConfigAttribute> getAttributes(Object object) {
 
-        Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
+    Object resourceMap = securityMap.get("resourceMap");
+    if (resourceMap != null) {
+      final HttpServletRequest request = ((FilterInvocation) object).getRequest();
+      Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
+      for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
+        /**
+         * 做URL-Method匹配,并且区分URL中的大小写
+         */
+        try {
+          String[] res = entry.getKey().split(",");
+          AntPathRequestMatcher um = new AntPathRequestMatcher(res[1], res[0], false);
+          if (um.matches(request)) {
+            return entry.getValue();
+          }
+        } catch (Exception e) {
+          logger.error("资源解析异常：" + e.getMessage());
+        } finally {
 
-        Object resourceMap = securityMap.get("resourceMap");
-        if (resourceMap != null) {
-            Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
-            for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
-                allAttributes.addAll(entry.getValue());
-            }
         }
 
-        return allAttributes;
+      }
     }
+    return null;
+  }
 
-    public Collection<ConfigAttribute> getAttributes(Object object) {
-
-        Object resourceMap = securityMap.get("resourceMap");
-        if (resourceMap != null) {
-            final HttpServletRequest request = ((FilterInvocation) object).getRequest();
-            Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
-            for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
-                /**
-			     * 做URL-Method匹配,并且区分URL中的大小写
-                 */
-                try {
-                    String[] res = entry.getKey().split(",");
-                    AntPathRequestMatcher um = new AntPathRequestMatcher(res[1], res[0], false);
-                    if (um.matches(request)) {
-                        return entry.getValue();
-                    }
-                } catch (Exception e) {
-                    logger.error("资源解析异常：" + e.getMessage());
-                } finally {
-
-                }
-
-            }
-        }
-        return null;
-    }
-
-    // 暂时不清楚干啥的
-    public boolean supports(Class<?> clazz) {
-        return FilterInvocation.class.isAssignableFrom(clazz);
-    }
+  // 暂时不清楚干啥的
+  public boolean supports(Class<?> clazz) {
+    return FilterInvocation.class.isAssignableFrom(clazz);
+  }
 }
