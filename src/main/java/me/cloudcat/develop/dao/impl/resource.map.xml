@@ -18,7 +18,7 @@
         </where>
     </select>
 
-    <select id="findByCondition" resultMap="resourceMap">
+    <select id="findByCondition" resultMap="resourceMap" >
         <include refid="basic_header"/>
         <where>
             <if test="e.name!=null}">

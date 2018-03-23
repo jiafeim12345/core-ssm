@@ -8,19 +8,19 @@ package me.cloudcat.develop.entity.type;
  */
 public enum RefreshStatus implements BaseType {
 
-  NONE(0),        // 未刷新
-  REFRESHING(1),  // 刷新中
-  REFRESHED(2);   // 已刷新
+    NONE(0),        // 未刷新
+    REFRESHING(1),  // 刷新中
+    REFRESHED(2);   // 已刷新
 
 
-  private int value;
+    private int value;
 
-  RefreshStatus(int value) {
-    this.value = value;
-  }
+    RefreshStatus(int value) {
+        this.value = value;
+    }
 
-  @Override
-  public int getValue() {
-    return value;
-  }
+    @Override
+    public int getValue() {
+        return value;
+    }
 }

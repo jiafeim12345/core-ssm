@@ -8,18 +8,18 @@ package me.cloudcat.develop.entity.type;
  */
 public enum Status implements BaseType {
 
-  DISABLE(0),   // 停用
+    DISABLE(0),   // 停用
 
-  ENABLE(1);    // 启用
+    ENABLE(1);    // 启用
 
-  private int value;
+    private int value;
 
-  private Status(int value) {
-    this.value = value;
-  }
+    private Status(int value) {
+        this.value = value;
+    }
 
-  @Override
-  public int getValue() {
-    return value;
-  }
+    @Override
+    public int getValue() {
+        return value;
+    }
 }

@@ -8,18 +8,18 @@ package me.cloudcat.develop.entity.type;
  */
 public enum RoleType implements BaseType {
 
-  ROOT(0),   // 超级管理员
+    ROOT(0),   // 超级管理员
 
-  USER(1);   // 普通用户
+    USER(1);   // 普通用户
 
-  private int value;
+    private int value;
 
-  private RoleType(int value) {
-    this.value = value;
-  }
+    private RoleType(int value) {
+        this.value = value;
+    }
 
-  @Override
-  public int getValue() {
-    return value;
-  }
+    @Override
+    public int getValue() {
+        return value;
+    }
 }

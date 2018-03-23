@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DomainScanner {
 
-  public void scan() {
+    public void scan() {
 
-  }
+    }
 }

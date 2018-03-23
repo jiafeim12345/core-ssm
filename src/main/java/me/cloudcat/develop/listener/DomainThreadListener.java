@@ -9,18 +9,18 @@ import javax.servlet.ServletContextListener;
 
 public class DomainThreadListener implements ServletContextListener {
 
-  @Override
-  public void contextInitialized(ServletContextEvent sce) {
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
 
-    // 通过WebApplicationContextUtils 得到Spring容器的实例。
-    ApplicationContext application = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
-    DomainThread thread = (DomainThread) application.getBean("domainThread");
-    thread.execute();
+        // 通过WebApplicationContextUtils 得到Spring容器的实例。
+        ApplicationContext application = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
+        DomainThread thread = (DomainThread) application.getBean("domainThread");
+        thread.execute();
 
-  }
+    }
 
-  @Override
-  public void contextDestroyed(ServletContextEvent sce) {
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
 
-  }
+    }
 }

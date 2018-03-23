@@ -42,21 +42,21 @@ import java.io.IOException;
  */
 public class LoginFailureHandler implements AuthenticationFailureHandler {
 
-  private Logger logger = LoggerFactory.getLogger("security");
+    private Logger logger = LoggerFactory.getLogger("security");
 
-  private final String forwardUrl;
+    private final String forwardUrl;
 
-  /**
-   * @param forwardUrl
-   */
-  public LoginFailureHandler(String forwardUrl) {
-    Assert.isTrue(UrlUtils.isValidRedirectUrl(forwardUrl), "'"
-            + forwardUrl + "' is not a valid forward URL");
-    this.forwardUrl = forwardUrl;
-  }
+    /**
+     * @param forwardUrl
+     */
+    public LoginFailureHandler(String forwardUrl) {
+        Assert.isTrue(UrlUtils.isValidRedirectUrl(forwardUrl), "'"
+                + forwardUrl + "' is not a valid forward URL");
+        this.forwardUrl = forwardUrl;
+    }
 
-  public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-    request.setAttribute("message", "认证失败，用户名或密码错误！");
-    request.getRequestDispatcher(forwardUrl).forward(request, response);
-  }
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        request.setAttribute("message", "认证失败，用户名或密码错误！");
+        request.getRequestDispatcher(forwardUrl).forward(request, response);
+    }
 }

@@ -13,70 +13,70 @@ import java.util.Date;
  */
 public class Resource extends BaseEntity<Resource> {
 
-  private String name;
-  private String description;
+    private String name;
+    private String description;
 
-  private Method method;       // 资源类型
-  private String api;          // 接口信息
+    private Method method;       // 资源类型
+    private String api;          // 接口信息
 
-  private Date createTime;
-  private Date updateTime;
+    private Date createTime;
+    private Date updateTime;
 
-  private Status status;       // 停启用状态
+    private Status status;       // 停启用状态
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public Method getMethod() {
-    return method;
-  }
+    public Method getMethod() {
+        return method;
+    }
 
-  public void setMethod(Method method) {
-    this.method = method;
-  }
+    public void setMethod(Method method) {
+        this.method = method;
+    }
 
-  public String getApi() {
-    return api;
-  }
+    public String getApi() {
+        return api;
+    }
 
-  public void setApi(String api) {
-    this.api = api;
-  }
+    public void setApi(String api) {
+        this.api = api;
+    }
 
-  public Date getCreateTime() {
-    return createTime;
-  }
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-  public Date getUpdateTime() {
-    return updateTime;
-  }
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-  public void setUpdateTime(Date updateTime) {
-    this.updateTime = updateTime;
-  }
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-  public Status getStatus() {
-    return status;
-  }
+    public Status getStatus() {
+        return status;
+    }
 
-  public void setStatus(Status status) {
-    this.status = status;
-  }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
