@@ -7,7 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:xml/spring-context.xml", "classpath:xml/spring-rabbitmq.xml"})
+@ContextConfiguration(locations = {"classpath:spring-context.xml", "classpath:spring-rabbitmq.xml"})
 public class ProducerTest {
 
     @Autowired

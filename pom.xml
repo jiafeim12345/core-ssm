@@ -18,7 +18,7 @@
 			<properties>
 
 				<jdbc.dialect></jdbc.dialect>
-				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+				<jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
 
 				<redis.timeout>10000</redis.timeout>
 				<redis.key>core-ssm:dev</redis.key>
@@ -34,7 +34,7 @@
 			<properties>
 
 				<jdbc.dialect></jdbc.dialect>
-				<jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+				<jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
 
 				<redis.timeout>10000</redis.timeout>
 				<redis.key>core-ssm:product</redis.key>
