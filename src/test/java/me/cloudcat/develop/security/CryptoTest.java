@@ -14,8 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @Time: 2018/3/5 16:08
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring-context.xml",
-        "classpath:spring-redis.xml", "classpath:spring-rabbitmq.xml", "classpath:spring-security.xml"})
+@ContextConfiguration(locations={"classpath:xml/spring-context.xml",
+        "classpath:xml/spring-redis.xml", "classpath:xml/spring-rabbitmq.xml", "classpath:xml/spring-security.xml"})
 public class CryptoTest {
 
     @Autowired
