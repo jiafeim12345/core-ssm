@@ -13,6 +13,11 @@
 </head>
 
 <body>
-    <b><h1 align="center">404</h1></b>
+    <b>
+        <h1 align="center">404 您所访问的页面不存在</h1>
+    </b>
+    <div align="center">
+        <a href="${pageContext.request.contextPath}/admin/domain">返回首页</a>
+    </div>
 </body>
 </html>

@@ -13,6 +13,11 @@
 </head>
 
 <body>
-    <b><h1 align="center">403</h1></b>
+    <b>
+        <h1 align="center">403 您无权限访问该资源</h1>
+    </b>
+    <div align="center">
+        <a href="${pageContext.request.contextPath}/admin/domain">返回首页</a>
+    </div>
 </body>
 </html>
