@@ -33,9 +33,9 @@ public class DomainService {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
-    static RedisMapFactory redisFactory;
-    static RedisMap domainMap;
-    static RedisMap configMap;
+    private static RedisMapFactory redisFactory;
+    private static RedisMap domainMap;
+    private static RedisMap configMap;
 
     @Autowired
     public void setRedisFactory(RedisMapFactory redisFactory) {
@@ -89,13 +89,13 @@ public class DomainService {
         String now = formatter.format(LocalDate.now());
         params.put("datestr", now);
         String paramStr = CommonUtils.formDataSerialize(params);
-        headers.put("Cookie", getDomainCookie());
+        headers.put("Cookie", getCookie());
         String result = HttpUtils.sendPost("https://newly.faname.com/tools/newly/Newly03.ashx",
                 paramStr, headers);
-        if (StringUtils.isNotEmpty(result)){
+        if (StringUtils.isNotEmpty(result)) {
             logger.info("万网域名：Total " + JSONArray.parseObject(result).get("Total")
                     + "  刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒");
-            logger.debug("Cookie：" + getDomainCookie());
+            logger.debug("Cookie：" + getCookie());
         }
         return result;
     }
@@ -165,7 +165,7 @@ public class DomainService {
      *
      * @return
      */
-    public String getDomainCookie() {
+    public String getCookie() {
         String now = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now());
         Object domainCookie = configMap.get("cookie");
         if (domainCookie != null && domainCookie.toString().contains(now)) {
@@ -179,6 +179,13 @@ public class DomainService {
      * 清除redis中域名
      */
     public void clearDomain() {
-        domainMap.remove("records", "total");
+        domainMap.removeAll();
+    }
+
+    /**
+     * config设置
+     */
+    public void setConfig(String key, Object value) {
+        configMap.put(key, value);
     }
 }
