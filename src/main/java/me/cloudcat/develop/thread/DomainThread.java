@@ -6,8 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.entity.message.OutputObject;
 import me.cloudcat.develop.entity.vo.DomainOutputVO;
-import me.cloudcat.develop.redis.RedisMap;
-import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.service.DomainService;
 import me.cloudcat.develop.utils.ThreadUtils;
 import me.cloudcat.develop.websocket.handler.ChatWebSocketHandler;
@@ -33,17 +31,6 @@ public class DomainThread {
 
     @Autowired
     DomainService domainService;
-
-    static RedisMapFactory redisFactory;
-    static RedisMap domainMap;
-    static RedisMap configMap;
-
-    @Autowired
-    public void setRedisFactory(RedisMapFactory redisFactory) {
-        this.redisFactory = redisFactory;
-        domainMap = redisFactory.getRedisMap("domain");
-        configMap = redisFactory.getRedisMap("config");
-    }
 
     public void execute() {
         new Worker().start();

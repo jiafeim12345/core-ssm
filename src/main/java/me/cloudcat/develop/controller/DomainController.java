@@ -4,8 +4,6 @@ import me.cloudcat.develop.Constant;
 import me.cloudcat.develop.entity.message.OutputObject;
 import me.cloudcat.develop.entity.vo.ConfigVO;
 import me.cloudcat.develop.entity.vo.DomainOutputVO;
-import me.cloudcat.develop.redis.RedisMap;
-import me.cloudcat.develop.redis.RedisMapFactory;
 import me.cloudcat.develop.service.DomainService;
 import me.cloudcat.develop.utils.BusinessUtils;
 import me.cloudcat.develop.utils.DNSUtils;
@@ -45,23 +43,12 @@ public class DomainController {
     @Autowired
     ChatWebSocketHandler socketHandler;
 
-    static RedisMapFactory redisFactory;
-    static RedisMap domainMap;
-    static RedisMap configMap;
-
-    @Autowired
-    public void setRedisFactory(RedisMapFactory redisFactory) {
-        this.redisFactory = redisFactory;
-        domainMap = redisFactory.getRedisMap("domain");
-        configMap = redisFactory.getRedisMap("config");
-    }
-
     @RequestMapping(value = "/admin/domain", method = RequestMethod.GET)
     public String getDomain(Model model, HttpServletRequest request) throws InterruptedException {
-
+        request.getSession();
         // 当没人监听时，清空redis中Domain
         if (ThreadUtils.getObserver() <= 0) {
-            domainMap.removeAll();
+            domainService.clearDomain();
         }
 
         // 封装页面信息
@@ -116,7 +103,7 @@ public class DomainController {
 
         // 校验参数正确性
         if (StringUtils.isNotEmpty(cookie)) {
-            configMap.put("cookie", cookie);
+            domainService.setConfig("cookie", cookie);
         } else {
             cookie = null;
         }
