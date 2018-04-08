@@ -2,7 +2,6 @@ package me.cloudcat.develop.security;
 
 import me.cloudcat.develop.dao.UserDao;
 import me.cloudcat.develop.entity.User;
-import me.cloudcat.develop.entity.type.Status;
 import me.cloudcat.develop.service.UserService;
 import me.cloudcat.develop.utils.CryptoUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -30,23 +29,21 @@ public class CryptoTest {
     UserService userService;
 
     @Test
-    public void crypto() {
+    public void updatePassword() {
         User user = new User();
-        user.setUsername("lvlv");
-        String encode = CryptoUtils.encode("Qiuqiu");
+        user.setUsername("test");
+        String encode = CryptoUtils.encode("test");
         user.setPassword(encode);
         userDao.updatePassword(user);
     }
 
     @Test
-    public void insertUser() {
-        long start = System.currentTimeMillis();
-        int num = 1;
-        for (int i = 0; i < num; i++) {
-            userService.InsertUser(500);
-        }
-        long time = System.currentTimeMillis() - start;
-        System.out.println("花费时间：" + time);
+    public void addUser() {
+        User user = new User();
+        user.setUsername("test");
+        user.setPassword(CryptoUtils.encode("test"));
+        user.setEmail(UUID.randomUUID().toString());
+        userService.save(user);
     }
 
 }

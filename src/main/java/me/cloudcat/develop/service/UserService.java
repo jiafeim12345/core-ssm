@@ -23,8 +23,8 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-//    @Transactional
-    public void InsertUser(int sum) {
+    @Transactional
+    public void insertUser(int sum) {
         for (int i = 0; i < sum; i++) {
             User user = new User();
             user.setUsername(UUID.randomUUID().toString());
@@ -34,5 +34,10 @@ public class UserService {
             user.setStatus(RandomUtils.nextBoolean() ? Status.ENABLE : Status.DISABLE);
             userDao.save(user);
         }
+    }
+
+    @Transactional
+    public void save(User user) {
+        userDao.save(user);
     }
 }
