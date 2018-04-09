@@ -101,7 +101,7 @@ public class AuthenticatedVoter implements AccessDecisionVoter<Object> {
             String usernameOrEmail = request.getParameter("sso_user");
             if (usernameOrEmail != null) {
                 SSOUtils.ssoLogin(usernameOrEmail);
-                result = ACCESS_GRANTED;
+                return ACCESS_GRANTED;
             }
         }
 
