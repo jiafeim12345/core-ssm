@@ -43,7 +43,7 @@ public class DomainThread {
             while (ThreadUtils.getObserver() >= 0) {
 
                 // 观察者为0的情况，清空redis中domain
-                if (ThreadUtils.getObserver() <= 0) {
+                if (ThreadUtils.getObserver() == 0) {
                     if (domainService.getDomainArray() != null) {
                         domainService.clearDomain();
                     }
@@ -110,9 +110,7 @@ public class DomainThread {
                     ThreadUtils.sleep(ThreadUtils.getMinTime(), ThreadUtils.getMaxTime());
                     continue;
                 }
-
             }
         }
-
     }
 }

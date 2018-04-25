@@ -22,7 +22,7 @@
         </rabbit:bindings>
     </rabbit:topic-exchange>
     <!-- 定义template，用户数据的接收和发送 -->
-    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="topicExchange" />
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="topicExchange"/>
 
     <rabbit:listener-container connection-factory="connectionFactory">
         <rabbit:listener ref="receiver1" queues="queue1" />
