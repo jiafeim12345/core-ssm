@@ -20,23 +20,23 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
 
-    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+  private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    /**
-     * 登录页面路由
-     *
-     * @param model
-     * @param request
-     * @return
-     * @throws InterruptedException
-     */
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String getDomain(Model model, HttpServletRequest request) throws InterruptedException {
-        // 用户已登录
-        if (BusinessUtils.getUser() != null) {
-            return "redirect:" + PropertyUtils.getString("login.success.redirect");
-        }
-        // 进入登录页面
-        return "login";
+  /**
+   * 登录页面路由
+   *
+   * @param model
+   * @param request
+   * @return
+   * @throws InterruptedException
+   */
+  @RequestMapping(value = "/login", method = RequestMethod.GET)
+  public String getDomain(Model model, HttpServletRequest request) throws InterruptedException {
+    // 用户已登录
+    if (BusinessUtils.getUser() != null) {
+      return "redirect:" + PropertyUtils.getString("login.success.redirect");
     }
+    // 进入登录页面
+    return "login";
+  }
 }

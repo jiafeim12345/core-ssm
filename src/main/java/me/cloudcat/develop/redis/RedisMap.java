@@ -11,48 +11,48 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 public class RedisMap {
 
-    private RedisTemplate redisTemplate;
+  private RedisTemplate redisTemplate;
 
-    private String hashKey;
-    private HashOperations operations;
+  private String hashKey;
+  private HashOperations operations;
 
-    public RedisMap(RedisTemplate redisTemplate, String hashKey) {
-        this.hashKey = hashKey;
-        this.redisTemplate = redisTemplate;
-        operations = redisTemplate.opsForHash();
-    }
+  public RedisMap(RedisTemplate redisTemplate, String hashKey) {
+    this.hashKey = hashKey;
+    this.redisTemplate = redisTemplate;
+    operations = redisTemplate.opsForHash();
+  }
 
-    /**
-     * 存储
-     * @param key
-     * @param value
-     */
-    public void put(String key, Object value) {
-        operations.put(hashKey, key, value);
-    }
+  /**
+   * 存储
+   * @param key
+   * @param value
+   */
+  public void put(String key, Object value) {
+    operations.put(hashKey, key, value);
+  }
 
-    /**
-     * 取值
-     * @param key
-     * @return
-     */
-    public Object get(String key) {
-        return operations.get(hashKey, key);
-    }
+  /**
+   * 取值
+   * @param key
+   * @return
+   */
+  public Object get(String key) {
+    return operations.get(hashKey, key);
+  }
 
-    /**
-     * 删除RedisMap中键值
-     * @param key
-     * @return
-     */
-    public Long remove(Object... key) {
-        return operations.delete(hashKey, key);
-    }
+  /**
+   * 删除RedisMap中键值
+   * @param key
+   * @return
+   */
+  public Long remove(Object... key) {
+    return operations.delete(hashKey, key);
+  }
 
-    /**
-     * 删除RedisMap
-     */
-    public void removeAll() {
-        redisTemplate.delete(hashKey);
-    }
+  /**
+   * 删除RedisMap
+   */
+  public void removeAll() {
+    redisTemplate.delete(hashKey);
+  }
 }

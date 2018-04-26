@@ -3,99 +3,99 @@
 
 <mapper namespace="me.cloudcat.develop.dao.UserDao">
 
-    <resultMap type="User" id="userBasicMap" autoMapping="true">
-    </resultMap>
+  <resultMap type="User" id="userBasicMap" autoMapping="true">
+  </resultMap>
 
-    <resultMap type="User" id="userDetailMap" autoMapping="true">
-        <collection property="roles" ofType="Role" javaType="list" column="id"
-                    select="me.cloudcat.develop.dao.RoleDao.getRolesByUserId">
-        </collection>
-    </resultMap>
+  <resultMap type="User" id="userDetailMap" autoMapping="true">
+    <collection property="roles" ofType="Role" javaType="list" column="id"
+          select="me.cloudcat.develop.dao.RoleDao.getRolesByUserId">
+    </collection>
+  </resultMap>
 
-    <sql id="basic_header">
-        SELECT u.*
-        FROM tbl_user u
-    </sql>
+  <sql id="basic_header">
+    SELECT u.*
+    FROM tbl_user u
+  </sql>
 
-    <sql id="detail_header">
-        SELECT u.*,r.id role_id,r.name role_name
-        FROM tbl_user u
-        LEFT JOIN tbl_user_role_rel rel ON rel.user_id = u.id
-        LEFT JOIN tbl_role r on rel.role_id = r.id
-    </sql>
+  <sql id="detail_header">
+    SELECT u.*,r.id role_id,r.name role_name
+    FROM tbl_user u
+    LEFT JOIN tbl_user_role_rel rel ON rel.user_id = u.id
+    LEFT JOIN tbl_role r on rel.role_id = r.id
+  </sql>
 
-    <select id="getBasic" resultMap="userBasicMap">
-        <include refid="basic_header"/>
-        <where>
-            id = #{id}
-        </where>
-    </select>
+  <select id="getBasic" resultMap="userBasicMap">
+    <include refid="basic_header"/>
+    <where>
+      id = #{id}
+    </where>
+  </select>
 
-    <select id="findOne" resultMap="userDetailMap">
-        <include refid="basic_header"/>
-        <where>
-            id = #{id}
-        </where>
-    </select>
+  <select id="findOne" resultMap="userDetailMap">
+    <include refid="basic_header"/>
+    <where>
+      id = #{id}
+    </where>
+  </select>
 
-    <select id="findByCondition" resultMap="userDetailMap">
-        <include refid="basic_header"/>
-        <where>
-            <if test="e.email!=null}">
-                AND u.email = #{e.email}
-            </if>
-            <if test="e.username!=null}">
-                AND u.email = #{e.username}
-            </if>
-            <if test="e.status!=null}">
-                AND u.status = #{e.status}
-            </if>
-        </where>
-    </select>
+  <select id="findByCondition" resultMap="userDetailMap">
+    <include refid="basic_header"/>
+    <where>
+      <if test="e.email!=null}">
+        AND u.email = #{e.email}
+      </if>
+      <if test="e.username!=null}">
+        AND u.email = #{e.username}
+      </if>
+      <if test="e.status!=null}">
+        AND u.status = #{e.status}
+      </if>
+    </where>
+  </select>
 
-    <select id="findByUsernameOrEmail" resultMap="userDetailMap">
-        <include refid="basic_header"/>
-        <where>
-            username = #{value}
-            OR
-            email = #{value}
-        </where>
-    </select>
+  <select id="findByUsernameOrEmail" resultMap="userDetailMap">
+    <include refid="basic_header"/>
+    <where>
+      username = #{value}
+      OR
+      email = #{value}
+    </where>
+  </select>
 
-    <select id="findAll" resultMap="userDetailMap">
-        <include refid="basic_header"/>
-    </select>
+  <select id="findAll" resultMap="userDetailMap">
+    <include refid="basic_header"/>
+  </select>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
-        insert into tbl_user(username, email, password, status)
-        VALUES(#{e.username}, #{e.email}, #{e.password}, #{e.status})
-    </insert>
+  <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
+    insert into tbl_user(username, email, password, status)
+    VALUES(#{e.username}, #{e.email}, #{e.password}, #{e.status})
+  </insert>
 
-    <delete id="delete">
-        DELETE FROM tbl_user
-        WHERE id = #{id}
-    </delete>
+  <delete id="delete">
+    DELETE FROM tbl_user
+    WHERE id = #{id}
+  </delete>
 
-    <update id="updateLastLoginTime">
-        UPDATE tbl_user
-        SET last_login_time = now()
-        WHERE id = #{id}
-    </update>
+  <update id="updateLastLoginTime">
+    UPDATE tbl_user
+    SET last_login_time = now()
+    WHERE id = #{id}
+  </update>
 
-    <update id="updatePassword">
-        UPDATE tbl_user
-        SET password = #{e.password}
-        <where>
-            <if test="e.email!=null">
-               AND email = #{e.email}
-            </if>
-            <if test="e.username!=null">
-               AND username = #{e.username}
-            </if>
-            <if test="e.id!=null">
-                AND id = #{e.id}
-            </if>
-        </where>
-    </update>
+  <update id="updatePassword">
+    UPDATE tbl_user
+    SET password = #{e.password}
+    <where>
+      <if test="e.email!=null">
+         AND email = #{e.email}
+      </if>
+      <if test="e.username!=null">
+         AND username = #{e.username}
+      </if>
+      <if test="e.id!=null">
+        AND id = #{e.id}
+      </if>
+    </where>
+  </update>
 
 </mapper>

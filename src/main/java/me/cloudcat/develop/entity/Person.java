@@ -8,9 +8,9 @@ package me.cloudcat.develop.entity;
  */
 public class Person extends BaseEntity<Person> {
 	
-	private String name;      // 姓名
-	private String gender;    // 性别
-	private Integer age;      // 年龄
+	private String name;    // 姓名
+	private String gender;  // 性别
+	private Integer age;    // 年龄
 
 
 	public String getGender() {

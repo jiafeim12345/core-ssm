@@ -16,5 +16,5 @@ import java.util.List;
 @Repository
 public interface RoleDao extends BaseDao<Role> {
 
-    List<Role> getRolesByUserId(@Param("userId") Long userId);
+  List<Role> getRolesByUserId(@Param("userId") Long userId);
 }

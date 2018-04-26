@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisMapFactory {
 
-    private static RedisTemplate redisTemplate;
+  private static RedisTemplate redisTemplate;
 
-    @Autowired
-    public void setRedisTemplate(RedisTemplate redisTemplate) {
-        RedisMapFactory.redisTemplate = redisTemplate;
-    }
+  @Autowired
+  public void setRedisTemplate(RedisTemplate redisTemplate) {
+    RedisMapFactory.redisTemplate = redisTemplate;
+  }
 
-    public static RedisMap getRedisMap(String hashKey) {
-        RedisMap redisMap = new RedisMap(redisTemplate, PropertyUtils.getString("redis.key") + ":" + hashKey);
-        return redisMap;
-    }
+  public static RedisMap getRedisMap(String hashKey) {
+    RedisMap redisMap = new RedisMap(redisTemplate, PropertyUtils.getString("redis.key") + ":" + hashKey);
+    return redisMap;
+  }
 }

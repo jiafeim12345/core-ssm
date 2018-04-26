@@ -3,58 +3,58 @@
 
 <mapper namespace="me.cloudcat.develop.dao.ResourceDao">
 
-    <resultMap type="Resource" id="resourceMap" autoMapping="true">
-    </resultMap>
+  <resultMap type="Resource" id="resourceMap" autoMapping="true">
+  </resultMap>
 
-    <sql id="basic_header">
-        SELECT re.*
-        FROM tbl_resource re
-    </sql>
+  <sql id="basic_header">
+    SELECT re.*
+    FROM tbl_resource re
+  </sql>
 
-    <select id="getBasic" resultMap="resourceMap">
-        <include refid="basic_header"/>
-        <where>
-            id = #{id}
-        </where>
-    </select>
+  <select id="getBasic" resultMap="resourceMap">
+    <include refid="basic_header"/>
+    <where>
+      id = #{id}
+    </where>
+  </select>
 
-    <select id="findByCondition" resultMap="resourceMap" >
-        <include refid="basic_header"/>
-        <where>
-            <if test="e.name!=null}">
-                AND re.name = #{e.name}
-            </if>
-            <if test="e.method!=null}">
-                AND re.method = #{e.method}
-            </if>
-            <if test="e.api!=null}">
-                AND re.api = #{e.api}
-            </if>
-            <if test="e.status!=null}">
-                AND re.status = #{e.status}
-            </if>
-        </where>
-    </select>
+  <select id="findByCondition" resultMap="resourceMap" >
+    <include refid="basic_header"/>
+    <where>
+      <if test="e.name!=null}">
+        AND re.name = #{e.name}
+      </if>
+      <if test="e.method!=null}">
+        AND re.method = #{e.method}
+      </if>
+      <if test="e.api!=null}">
+        AND re.api = #{e.api}
+      </if>
+      <if test="e.status!=null}">
+        AND re.status = #{e.status}
+      </if>
+    </where>
+  </select>
 
-    <select id="findAll" resultMap="resourceMap">
-        <include refid="basic_header"/>
-    </select>
+  <select id="findAll" resultMap="resourceMap">
+    <include refid="basic_header"/>
+  </select>
 
-    <select id="getResourcesByRole" resultMap="resourceMap">
-        SELECT re.*
-        FROM tbl_resource re
-        LEFT JOIN tbl_role_resource_rel rel ON rel.resource_id = re.id
-        WHERE rel.role_id = #{roleId}
-    </select>
+  <select id="getResourcesByRole" resultMap="resourceMap">
+    SELECT re.*
+    FROM tbl_resource re
+    LEFT JOIN tbl_role_resource_rel rel ON rel.resource_id = re.id
+    WHERE rel.role_id = #{roleId}
+  </select>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
-        insert into tbl_resource(name, description, method, api, status)
-        VALUES(#{e.name}, #{e.description}, #{e.method}, #{e.api}, #{e.status})
-    </insert>
+  <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
+    insert into tbl_resource(name, description, method, api, status)
+    VALUES(#{e.name}, #{e.description}, #{e.method}, #{e.api}, #{e.status})
+  </insert>
 
-    <delete id="delete">
-        DELETE FROM tbl_resource
-        WHERE id = #{id}
-    </delete>
+  <delete id="delete">
+    DELETE FROM tbl_resource
+    WHERE id = #{id}
+  </delete>
 
 </mapper>

@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,47 +41,47 @@ import java.io.IOException;
  * @author Ben Alex
  */
 public class ResourceAccessDeniedHandler implements AccessDeniedHandler {
-    //~ Static fields/initializers =====================================================================================
+  //~ Static fields/initializers =====================================================================================
 
-    protected static final Logger logger = LoggerFactory.getLogger("security");
+  protected static final Logger logger = LoggerFactory.getLogger("security");
 
-    //~ Instance fields ================================================================================================
+  //~ Instance fields ================================================================================================
 
-    private String errorPage = "/WEB-INF/error/403.jsp";
+  private String errorPage = "/WEB-INF/error/403.jsp";
 
-    //~ Methods ========================================================================================================
+  //~ Methods ========================================================================================================
 
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
-            throws IOException, ServletException {
-        if (!response.isCommitted()) {
-            if (errorPage != null) {
-                // Put exception into request scope (perhaps of use to a view)
-                request.setAttribute(WebAttributes.ACCESS_DENIED_403, accessDeniedException);
+  public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException)
+      throws IOException, ServletException {
+    if (!response.isCommitted()) {
+      if (errorPage != null) {
+        // Put exception into request scope (perhaps of use to a view)
+        request.setAttribute(WebAttributes.ACCESS_DENIED_403, accessDeniedException);
 
-                // Set the 403 status code.
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        // Set the 403 status code.
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-                // forward to error page.
-                RequestDispatcher dispatcher = request.getRequestDispatcher(errorPage);
-                dispatcher.forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
-            }
-        }
+        // forward to error page.
+        RequestDispatcher dispatcher = request.getRequestDispatcher(errorPage);
+        dispatcher.forward(request, response);
+      } else {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
+      }
+    }
+  }
+
+  /**
+   * The error page to use. Must begin with a "/" and is interpreted relative to the current context root.
+   *
+   * @param errorPage the dispatcher path to display
+   *
+   * @throws IllegalArgumentException if the argument doesn't comply with the above limitations
+   */
+  public void setErrorPage(String errorPage) {
+    if ((errorPage != null) && !errorPage.startsWith("/")) {
+      throw new IllegalArgumentException("errorPage must begin with '/'");
     }
 
-    /**
-     * The error page to use. Must begin with a "/" and is interpreted relative to the current context root.
-     *
-     * @param errorPage the dispatcher path to display
-     *
-     * @throws IllegalArgumentException if the argument doesn't comply with the above limitations
-     */
-    public void setErrorPage(String errorPage) {
-        if ((errorPage != null) && !errorPage.startsWith("/")) {
-            throw new IllegalArgumentException("errorPage must begin with '/'");
-        }
-
-        this.errorPage = errorPage;
-    }
+    this.errorPage = errorPage;
+  }
 }

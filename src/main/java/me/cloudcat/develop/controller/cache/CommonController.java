@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class CommonController {
 
-    @RequestMapping(value = "/common/testOne", method = RequestMethod.GET)
-    public String testOne() {
-        return null;
-    }
+  @RequestMapping(value = "/common/testOne", method = RequestMethod.GET)
+  public String testOne() {
+    return null;
+  }
 }

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class Receiver1 implements MessageListener {
 
-    @Autowired
-    private RabbitTemplate template;
+  @Autowired
+  private RabbitTemplate template;
 
-    @Override
-    public void onMessage(Message message) {
-        System.out.println("Received1:" + new String(message.getBody()));
-//        template.convertAndSend("key.abc.125", "此处为队列1返回的数据");
-    }
+  @Override
+  public void onMessage(Message message) {
+    System.out.println("Received1:" + new String(message.getBody()));
+//    template.convertAndSend("key.abc.125", "此处为队列1返回的数据");
+  }
 }

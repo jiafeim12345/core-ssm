@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class CustomSaltSource implements SaltSource {
 
-    @Override
-    public Object getSalt(UserDetails user) {
-        return PropertyUtils.getString("password.salt");
-    }
+  @Override
+  public Object getSalt(UserDetails user) {
+    return PropertyUtils.getString("password.salt");
+  }
 }

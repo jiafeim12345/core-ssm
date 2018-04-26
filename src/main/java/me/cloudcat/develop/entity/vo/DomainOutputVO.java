@@ -4,29 +4,29 @@ import com.alibaba.fastjson.JSONArray;
 
 public class DomainOutputVO {
 
-    private Integer total;
-    private JSONArray rows;
+  private Integer total;
+  private JSONArray rows;
 
-    public DomainOutputVO(Integer total, JSONArray rows) {
-        this.total = total;
-        this.rows = rows;
-    }
+  public DomainOutputVO(Integer total, JSONArray rows) {
+    this.total = total;
+    this.rows = rows;
+  }
 
-    public DomainOutputVO() {}
+  public DomainOutputVO() {}
 
-    public Integer getTotal() {
-        return total;
-    }
+  public Integer getTotal() {
+    return total;
+  }
 
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
+  public void setTotal(Integer total) {
+    this.total = total;
+  }
 
-    public JSONArray getRows() {
-        return rows;
-    }
+  public JSONArray getRows() {
+    return rows;
+  }
 
-    public void setRows(JSONArray rows) {
-        this.rows = rows;
-    }
+  public void setRows(JSONArray rows) {
+    this.rows = rows;
+  }
 }

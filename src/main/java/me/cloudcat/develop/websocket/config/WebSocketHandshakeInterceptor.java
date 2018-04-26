@@ -23,18 +23,18 @@ import java.util.Map;
  */
 public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 
-    private static Logger logger = LoggerFactory.getLogger("socket");
+  private static Logger logger = LoggerFactory.getLogger("socket");
 
 	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes)
 			throws Exception {
 
-        if (request instanceof ServletServerHttpRequest) {
-            String username = BusinessUtils.getUser().getUsername();
-            // 向socket session中设置username属性，作为其唯一标识
-            attributes.put(Constant.SESSION_SOCKET, username);
-            logger.info("socket connect success : " + username);
-        }
+    if (request instanceof ServletServerHttpRequest) {
+      String username = BusinessUtils.getUser().getUsername();
+      // 向socket session中设置username属性，作为其唯一标识
+      attributes.put(Constant.SESSION_SOCKET, username);
+      logger.info("socket connect success : " + username);
+    }
 
 		return true;
 	}
