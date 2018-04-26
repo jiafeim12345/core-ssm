@@ -118,7 +118,7 @@ public class DomainController {
       maxTime = null;
     }
     socketHandler.sendMessageToUser(BusinessUtils.getUser().getUsername(),
-            new OutputObject(Constant.RESPONSE_CODE_200, "OK", new ConfigVO(minTime, maxTime, cookie), null));
+        new OutputObject(Constant.RESPONSE_CODE_200, "OK", new ConfigVO(minTime, maxTime, cookie), null));
     reAttributes.addFlashAttribute("message", "设置成功！");
     return "redirect:/admin/domainConfig";
   }

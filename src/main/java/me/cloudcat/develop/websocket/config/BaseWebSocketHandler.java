@@ -18,71 +18,71 @@ import java.util.Map;
 
 public abstract class BaseWebSocketHandler implements WebSocketHandler {
 
-	private static Logger logger = LoggerFactory.getLogger("socket");
+  private static Logger logger = LoggerFactory.getLogger("socket");
 
-	private static Map<String, WebSocketSession> wsSessions = new HashMap<String, WebSocketSession>();
+  private static Map<String, WebSocketSession> wsSessions = new HashMap<String, WebSocketSession>();
 
-	// 连接建立后处理
-	@Override
-	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		try {
-			wsSessions.put(session.getAttributes().get(Constant.SESSION_SOCKET).toString() + "-" + session.getId()
+  // 连接建立后处理
+  @Override
+  public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    try {
+      wsSessions.put(session.getAttributes().get(Constant.SESSION_SOCKET).toString() + "-" + session.getId()
           , session);
       ThreadUtils.setObserver(ThreadUtils.getObserver() + 1);
       logger.info("当前监听人数：{}", ThreadUtils.getObserver());
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-	}
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+    }
+  }
 
-	// 抛出异常时处理
-	@Override
-	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-		if (session.isOpen()) {
-			session.close();
-		}
-		wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET) + "-" + session.getId());
-		logger.error("socket error! " + exception.toString());
-	}
+  // 抛出异常时处理
+  @Override
+  public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+    if (session.isOpen()) {
+      session.close();
+    }
+    wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET) + "-" + session.getId());
+    logger.error("socket error! " + exception.toString());
+  }
 
-	// 连接关闭后处理
-	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+  // 连接关闭后处理
+  @Override
+  public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
     wsSessions.remove(session.getAttributes().get(Constant.SESSION_SOCKET) + "-" + session.getId());
     ThreadUtils.setObserver(ThreadUtils.getObserver() - 1);
     logger.info("socket closed.");
-		logger.info("当前监听人数：{}", ThreadUtils.getObserver());
-	}
+    logger.info("当前监听人数：{}", ThreadUtils.getObserver());
+  }
 
-	@Override
-	public boolean supportsPartialMessages() {
-		return false;
-	}
+  @Override
+  public boolean supportsPartialMessages() {
+    return false;
+  }
 
-	/**
-	 * 向用户发送数据
-	 * 
-	 * @param userName
-	 * @param opo
-	 */
-	public void sendMessageToUser(String userName, OutputObject opo) {
+  /**
+   * 向用户发送数据
+   *
+   * @param userName
+   * @param opo
+   */
+  public void sendMessageToUser(String userName, OutputObject opo) {
     for (Map.Entry<String, WebSocketSession> entry : wsSessions.entrySet()) {
       if (entry.getKey().split("-")[0].equals(userName)) {
         sendMessage(entry.getKey(), opo);
       }
     }
-	}
+  }
 
-	/**
-	 * 向用户发送数据(广播)
-	 * 
-	 * @param opo
-	 */
-	public void sendMessageToAll(OutputObject opo) {
-    for (String key : wsSessions.keySet()){
+  /**
+   * 向用户发送数据(广播)
+   *
+   * @param opo
+   */
+  public void sendMessageToAll(OutputObject opo) {
+    for (String key : wsSessions.keySet()) {
       sendMessage(key, opo);
     }
-	}
+  }
 
   /**
    * 发送消息
@@ -103,13 +103,13 @@ public abstract class BaseWebSocketHandler implements WebSocketHandler {
     }
   }
 
-	/**
-	 * 获取socket session
-	 * 
-	 * @param userName
-	 * @return
-	 */		
-	public WebSocketSession getWebSocketSession(String userName) {
-		return wsSessions.get(userName);
-	}
+  /**
+   * 获取socket session
+   *
+   * @param userName
+   * @return
+   */
+  public WebSocketSession getWebSocketSession(String userName) {
+    return wsSessions.get(userName);
+  }
 }

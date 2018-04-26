@@ -12,7 +12,8 @@ public class ConfigVO {
     this.cookie = cookie;
   }
 
-  public ConfigVO() {}
+  public ConfigVO() {
+  }
 
   public Integer getMinTime() {
     return minTime;

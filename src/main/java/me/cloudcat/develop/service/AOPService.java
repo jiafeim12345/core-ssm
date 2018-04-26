@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AOPService {
-	
-	public void printOne() {
-		System.out.println("this is printOne");
-	}
-	
-	public void printTwo() {
-		System.out.println("this is printTwo");
-	}
-	
+
+  public void printOne() {
+    System.out.println("this is printOne");
+  }
+
+  public void printTwo() {
+    System.out.println("this is printTwo");
+  }
+
 }

@@ -74,7 +74,6 @@ public class ResourceAccessDeniedHandler implements AccessDeniedHandler {
    * The error page to use. Must begin with a "/" and is interpreted relative to the current context root.
    *
    * @param errorPage the dispatcher path to display
-   *
    * @throws IllegalArgumentException if the argument doesn't comply with the above limitations
    */
   public void setErrorPage(String errorPage) {

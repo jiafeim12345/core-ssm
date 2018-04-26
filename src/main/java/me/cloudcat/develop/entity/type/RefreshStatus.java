@@ -8,7 +8,7 @@ package me.cloudcat.develop.entity.type;
  */
 public enum RefreshStatus implements BaseType {
 
-  NONE(0),    // 未刷新
+  NONE(0),        // 未刷新
   REFRESHING(1),  // 刷新中
   REFRESHED(2);   // 已刷新
 

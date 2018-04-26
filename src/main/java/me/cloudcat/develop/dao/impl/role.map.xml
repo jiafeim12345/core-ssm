@@ -3,71 +3,71 @@
 
 <mapper namespace="me.cloudcat.develop.dao.RoleDao">
 
-  <resultMap type="Role" id="roleBasicMap" autoMapping="true">
-  </resultMap>
+    <resultMap type="Role" id="roleBasicMap" autoMapping="true">
+    </resultMap>
 
-  <resultMap type="Role" id="roleDetailMap" autoMapping="true">
-    <collection property="resources" ofType="Resource" column="id"
-          select="me.cloudcat.develop.dao.ResourceDao.getResourcesByRole">
-    </collection>
-  </resultMap>
+    <resultMap type="Role" id="roleDetailMap" autoMapping="true">
+        <collection property="resources" ofType="Resource" column="id"
+                    select="me.cloudcat.develop.dao.ResourceDao.getResourcesByRole">
+        </collection>
+    </resultMap>
 
-  <sql id="basic_header">
-    SELECT r.*
-    FROM tbl_role r
-  </sql>
+    <sql id="basic_header">
+        SELECT r.*
+        FROM tbl_role r
+    </sql>
 
-  <sql id="detail_header">
-    SELECT r.*, re.id re_id
-    FROM tbl_role r
-    LEFT JOIN tbl_role_resource_rel rel ON rel.role_id = r.id
-    LEFT JOIN tbl_resource re ON rel.resource_id = re.id
-  </sql>
+    <sql id="detail_header">
+        SELECT r.*, re.id re_id
+        FROM tbl_role r
+        LEFT JOIN tbl_role_resource_rel rel ON rel.role_id = r.id
+        LEFT JOIN tbl_resource re ON rel.resource_id = re.id
+    </sql>
 
-  <select id="getBasic" resultMap="roleBasicMap">
-    <include refid="basic_header"/>
-    <where>
-      id = #{id}
-    </where>
-  </select>
+    <select id="getBasic" resultMap="roleBasicMap">
+        <include refid="basic_header"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
 
-  <select id="findOne" resultMap="roleDetailMap">
-    <include refid="basic_header"/>
-    <where>
-      id = #{id}
-    </where>
-  </select>
+    <select id="findOne" resultMap="roleDetailMap">
+        <include refid="basic_header"/>
+        <where>
+            id = #{id}
+        </where>
+    </select>
 
-  <select id="findByCondition" resultMap="roleDetailMap" >
-    <include refid="basic_header"/>
-    <where>
-      <if test="e.name!=null}">
-        AND r.name = #{e.name}
-      </if>
-      <if test="e.status!=null}">
-        AND r.status = #{e.status}
-      </if>
-    </where>
-  </select>
+    <select id="findByCondition" resultMap="roleDetailMap">
+        <include refid="basic_header"/>
+        <where>
+            <if test="e.name!=null}">
+                AND r.name = #{e.name}
+            </if>
+            <if test="e.status!=null}">
+                AND r.status = #{e.status}
+            </if>
+        </where>
+    </select>
 
-  <select id="findAll" resultMap="roleDetailMap">
-    <include refid="basic_header"/>
-  </select>
+    <select id="findAll" resultMap="roleDetailMap">
+        <include refid="basic_header"/>
+    </select>
 
-  <select id="getRolesByUserId" resultMap="roleBasicMap">
-    SELECT r.*
-    FROM tbl_role r LEFT JOIN tbl_user_role_rel rel ON rel.role_id = r.id
-    WHERE rel.user_id = #{userId}
-  </select>
+    <select id="getRolesByUserId" resultMap="roleBasicMap">
+        SELECT r.*
+        FROM tbl_role r LEFT JOIN tbl_user_role_rel rel ON rel.role_id = r.id
+        WHERE rel.user_id = #{userId}
+    </select>
 
-  <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
-    insert into tbl_role(name, description, status)
-    VALUES(#{e.name}, #{e.description}, #{e.status})
-  </insert>
+    <insert id="save" useGeneratedKeys="true" keyProperty="e.id">
+        insert into tbl_role(name, description, status)
+        VALUES(#{e.name}, #{e.description}, #{e.status})
+    </insert>
 
-  <delete id="delete">
-    DELETE FROM tbl_role
-    WHERE id = #{id}
-  </delete>
+    <delete id="delete">
+        DELETE FROM tbl_role
+        WHERE id = #{id}
+    </delete>
 
 </mapper>

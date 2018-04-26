@@ -17,7 +17,7 @@ public class Resource extends BaseEntity<Resource> {
   private String description;
 
   private Method method;     // 资源类型
-  private String api;      // 接口信息
+  private String api;        // 接口信息
 
   private Date createTime;
   private Date updateTime;

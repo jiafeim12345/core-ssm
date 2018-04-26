@@ -1,7 +1,6 @@
 package me.cloudcat.develop.utils;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -24,7 +23,7 @@ public class CommonUtils {
       return null;
     }
     String formStr = "";
-    for (String key: formMap.keySet()) {
+    for (String key : formMap.keySet()) {
       formStr += key + "=" + formMap.get(key) + "&";
     }
     // 去除多余的&符
@@ -45,7 +44,7 @@ public class CommonUtils {
       return null;
     }
     TreeMap<String, Object> orderedMap = new TreeMap<>();
-    for (String key: formMap.keySet()) {
+    for (String key : formMap.keySet()) {
       orderedMap.put(key, formMap.get(key));
     }
     String result = formDataSerialize(orderedMap);

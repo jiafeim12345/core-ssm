@@ -24,6 +24,7 @@ public class RedisMap {
 
   /**
    * 存储
+   *
    * @param key
    * @param value
    */
@@ -33,6 +34,7 @@ public class RedisMap {
 
   /**
    * 取值
+   *
    * @param key
    * @return
    */
@@ -42,6 +44,7 @@ public class RedisMap {
 
   /**
    * 删除RedisMap中键值
+   *
    * @param key
    * @return
    */

@@ -7,6 +7,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface PrintLog {
   String name() default "admin";
+
   boolean showName() default false;
+
   String content();
 }

@@ -1,7 +1,6 @@
 package me.cloudcat.develop.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.codec.Base64;
 
 
 /**

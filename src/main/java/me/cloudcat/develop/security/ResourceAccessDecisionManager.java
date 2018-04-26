@@ -28,7 +28,7 @@ public class ResourceAccessDecisionManager implements AccessDecisionManager {
     }
 
     Iterator<ConfigAttribute> ite = configAttributes.iterator();
-		/*
+    /*
 		 * 访问控制，登陆用户有一个相应权限就可以访问
 		 */
     User currentUser = BusinessUtils.getUser();

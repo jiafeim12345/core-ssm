@@ -94,7 +94,7 @@ public class DomainService {
         paramStr, headers);
     if (StringUtils.isNotEmpty(result)) {
       logger.info("万网域名：Total " + JSONArray.parseObject(result).get("Total")
-          + "  刷新频率：" + ThreadUtils.getMinTime() +" ~ " + ThreadUtils.getMaxTime() + " 秒");
+          + "  刷新频率：" + ThreadUtils.getMinTime() + " ~ " + ThreadUtils.getMaxTime() + " 秒");
       logger.debug("Cookie：" + getCookie());
     }
     return result;
@@ -133,7 +133,7 @@ public class DomainService {
       return null;
     }
     Set<String> domainSet = new HashSet<String>();
-    for(Object ob : getDomainArray()){
+    for (Object ob : getDomainArray()) {
       domainSet.add(((JSONObject) ob).get("Domain").toString());
     }
     return domainSet;
@@ -149,7 +149,7 @@ public class DomainService {
    */
   public JSONArray getNewDomain(JSONArray newDomainArray) {
     JSONArray result = new JSONArray();
-    for(Object ob : newDomainArray) {
+    for (Object ob : newDomainArray) {
       String domain = JSON.parseObject(ob.toString()).get("Domain").toString();
       // 如果域名在旧域名记录中不存在，则返回
       Set<String> oldDomains = getDomainSet();

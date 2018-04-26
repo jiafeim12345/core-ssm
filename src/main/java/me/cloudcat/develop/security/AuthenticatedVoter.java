@@ -84,7 +84,6 @@ public class AuthenticatedVoter implements AccessDecisionVoter<Object> {
    * This implementation supports any type of class, because it does not query the presented secure object.
    *
    * @param clazz the secure object type
-   *
    * @return always {@code true}
    */
   public boolean supports(Class<?> clazz) {

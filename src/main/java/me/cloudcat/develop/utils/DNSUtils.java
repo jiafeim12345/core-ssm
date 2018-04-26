@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class DNSUtils {
 
-  private static Logger logger =  Logger.getLogger("DNS");
+  private static Logger logger = Logger.getLogger("DNS");
 
   public static Map<String, Object> getWhois(String domainName) throws UnsupportedEncodingException, SignatureException {
     //字典序排序
@@ -38,7 +38,7 @@ public class DNSUtils {
     // 阿里云算法修正，解决TimeStamp冒号被转义成%253A的问题。
     encodeUrlParam = encodeUrlParam.replaceAll("%3A", "%253A");
     logger.info("Whois解析：" + domainName);
-    String tosign= "POST" + "&" + "%2F" + "&" + encodeUrlParam;
+    String tosign = "POST" + "&" + "%2F" + "&" + encodeUrlParam;
     String hmacSHA1 = SignatureUtils.hmacSHA1Base64(tosign, "DxgPChG1Z6D8mVV72Yc2hmhjoKnuoi&").trim();
     String signature = URLEncoder.encode(hmacSHA1, "utf-8");
     map.put("Signature", signature);

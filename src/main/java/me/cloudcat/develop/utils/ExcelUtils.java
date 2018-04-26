@@ -1,20 +1,19 @@
 package me.cloudcat.develop.utils;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 
 /**
  * excel表格处理工具
+ *
  * @Author: zhenzhong.wang
  * @Time: 2017/12/25 13:34
  */
@@ -22,13 +21,14 @@ public class ExcelUtils {
 
   /**
    * 得到Excel，并解析内容，对2007及以上版本 使用XSSF解析
+   *
    * @param filePath
    * @throws IOException
    * @throws InvalidFormatException
    */
   public static void dataClean(String filePath) throws IOException, InvalidFormatException {
     // 通过流创建XSSF WorkBook
-    InputStream ins=new FileInputStream(new File(filePath));
+    InputStream ins = new FileInputStream(new File(filePath));
     XSSFWorkbook wb = (XSSFWorkbook) WorkbookFactory.create(ins);
     // workbook加入写工作流
     OutputStream out = new FileOutputStream(new File(filePath));
@@ -66,31 +66,31 @@ public class ExcelUtils {
                 }
               }
             }
-            int start , end;
+            int start, end;
             // 获取公司名
             int po2 = value.indexOf("有限公司");
-            end = po2+4;
+            end = po2 + 4;
             if (po2 < 0) {
               po2 = value.indexOf("事务所");
-              end = po2+3;
+              end = po2 + 3;
             }
             if (po2 < 0) {
               po2 = value.indexOf("经营部");
-              end = po2+3;
+              end = po2 + 3;
             }
-            start = po2-20;
+            start = po2 - 20;
 
-            if (po2 > 0){
+            if (po2 > 0) {
               if (start <= 0) {
-                start = 0 ;
+                start = 0;
               }
               account = value.substring(start, end);
-              if (account.indexOf("上海") < 0){
+              if (account.indexOf("上海") < 0) {
                 account = "";
               }
               if (StringUtils.isNotBlank(account)) {
                 // 剔除脏字符
-                for (int num = 0; num< 2; num++) {
+                for (int num = 0; num < 2; num++) {
                   if (account.lastIndexOf("&&") >= 0) {
                     account = account.substring(account.indexOf("&&") + 2, account.length());
                   }
@@ -137,7 +137,7 @@ public class ExcelUtils {
   /**
    * 创建Excel，并写入内容
    */
-  public static void CreateExcel(){
+  public static void CreateExcel() {
 
     //1.创建Excel工作薄对象
     HSSFWorkbook wb = new HSSFWorkbook();
@@ -146,7 +146,7 @@ public class ExcelUtils {
     //3.创建Excel工作表的行
     HSSFRow row = sheet.createRow(6);
     //4.创建单元格样式
-    CellStyle cellStyle =wb.createCellStyle();
+    CellStyle cellStyle = wb.createCellStyle();
     // 设置这些样式
     cellStyle.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
     cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -166,18 +166,15 @@ public class ExcelUtils {
 
 
     //设置sheet名称和单元格内容
-    wb.setSheetName(0,"第一张工作表");
+    wb.setSheetName(0, "第一张工作表");
     //设置单元格内容   cell.setCellValue("单元格内容");
 
     // 最后一步，将文件存到指定位置
-    try
-    {
+    try {
       FileOutputStream fout = new FileOutputStream("E:/students.xls");
       wb.write(fout);
       fout.close();
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }

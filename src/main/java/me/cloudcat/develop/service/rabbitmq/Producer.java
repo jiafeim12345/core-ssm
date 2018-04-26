@@ -2,10 +2,7 @@ package me.cloudcat.develop.service.rabbitmq;
 
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 @Service
 public class Producer {
@@ -15,6 +12,7 @@ public class Producer {
 
   /**
    * 发送消息给队列1
+   *
    * @param message
    */
   public void sendMessage1(Object message) {
@@ -23,6 +21,7 @@ public class Producer {
 
   /**
    * 发送消息给队列2
+   *
    * @param message
    */
   public void sendMessage2(Object message) {

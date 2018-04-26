@@ -35,7 +35,6 @@ import java.io.IOException;
  *
  * @author Shazin Sadakath
  * @since 4.1
- *
  */
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 

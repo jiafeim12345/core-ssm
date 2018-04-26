@@ -10,7 +10,7 @@ public enum Status implements BaseType {
 
   DISABLE(0),   // 停用
 
-  ENABLE(1);  // 启用
+  ENABLE(1);    // 启用
 
   private int value;
 

@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class OutputObject {
 
-  String code;    // 状态码
+  String code;      // 状态码
   String message;   // 消息
   Object result;    // 结果
   String option;    // 操作
@@ -24,7 +24,8 @@ public class OutputObject {
     this.option = option;
   }
 
-  public OutputObject() {}
+  public OutputObject() {
+  }
 
   public String getCode() {
     return code;

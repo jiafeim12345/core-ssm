@@ -5,9 +5,6 @@ import org.apache.xerces.impl.dv.util.Base64;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 
 /**
@@ -24,11 +21,9 @@ public class SignatureUtils {
    * Computes RFC 2104-compliant HMAC signature. * @param data The data to be
    * signed.
    *
-   * @param key
-   *      The signing key.
+   * @param key The signing key.
    * @return The Base64-encoded RFC 2104-compliant HMAC signature.
-   * @throws java.security.SignatureException
-   *       when signature generation fails
+   * @throws java.security.SignatureException when signature generation fails
    */
   public static String hmacSHA1Base64(String data, String key)
       throws java.security.SignatureException {

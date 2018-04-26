@@ -20,6 +20,7 @@ public class ThreadUtils {
 
   /**
    * [min,max]区间内睡眠随机时间
+   *
    * @param max
    * @param min
    */
@@ -61,7 +62,7 @@ public class ThreadUtils {
   }
 
   public static void setMinTime(Integer min) {
-    synchronized(minTime) {
+    synchronized (minTime) {
       minTime = min;
     }
   }
@@ -71,7 +72,7 @@ public class ThreadUtils {
   }
 
   public static void setMaxTime(Integer max) {
-    synchronized(maxTime) {
+    synchronized (maxTime) {
       maxTime = max;
     }
   }

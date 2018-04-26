@@ -12,7 +12,8 @@ public class DomainOutputVO {
     this.rows = rows;
   }
 
-  public DomainOutputVO() {}
+  public DomainOutputVO() {
+  }
 
   public Integer getTotal() {
     return total;

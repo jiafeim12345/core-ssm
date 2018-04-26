@@ -59,14 +59,14 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
    */
   private void init() {
 
-		/**
-		 * 应当是资源(格式：method,api)为key， 权限为value。 资源为URL-Method的Map， 权限就是那些以ROLE_为前缀的角色。
-		 * 一个资源可以由多个权限来访问。
-		 */
+    /**
+     * 应当是资源(格式：method,api)为key， 权限为value。 资源为URL-Method的Map， 权限就是那些以ROLE_为前缀的角色。
+     * 一个资源可以由多个权限来访问。
+     */
     Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
 
 		/*
-		 * 在Web服务器启动时，提取系统中的所有权限。
+     * 在Web服务器启动时，提取系统中的所有权限。
 		 */
     List<Role> authorityList = roleDao.findAll();
 
@@ -83,7 +83,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
 				/*
 				 * 判断资源文件和权限的对应关系，如果已经存在相关的资源url，则要限通过该url为key提取出权集合，将权限增加到权限集合中
 				 */
-				String resKey = res.getMethod().toString() + "," + res.getApi();
+        String resKey = res.getMethod().toString() + "," + res.getApi();
         if (resourceMap.containsKey(resKey)) {
           Collection<ConfigAttribute> value = resourceMap.get(resKey);
           value.add(attr);
@@ -129,7 +129,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
       Map<String, Collection<ConfigAttribute>> map = (Map<String, Collection<ConfigAttribute>>) resourceMap;
       for (Map.Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
         /**
-			   * 做URL-Method匹配,并且区分URL中的大小写
+         * 做URL-Method匹配,并且区分URL中的大小写
          */
         try {
           String[] res = entry.getKey().split(",");

@@ -2,7 +2,6 @@ package me.cloudcat.develop.security;
 
 import me.cloudcat.develop.dao.UserDao;
 import me.cloudcat.develop.entity.User;
-import me.cloudcat.develop.utils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
