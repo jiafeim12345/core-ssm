@@ -34,7 +34,10 @@
   <bean id="propertyUtils" class="me.cloudcat.develop.utils.PropertyUtils"/>
 
   <!-- 加载bean -->
-  <context:component-scan base-package="me.cloudcat.develop"/>
+  <context:component-scan base-package="me.cloudcat.develop">
+    <context:exclude-filter type="regex" expression="me.cloudcat.develop.security.*"/>
+    <context:exclude-filter type="regex" expression="me.cloudcat.develop.utils.SSOUtils"/>
+  </context:component-scan>
 
 
   <!-- 数据源配置 -->
