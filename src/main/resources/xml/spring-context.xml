@@ -1,136 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:data="http://www.springframework.org/schema/data/repository"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:data="http://www.springframework.org/schema/data/repository"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 		http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository.xsd">
 
 
-	<!-- 加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
-	<context:property-placeholder location="classpath:properties/jdbc.properties,classpath:properties/secret.properties,
+  <!-- 加载资源文件 其中包含变量信息，必须在Spring配置文件的最前面加载，即第一个加载 -->
+  <context:property-placeholder location="classpath:properties/jdbc.properties,classpath:properties/secret.properties,
 	                                        classpath:properties/redis.properties,classpath:properties/mq.properties,
-	                                        classpath:properties/config.properties" />
+	                                        classpath:properties/config.properties"/>
 
-    <bean id="messageSource"
-          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames">
-            <array>
-                <value>classpath:properties/config</value>
-                <value>classpath:properties/jdbc</value>
-                <value>classpath:properties/mq</value>
-				<value>classpath:properties/redis</value>
-            </array>
-        </property>
-        <property name="useCodeAsDefaultMessage" value="true" />
-    </bean>
+  <bean id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+    <property name="basenames">
+      <array>
+        <value>classpath:properties/config</value>
+        <value>classpath:properties/jdbc</value>
+        <value>classpath:properties/mq</value>
+        <value>classpath:properties/redis</value>
+      </array>
+    </property>
+    <property name="useCodeAsDefaultMessage" value="true"/>
+  </bean>
 
-    <!-- 需放到业务bean之前，保证比业务类先初始化，避免空指针异常 -->
-    <bean id="propertyUtils" class="me.cloudcat.develop.utils.PropertyUtils"/>
+  <!-- 需放到业务bean之前，保证比业务类先初始化，避免空指针异常 -->
+  <bean id="propertyUtils" class="me.cloudcat.develop.utils.PropertyUtils"/>
 
-	<!-- 加载bean -->
-	<context:component-scan base-package="me.cloudcat.develop" />
+  <!-- 加载bean -->
+  <context:component-scan base-package="me.cloudcat.develop"/>
 
 
-	<!-- 数据源配置 -->
-	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-		<!-- 基本属性 url、user、password -->
-		<property name="name" value="druid-dataSource-1" />
-		<property name="driverClassName" value="${jdbc.driver}" />
-		<property name="url" value="${jdbc.urlPath}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
+  <!-- 数据源配置 -->
+  <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+    <!-- 基本属性 url、user、password -->
+    <property name="name" value="druid-dataSource-1"/>
+    <property name="driverClassName" value="${jdbc.driver}"/>
+    <property name="url" value="${jdbc.urlPath}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
 
-		<!-- 配置初始化大小、最小、最大 -->
-		<property name="initialSize" value="1" />
-		<property name="minIdle" value="1" />
-		<property name="maxActive" value="20" />
+    <!-- 配置初始化大小、最小、最大 -->
+    <property name="initialSize" value="1"/>
+    <property name="minIdle" value="1"/>
+    <property name="maxActive" value="20"/>
 
-		<!-- 配置获取连接等待超时的时间 -->
-		<property name="maxWait" value="60000" />
+    <!-- 配置获取连接等待超时的时间 -->
+    <property name="maxWait" value="60000"/>
 
-		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+    <property name="timeBetweenEvictionRunsMillis" value="60000"/>
 
-		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
-		<property name="minEvictableIdleTimeMillis" value="300000" />
-        
-        <property name="maxOpenPreparedStatements" value="-1" />
+    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+    <property name="minEvictableIdleTimeMillis" value="300000"/>
 
-		<property name="validationQuery" value="SELECT 'x'" />
-		<property name="testWhileIdle" value="true" />
-		<property name="testOnBorrow" value="false" />
-		<property name="testOnReturn" value="false" />
+    <property name="maxOpenPreparedStatements" value="-1"/>
 
-		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
-		<property name="poolPreparedStatements" value="true" />
-		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+    <property name="validationQuery" value="SELECT 'x'"/>
+    <property name="testWhileIdle" value="true"/>
+    <property name="testOnBorrow" value="false"/>
+    <property name="testOnReturn" value="false"/>
 
-		<!-- 配置监控统计拦截的filters -->
-		<property name="filters" value="stat" />
-	</bean>
+    <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+    <property name="poolPreparedStatements" value="true"/>
+    <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
 
-    <!-- 多数据库处理 -->
-    <bean id="vendorProperties"
-          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="properties">
-            <props>
-                <prop key="Oracle">oracle</prop>
-                <prop key="MySQL">mysql</prop>
-                <prop key="SQL Server">sqlserver</prop>
-                <prop key="DB2">db2</prop>
-            </props>
-        </property>
-    </bean>
-    <bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
-        <property name="properties" ref="vendorProperties" />
-    </bean>
+    <!-- 配置监控统计拦截的filters -->
+    <property name="filters" value="stat"/>
+  </bean>
 
-	<!-- sqlSessionFactory -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<!-- 数据库连接池 -->
-		<property name="dataSource" ref="dataSource" />
-		<!-- 指定mapper.xml的位置 -->
-		<property name="mapperLocations" value="classpath:me/cloudcat/develop/dao/impl/*.xml" />
-		<!-- 加载mybatis的全局配置文件 -->
-		<property name="configLocation" value="classpath:xml/mybatis-config.xml" />
-        <property name="databaseIdProvider" ref="databaseIdProvider" />
-        <property name="typeAliasesPackage" value="me.cloudcat.develop.entity"/>
-	</bean>
+  <!-- 多数据库处理 -->
+  <bean id="vendorProperties"
+        class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="properties">
+      <props>
+        <prop key="Oracle">oracle</prop>
+        <prop key="MySQL">mysql</prop>
+        <prop key="SQL Server">sqlserver</prop>
+        <prop key="DB2">db2</prop>
+      </props>
+    </property>
+  </bean>
+  <bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+    <property name="properties" ref="vendorProperties"/>
+  </bean>
 
-	<!-- mapper扫描器 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<!-- 扫描包路径，如果需要扫描多个包，中间使用半角逗号隔开 -->
-		<property name="basePackage" value="me.cloudcat.develop.dao"></property>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-	</bean>
+  <!-- sqlSessionFactory -->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- 数据库连接池 -->
+    <property name="dataSource" ref="dataSource"/>
+    <!-- 指定mapper.xml的位置 -->
+    <property name="mapperLocations" value="classpath:me/cloudcat/develop/dao/impl/*.xml"/>
+    <!-- 加载mybatis的全局配置文件 -->
+    <property name="configLocation" value="classpath:xml/mybatis-config.xml"/>
+    <property name="databaseIdProvider" ref="databaseIdProvider"/>
+    <property name="typeAliasesPackage" value="me.cloudcat.develop.entity"/>
+  </bean>
 
-	<!--<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">  
+  <!-- mapper扫描器 -->
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <!-- 扫描包路径，如果需要扫描多个包，中间使用半角逗号隔开 -->
+    <property name="basePackage" value="me.cloudcat.develop.dao"></property>
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+  </bean>
+
+  <!--<bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
      <property name="ehCacheLocation" value="classpath:ehcache.xml" />  
    </bean> -->
-	
 
-	<!-- 事务配置 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	<tx:annotation-driven transaction-manager="transactionManager" />
 
-	<!-- 配置事务异常封装 -->
-	<bean id="persistenceExceptionTranslationPostProcessor"
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+  <!-- 事务配置 -->
+  <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+  <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <aop:config>
-        <aop:aspect id="id" order="1" ref="datePrint">
-            <aop:pointcut expression="execution(* me.cloudcat.develop.service.AOPService.printOne(..))" id="allMethod"/>
-            <aop:pointcut expression="execution(* me.cloudcat.develop.service.AOPService.printTwo(..))" id="printTwo"/>
-            <aop:after method="printDate1" pointcut-ref="allMethod" />
-            <aop:around method="printDate2" pointcut-ref="allMethod"  />
-            <aop:before method="printDate1" pointcut-ref="allMethod"/>
-        </aop:aspect>
-    </aop:config>
+  <!-- 配置事务异常封装 -->
+  <bean id="persistenceExceptionTranslationPostProcessor"
+        class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+  <aop:config>
+    <aop:aspect id="id" order="1" ref="datePrint">
+      <aop:pointcut expression="execution(* me.cloudcat.develop.service.AOPService.printOne(..))" id="allMethod"/>
+      <aop:pointcut expression="execution(* me.cloudcat.develop.service.AOPService.printTwo(..))" id="printTwo"/>
+      <aop:after method="printDate1" pointcut-ref="allMethod"/>
+      <aop:around method="printDate2" pointcut-ref="allMethod"/>
+      <aop:before method="printDate1" pointcut-ref="allMethod"/>
+    </aop:aspect>
+  </aop:config>
 </beans>

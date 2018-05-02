@@ -8,23 +8,25 @@
                            http://www.springframework.org/schema/rabbit/spring-rabbit-1.6.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <!-- 配置connection-factory,指定rabbit server的参数 -->
-    <rabbit:connection-factory id="connectionFactory" host="${mq.host}" port="${mq.port}" username="${mq.username}" password="${mq.password}"
-                               virtual-host="${mq.vhost}" connection-timeout="${mq.timeout}" />
+  <!-- 配置connection-factory,指定rabbit server的参数 -->
+  <rabbit:connection-factory id="connectionFactory" host="${mq.host}" port="${mq.port}" username="${mq.username}"
+                             password="${mq.password}"
+                             virtual-host="${mq.vhost}" connection-timeout="${mq.timeout}"/>
 
-    <!-- 通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器中自动生成 -->
-    <rabbit:admin id="connectAdmin" connection-factory="connectionFactory" />
-    <rabbit:queue id="queue1" name="queue1" durable="true" auto-delete="false" exclusive="false" declared-by="connectAdmin" />
-    <!-- 定义topicExchange 绑定queue -->
-    <rabbit:topic-exchange name="core-ssm-topic" id="core-ssm-topic" durable="true" declared-by="connectAdmin">
-        <rabbit:bindings>
-            <rabbit:binding queue="queue1" pattern="key.123.#"/>
-        </rabbit:bindings>
-    </rabbit:topic-exchange>
-    <!-- 定义template，用户数据的接收和发送 -->
-    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="topicExchange"/>
+  <!-- 通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器中自动生成 -->
+  <rabbit:admin id="connectAdmin" connection-factory="connectionFactory"/>
+  <rabbit:queue id="queue1" name="queue1" durable="true" auto-delete="false" exclusive="false"
+                declared-by="connectAdmin"/>
+  <!-- 定义topicExchange 绑定queue -->
+  <rabbit:topic-exchange name="core-ssm-topic" id="core-ssm-topic" durable="true" declared-by="connectAdmin">
+    <rabbit:bindings>
+      <rabbit:binding queue="queue1" pattern="key.123.#"/>
+    </rabbit:bindings>
+  </rabbit:topic-exchange>
+  <!-- 定义template，用户数据的接收和发送 -->
+  <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="topicExchange"/>
 
-    <rabbit:listener-container connection-factory="connectionFactory">
-        <rabbit:listener ref="receiver1" queues="queue1" />
-    </rabbit:listener-container>
+  <rabbit:listener-container connection-factory="connectionFactory">
+    <rabbit:listener ref="receiver1" queues="queue1"/>
+  </rabbit:listener-container>
 </beans>

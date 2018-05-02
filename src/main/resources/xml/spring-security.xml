@@ -2,7 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:security="http://www.springframework.org/schema/security"
-       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
@@ -10,129 +11,129 @@
            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
            http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd ">
 
-    <security:http pattern="/static/**" security="none"/>
+  <security:http pattern="/static/**" security="none"/>
 
-    <!-- ########################### 基本配置 ######################### -->
+  <!-- ########################### 基本配置 ######################### -->
 
-    <security:http auto-config="false" use-expressions="false"
-                   access-decision-manager-ref="accessDecisionManager" >
+  <security:http auto-config="false" use-expressions="false"
+                 access-decision-manager-ref="accessDecisionManager">
 
-        <!-- 登录操作，配置处理器，登录拦截地址等 -->
-        <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"
-                             authentication-failure-handler-ref="authenticationFailureHandler"
-                             login-processing-url="/login/authenticate"
-                             username-parameter="username"
-                             password-parameter="password"
-                             login-page="/login"
-        />
-        <security:headers>
-            <!-- 允许网页加载同源下的frame -->
-            <security:frame-options policy="SAMEORIGIN"/>
-        </security:headers>
-        <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
-        <security:intercept-url pattern="/admin/**" access="IS_AUTHENTICATED_FULLY"/>
+    <!-- 登录操作，配置处理器，登录拦截地址等 -->
+    <security:form-login authentication-success-handler-ref="authenticationSuccessHandler"
+                         authentication-failure-handler-ref="authenticationFailureHandler"
+                         login-processing-url="/login/authenticate"
+                         username-parameter="username"
+                         password-parameter="password"
+                         login-page="/login"
+    />
+    <security:headers>
+      <!-- 允许网页加载同源下的frame -->
+      <security:frame-options policy="SAMEORIGIN"/>
+    </security:headers>
+    <!-- 登录用户可访问 /api/** 这个API是数据请求API -->
+    <security:intercept-url pattern="/admin/**" access="IS_AUTHENTICATED_FULLY"/>
 
-        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 
-        <!-- 防止重复登录 -->
-        <security:session-management session-fixation-protection="none">
-            <security:concurrency-control max-sessions="10" error-if-maximum-exceeded="false"
-                                          expired-url="/" session-registry-ref="sessionRegistry"/>
-        </security:session-management>
+    <!-- 防止重复登录 -->
+    <security:session-management session-fixation-protection="none">
+      <security:concurrency-control max-sessions="10" error-if-maximum-exceeded="false"
+                                    expired-url="/" session-registry-ref="sessionRegistry"/>
+    </security:session-management>
 
-        <!-- csrf攻击保护，默认开启 -->
-        <security:csrf disabled="true"/>
+    <!-- csrf攻击保护，默认开启 -->
+    <security:csrf disabled="true"/>
 
-        <!-- 记住我：默认两周 -->
-        <security:remember-me remember-me-parameter="remember"/>
-        <!-- 403控制 -->
-        <security:access-denied-handler ref="accessDeniedHandler"/>
-        <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->
-        <security:custom-filter ref="apiFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
-        <security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER" />
-    </security:http>
-
+    <!-- 记住我：默认两周 -->
+    <security:remember-me remember-me-parameter="remember"/>
     <!-- 403控制 -->
-    <bean id="accessDeniedHandler" class="me.cloudcat.develop.security.handler.ResourceAccessDeniedHandler"/>
+    <security:access-denied-handler ref="accessDeniedHandler"/>
+    <!-- 将自定义的拦截器放在FILTER_SECURITY_INTERCEPTOR拦截器之后，先由spring做拦截。 -->
+    <security:custom-filter ref="apiFilter" after="FILTER_SECURITY_INTERCEPTOR"/>
+    <security:custom-filter ref="customLogoutFilter" position="LOGOUT_FILTER"/>
+  </security:http>
 
-    <!-- 访问决策管理器，AffirmativeBased表示只要有一个Voter通过权限要求，就可以访问 -->
-    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
-        <constructor-arg name="decisionVoters">
-            <list>
-                <bean class="me.cloudcat.develop.security.AuthenticatedVoter"/>
-            </list>
-        </constructor-arg>
-    </bean>
+  <!-- 403控制 -->
+  <bean id="accessDeniedHandler" class="me.cloudcat.develop.security.handler.ResourceAccessDeniedHandler"/>
 
-    <!-- #################################################### -->
+  <!-- 访问决策管理器，AffirmativeBased表示只要有一个Voter通过权限要求，就可以访问 -->
+  <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+    <constructor-arg name="decisionVoters">
+      <list>
+        <bean class="me.cloudcat.develop.security.AuthenticatedVoter"/>
+      </list>
+    </constructor-arg>
+  </bean>
 
-
-    <!-- ############### 登录成功/失败处理器 ################## -->
-
-    <bean id="authenticationSuccessHandler" class="me.cloudcat.develop.security.handler.LoginSuccessHandler">
-        <constructor-arg name="redirectUrl" value="${login.success.redirect}"/>
-    </bean>
-    <!-- 登录失败处理 -->
-    <bean id="authenticationFailureHandler" class="me.cloudcat.develop.security.handler.LoginFailureHandler">
-        <constructor-arg name="forwardUrl" value="${login.failure.forward}"/>
-    </bean>
-
-    <!-- ####################################################### -->
+  <!-- #################################################### -->
 
 
-    <!-- ################### 自定义api过滤器, 拦截api请求，进行用户认证，访问控制，资源权限管理  #######################-->
-    <bean id="apiFilter" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-        <!-- 设定每次请求都检查 -->
-        <property name="observeOncePerRequest" value="false"/>
-        <!-- 用户认证 -->
-        <property name="authenticationManager" ref="authenticationManager" />
-        <!-- 访问决策管理器 -->
-        <property name="accessDecisionManager" ref="resourceAccessDecisionManager" />
-        <!-- 资源数据源，从数据库拿出权限-资源信息 -->
-        <property name="securityMetadataSource" ref="securityMetadataSource" />
-    </bean>
+  <!-- ############### 登录成功/失败处理器 ################## -->
 
-    <!-- 认证管理器(提供用户名、密码验证)
-           1、erase-credentials默认为true，会在ProviderManager（默认的AuthenticationManager实现）的方法返回前调用，清除credentials等信息。
-           2、erase-credentials设置为false后，不会清除这些保密信息，建议在使用完之后自己调用eraseCredentials()清楚这些信息。
-     -->
-    <security:authentication-manager alias="authenticationManager" erase-credentials="true">
+  <bean id="authenticationSuccessHandler" class="me.cloudcat.develop.security.handler.LoginSuccessHandler">
+    <constructor-arg name="redirectUrl" value="${login.success.redirect}"/>
+  </bean>
+  <!-- 登录失败处理 -->
+  <bean id="authenticationFailureHandler" class="me.cloudcat.develop.security.handler.LoginFailureHandler">
+    <constructor-arg name="forwardUrl" value="${login.failure.forward}"/>
+  </bean>
 
-        <security:authentication-provider user-service-ref="userDetailsService">
-            <!-- 密码加密 -->
-            <security:password-encoder hash="sha-256" ref="passwordEncoder"/>
-        </security:authentication-provider>
-    </security:authentication-manager>
-    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-    <!--<bean id="saltSource" class="me.cloudcat.develop.security.password.CustomSaltSource"/>-->
-
-    <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
-    <bean id="resourceAccessDecisionManager" class="me.cloudcat.develop.security.ResourceAccessDecisionManager"/>
-    <!-- 资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色去访问。 -->
-    <bean id="securityMetadataSource" class="me.cloudcat.develop.security.SecurityMetadataSource"/>
-
-    <!-- ############################################################################ -->
+  <!-- ####################################################### -->
 
 
-    <!-- ##################### 退出处理 ###################### -->
-    <bean id="customLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-        <!-- 退出操作需调用的URL -->
-        <property name="filterProcessesUrl" value="${logout.process.url}" />
+  <!-- ################### 自定义api过滤器, 拦截api请求，进行用户认证，访问控制，资源权限管理  #######################-->
+  <bean id="apiFilter" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+    <!-- 设定每次请求都检查 -->
+    <property name="observeOncePerRequest" value="false"/>
+    <!-- 用户认证 -->
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <!-- 访问决策管理器 -->
+    <property name="accessDecisionManager" ref="resourceAccessDecisionManager"/>
+    <!-- 资源数据源，从数据库拿出权限-资源信息 -->
+    <property name="securityMetadataSource" ref="securityMetadataSource"/>
+  </bean>
 
-        <!-- 退出处理成功后的默认显示url -->
-        <constructor-arg index="0" value="${logout.success.redirect}" />
-        <constructor-arg index="1">
-            <!-- 退出成功后的handler列表 -->
-            <array>
-                <bean id="securityContextLogoutHandler"
-                      class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
-            </array>
-        </constructor-arg>
-    </bean>
-    <!-- ##################################################### -->
+  <!-- 认证管理器(提供用户名、密码验证)
+         1、erase-credentials默认为true，会在ProviderManager（默认的AuthenticationManager实现）的方法返回前调用，清除credentials等信息。
+         2、erase-credentials设置为false后，不会清除这些保密信息，建议在使用完之后自己调用eraseCredentials()清楚这些信息。
+   -->
+  <security:authentication-manager alias="authenticationManager" erase-credentials="true">
 
-    <!-- #################### Session管理 ################### -->
-    <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
-    <!-- ################################################## -->
+    <security:authentication-provider user-service-ref="userDetailsService">
+      <!-- 密码加密 -->
+      <security:password-encoder hash="sha-256" ref="passwordEncoder"/>
+    </security:authentication-provider>
+  </security:authentication-manager>
+  <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+  <!--<bean id="saltSource" class="me.cloudcat.develop.security.password.CustomSaltSource"/>-->
+
+  <!-- 访问决策器，决定某个用户具有的角色，是否有足够的权限去访问某个资源。 -->
+  <bean id="resourceAccessDecisionManager" class="me.cloudcat.develop.security.ResourceAccessDecisionManager"/>
+  <!-- 资源源数据定义，将所有的资源和权限对应关系建立起来，即定义某一资源可以被哪些角色去访问。 -->
+  <bean id="securityMetadataSource" class="me.cloudcat.develop.security.SecurityMetadataSource"/>
+
+  <!-- ############################################################################ -->
+
+
+  <!-- ##################### 退出处理 ###################### -->
+  <bean id="customLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+    <!-- 退出操作需调用的URL -->
+    <property name="filterProcessesUrl" value="${logout.process.url}"/>
+
+    <!-- 退出处理成功后的默认显示url -->
+    <constructor-arg index="0" value="${logout.success.redirect}"/>
+    <constructor-arg index="1">
+      <!-- 退出成功后的handler列表 -->
+      <array>
+        <bean id="securityContextLogoutHandler"
+              class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
+      </array>
+    </constructor-arg>
+  </bean>
+  <!-- ##################################################### -->
+
+  <!-- #################### Session管理 ################### -->
+  <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl"/>
+  <!-- ################################################## -->
 
 </beans>
