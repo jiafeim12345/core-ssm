@@ -14,27 +14,27 @@ import java.util.SimpleTimeZone;
  */
 public class DateUtils {
 
-    /**
-     * 获取ISO8601日期
-     *
-     * @param date
-     * @return
-     */
-    public static String formatISO8601Date(Date date) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df.setTimeZone(new SimpleTimeZone(0, "GMT"));
-        return df.format(date);
-    }
+  /**
+   * 获取ISO8601日期
+   *
+   * @param date
+   * @return
+   */
+  public static String formatISO8601Date(Date date) {
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    df.setTimeZone(new SimpleTimeZone(0, "GMT"));
+    return df.format(date);
+  }
 
-    /**
-     * 格式化为常用格式：yyyy-MM-dd HH:mm:ss
-     *
-     * @param date
-     * @return
-     */
-    public static String formatToCommon(TemporalAccessor date) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String result = dtf.format(date);
-        return result;
-    }
+  /**
+   * 格式化为常用格式：yyyy-MM-dd HH:mm:ss
+   *
+   * @param date
+   * @return
+   */
+  public static String formatToCommon(TemporalAccessor date) {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    String result = dtf.format(date);
+    return result;
+  }
 }

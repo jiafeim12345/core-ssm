@@ -87,10 +87,10 @@
         SET password = #{e.password}
         <where>
             <if test="e.email!=null">
-               AND email = #{e.email}
+                AND email = #{e.email}
             </if>
             <if test="e.username!=null">
-               AND username = #{e.username}
+                AND username = #{e.username}
             </if>
             <if test="e.id!=null">
                 AND id = #{e.id}

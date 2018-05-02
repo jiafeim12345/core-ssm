@@ -6,7 +6,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface PrintLog {
-    String name() default "admin";
-    boolean showName() default false;
-    String content();
+  String name() default "admin";
+
+  boolean showName() default false;
+
+  String content();
 }

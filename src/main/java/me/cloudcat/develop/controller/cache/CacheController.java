@@ -1,22 +1,9 @@
 package me.cloudcat.develop.controller.cache;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import me.cloudcat.develop.dao.UserDao;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import me.cloudcat.develop.entity.User;
 
 /**
- *
  * @author ZZWang
  * @Time 2017年7月13日 上午9:47:39
  */
@@ -25,17 +12,17 @@ import me.cloudcat.develop.entity.User;
 public class CacheController {
 
 	/*@Autowired
-	UserDao userDao;
+  UserDao userDao;
 	
 	@Autowired
 	SqlSessionFactory factory;
 	
 	*//**
-	 * 测试一级缓存
-	 * @param request
-	 * @param model
-	 * @return
-	 *//*
+   * 测试一级缓存
+   * @param request
+   * @param model
+   * @return
+   *//*
 	@RequestMapping(value = "/testOneLevel", method = RequestMethod.GET)
 	public String test1(HttpServletRequest request, Model model) {
 		// 同一session进行查询操作测试
@@ -63,11 +50,11 @@ public class CacheController {
 	}
 	
 	*//**
-	 * 测试二级缓存（spring注入情况）
-	 * @param request
-	 * @param model
-	 * @return
-	 *//*
+   * 测试二级缓存（spring注入情况）
+   * @param request
+   * @param model
+   * @return
+   *//*
 	@RequestMapping(value = "/testTwoLevel", method = RequestMethod.GET)
 	public String test2(HttpServletRequest request, Model model) {
 		List<User> list = userDao.getUserTest("admin");
@@ -78,11 +65,11 @@ public class CacheController {
 		return null;
 	}
 	*//**
-	 * 测试二级缓存（session获取mapper）
-	 * @param request
-	 * @param model
-	 * @return
-	 *//*
+   * 测试二级缓存（session获取mapper）
+   * @param request
+   * @param model
+   * @return
+   *//*
 	@RequestMapping(value = "/testTwoLevel2", method = RequestMethod.GET)
 	public String test3(HttpServletRequest request, Model model) {
 		SqlSession session = factory.openSession();

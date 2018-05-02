@@ -2,7 +2,6 @@ package me.cloudcat.develop.security;
 
 import me.cloudcat.develop.dao.UserDao;
 import me.cloudcat.develop.entity.User;
-import me.cloudcat.develop.utils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +20,24 @@ import org.springframework.stereotype.Service;
 @Service("userDetailsService")
 public class LoginServiceImpl implements UserDetailsService {
 
-    private Logger logger = LoggerFactory.getLogger("security");
+  private Logger logger = LoggerFactory.getLogger("security");
 
-    @Autowired
-    UserDao userDao;
+  @Autowired
+  UserDao userDao;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 
-        User user = userDao.findByUsernameOrEmail(username);
-        if (user != null) {
-            // 更新用户状态
-            user.setSecurityStatus(true, true, true);
-            userDao.updateLastLoginTime(user.getId());
-        } else {
-            user = new User();
-        }
-        return user;
+    User user = userDao.findByUsernameOrEmail(username);
+    if (user != null) {
+      // 更新用户状态
+      user.setSecurityStatus(true, true, true);
+      userDao.updateLastLoginTime(user.getId());
+    } else {
+      user = new User();
     }
+    return user;
+  }
 
 }

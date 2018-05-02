@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -46,91 +46,90 @@ import java.util.Collection;
  * @author Ben Alex
  */
 public class AuthenticatedVoter implements AccessDecisionVoter<Object> {
-    //~ Static fields/initializers =====================================================================================
+  //~ Static fields/initializers =====================================================================================
 
-    private Logger logger = LoggerFactory.getLogger("security");
+  private Logger logger = LoggerFactory.getLogger("security");
 
-    public static final String IS_AUTHENTICATED_FULLY = "IS_AUTHENTICATED_FULLY";
-    public static final String IS_AUTHENTICATED_REMEMBERED = "IS_AUTHENTICATED_REMEMBERED";
-    public static final String IS_AUTHENTICATED_ANONYMOUSLY = "IS_AUTHENTICATED_ANONYMOUSLY";
-    //~ Instance fields ================================================================================================
+  public static final String IS_AUTHENTICATED_FULLY = "IS_AUTHENTICATED_FULLY";
+  public static final String IS_AUTHENTICATED_REMEMBERED = "IS_AUTHENTICATED_REMEMBERED";
+  public static final String IS_AUTHENTICATED_ANONYMOUSLY = "IS_AUTHENTICATED_ANONYMOUSLY";
+  //~ Instance fields ================================================================================================
 
-    private AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
+  private AuthenticationTrustResolver authenticationTrustResolver = new AuthenticationTrustResolverImpl();
 
-    //~ Methods ========================================================================================================
+  //~ Methods ========================================================================================================
 
-    private boolean isFullyAuthenticated(Authentication authentication) {
-        return (!authenticationTrustResolver.isAnonymous(authentication) &&
-                !authenticationTrustResolver.isRememberMe(authentication));
+  private boolean isFullyAuthenticated(Authentication authentication) {
+    return (!authenticationTrustResolver.isAnonymous(authentication) &&
+        !authenticationTrustResolver.isRememberMe(authentication));
+  }
+
+  public void setAuthenticationTrustResolver(AuthenticationTrustResolver authenticationTrustResolver) {
+    Assert.notNull(authenticationTrustResolver, "AuthenticationTrustResolver cannot be set to null");
+    this.authenticationTrustResolver = authenticationTrustResolver;
+  }
+
+  public boolean supports(ConfigAttribute attribute) {
+    if ((attribute.getAttribute() != null)
+        && (IS_AUTHENTICATED_FULLY.equals(attribute.getAttribute())
+        || IS_AUTHENTICATED_REMEMBERED.equals(attribute.getAttribute())
+        || IS_AUTHENTICATED_ANONYMOUSLY.equals(attribute.getAttribute()))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * This implementation supports any type of class, because it does not query the presented secure object.
+   *
+   * @param clazz the secure object type
+   * @return always {@code true}
+   */
+  public boolean supports(Class<?> clazz) {
+    return true;
+  }
+
+  // 自定义vote
+  public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
+    int result = ACCESS_ABSTAIN;
+
+    // Todo:模拟登陆
+    HttpServletRequest request = HttpUtils.getRequest();
+    if (request != null) {
+      String usernameOrEmail = request.getParameter("sso_user");
+      if (usernameOrEmail != null) {
+        SSOUtils.ssoLogin(usernameOrEmail);
+        return ACCESS_GRANTED;
+      }
     }
 
-    public void setAuthenticationTrustResolver(AuthenticationTrustResolver authenticationTrustResolver) {
-        Assert.notNull(authenticationTrustResolver, "AuthenticationTrustResolver cannot be set to null");
-        this.authenticationTrustResolver = authenticationTrustResolver;
-    }
+    for (ConfigAttribute attribute : attributes) {
+      if (this.supports(attribute)) {
+        result = ACCESS_DENIED;
 
-    public boolean supports(ConfigAttribute attribute) {
-        if ((attribute.getAttribute() != null)
-                && (IS_AUTHENTICATED_FULLY.equals(attribute.getAttribute())
-                || IS_AUTHENTICATED_REMEMBERED.equals(attribute.getAttribute())
-                || IS_AUTHENTICATED_ANONYMOUSLY.equals(attribute.getAttribute()))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * This implementation supports any type of class, because it does not query the presented secure object.
-     *
-     * @param clazz the secure object type
-     *
-     * @return always {@code true}
-     */
-    public boolean supports(Class<?> clazz) {
-        return true;
-    }
-
-    // 自定义vote
-    public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-        int result = ACCESS_ABSTAIN;
-
-        // Todo:模拟登陆
-        HttpServletRequest request = HttpUtils.getRequest();
-        if (request != null) {
-            String usernameOrEmail = request.getParameter("sso_user");
-            if (usernameOrEmail != null) {
-                SSOUtils.ssoLogin(usernameOrEmail);
-                return ACCESS_GRANTED;
-            }
-        }
-
-        for (ConfigAttribute attribute : attributes) {
-            if (this.supports(attribute)) {
-                result = ACCESS_DENIED;
-
-                if (IS_AUTHENTICATED_FULLY.equals(attribute.getAttribute())) {
-                    if (isFullyAuthenticated(authentication)) {
-                        return ACCESS_GRANTED;
-                    }
-                }
-
-                if (IS_AUTHENTICATED_REMEMBERED.equals(attribute.getAttribute())) {
-                    if (authenticationTrustResolver.isRememberMe(authentication)
-                            || isFullyAuthenticated(authentication)) {
-                        return ACCESS_GRANTED;
-                    }
-                }
-
-                if (IS_AUTHENTICATED_ANONYMOUSLY.equals(attribute.getAttribute())) {
-                    if (authenticationTrustResolver.isAnonymous(authentication) || isFullyAuthenticated(authentication)
-                            || authenticationTrustResolver.isRememberMe(authentication)) {
-                        return ACCESS_GRANTED;
-                    }
-                }
-            }
+        if (IS_AUTHENTICATED_FULLY.equals(attribute.getAttribute())) {
+          if (isFullyAuthenticated(authentication)) {
+            return ACCESS_GRANTED;
+          }
         }
 
-        return result;
+        if (IS_AUTHENTICATED_REMEMBERED.equals(attribute.getAttribute())) {
+          if (authenticationTrustResolver.isRememberMe(authentication)
+              || isFullyAuthenticated(authentication)) {
+            return ACCESS_GRANTED;
+          }
+        }
+
+        if (IS_AUTHENTICATED_ANONYMOUSLY.equals(attribute.getAttribute())) {
+          if (authenticationTrustResolver.isAnonymous(authentication) || isFullyAuthenticated(authentication)
+              || authenticationTrustResolver.isRememberMe(authentication)) {
+            return ACCESS_GRANTED;
+          }
+        }
+      }
     }
+
+    return result;
+  }
 }

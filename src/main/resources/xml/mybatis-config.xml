@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration
-PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-config.dtd">
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	
-	<!-- 全局setting配置，根据需要添加 -->
-	<settings>
-		<!--开启二级缓存 -->
-		<setting name="cacheEnabled" value="false"/>
-        <!-- 懒加载 -->
-		<setting name="lazyLoadingEnabled" value="false"/>
-        <setting name="jdbcTypeForNull" value="NULL"/>
-		<setting name="logImpl" value="LOG4J"/>
-        <!-- 开启自动映射 -->
-        <setting name="autoMappingBehavior" value="PARTIAL"/>
-        <!-- 自动映射时使用驼峰命名规则映射 -->
-        <setting name="mapUnderscoreToCamelCase" value="true"/>
-    </settings>
 
-    <!-- 枚举类型处理 -->
-    <!--<typeHandlers>-->
-        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Status" />-->
-        <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="RoleType" />-->
-    <!--</typeHandlers>-->
+  <!-- 全局setting配置，根据需要添加 -->
+  <settings>
+    <!--开启二级缓存 -->
+    <setting name="cacheEnabled" value="false"/>
+    <!-- 懒加载 -->
+    <setting name="lazyLoadingEnabled" value="false"/>
+    <setting name="jdbcTypeForNull" value="NULL"/>
+    <setting name="logImpl" value="LOG4J"/>
+    <!-- 开启自动映射 -->
+    <setting name="autoMappingBehavior" value="PARTIAL"/>
+    <!-- 自动映射时使用驼峰命名规则映射 -->
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+
+  <!-- 枚举类型处理 -->
+  <!--<typeHandlers>-->
+  <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Status" />-->
+  <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="RoleType" />-->
+  <!--</typeHandlers>-->
 
 </configuration>

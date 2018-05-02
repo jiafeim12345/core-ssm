@@ -15,5 +15,5 @@ import java.util.List;
 @Repository
 public interface ResourceDao extends BaseDao<Resource> {
 
-    public List<Resource> getResourcesByRole(@Param("roleId") Long roleId);
+  public List<Resource> getResourcesByRole(@Param("roleId") Long roleId);
 }

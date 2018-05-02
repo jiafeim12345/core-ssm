@@ -20,24 +20,24 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserDao userDao;
+  @Autowired
+  private UserDao userDao;
 
-    @Transactional
-    public void insertUser(int sum) {
-        for (int i = 0; i < sum; i++) {
-            User user = new User();
-            user.setUsername(UUID.randomUUID().toString());
-            String encode = CryptoUtils.encode(UUID.randomUUID().toString());
-            user.setPassword(encode);
-            user.setEmail(UUID.randomUUID().toString());
-            user.setStatus(RandomUtils.nextBoolean() ? Status.ENABLE : Status.DISABLE);
-            userDao.save(user);
-        }
+  @Transactional
+  public void insertUser(int sum) {
+    for (int i = 0; i < sum; i++) {
+      User user = new User();
+      user.setUsername(UUID.randomUUID().toString());
+      String encode = CryptoUtils.encode(UUID.randomUUID().toString());
+      user.setPassword(encode);
+      user.setEmail(UUID.randomUUID().toString());
+      user.setStatus(RandomUtils.nextBoolean() ? Status.ENABLE : Status.DISABLE);
+      userDao.save(user);
     }
+  }
 
-    @Transactional
-    public void save(User user) {
-        userDao.save(user);
-    }
+  @Transactional
+  public void save(User user) {
+    userDao.save(user);
+  }
 }

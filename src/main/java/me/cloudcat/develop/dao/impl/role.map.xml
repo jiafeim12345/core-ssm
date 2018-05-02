@@ -38,7 +38,7 @@
         </where>
     </select>
 
-    <select id="findByCondition" resultMap="roleDetailMap" >
+    <select id="findByCondition" resultMap="roleDetailMap">
         <include refid="basic_header"/>
         <where>
             <if test="e.name!=null}">
