@@ -424,8 +424,8 @@
 
     <!-- Elasticsearch核心依赖包 -->
     <dependency>
-      <groupId>org.elasticsearch</groupId>
-      <artifactId>elasticsearch</artifactId>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>transport</artifactId>
       <version>5.5.3</version>
     </dependency>
 
